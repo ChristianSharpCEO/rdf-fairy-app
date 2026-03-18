@@ -12,7 +12,7 @@
    Bump CACHE_VERSION when deploying updates.
    ============================================ */
 
-const CACHE_VERSION = 'rdf-v2';
+const CACHE_VERSION = 'rdf-v3';
 
 /* ─── APP SHELL ──────────────────────────────── */
 // Files that must be cached for the app to work offline.
@@ -68,9 +68,9 @@ self.addEventListener('fetch', (event) => {
   const { request } = event;
   const url = new URL(request.url);
 
-  // ── Weather API: Network-first ──
+  // ── Weather API (Open-Meteo): Network-first ──
   // Always try to get fresh data; fall back to cached if offline.
-  if (url.hostname.includes('openweathermap.org')) {
+  if (url.hostname.includes('open-meteo.com')) {
     event.respondWith(networkFirst(request));
     return;
   }
