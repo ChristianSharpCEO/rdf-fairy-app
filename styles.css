@@ -403,20 +403,19 @@ body::after {
   color: var(--text-frost);
 }
 
-/* ─── WEBCAM SECTION ─────────────────────────── */
+/* ─── WEBCAM PORTAL (CBC Live Feed) ──────────── */
 .webcam-section {
   margin: var(--s-lg) var(--s-md);
 }
 
-.webcam-grid {
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-md);
-}
-
-.webcam-card {
+.webcam-portal {
   padding: 0;
   overflow: hidden;
+  /* Extra glow for the portal feel */
+  box-shadow:
+    var(--glass-shadow),
+    0 0 40px rgba(217, 119, 6, 0.06),
+    inset 0 1px 0 rgba(255, 255, 255, 0.06);
 }
 
 .webcam-label {
@@ -446,11 +445,20 @@ body::after {
   50% { opacity: 0.3; }
 }
 
+/* Clipped iframe container — hides CBC site header/nav */
 .webcam-frame {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%;
-  background: rgba(0, 0, 0, 0.3);
+  padding-bottom: 56.25%; /* 16:9 */
+  background: rgba(0, 0, 0, 0.4);
+}
+
+.webcam-frame--clipped {
+  /* Extend the iframe taller and shift it up to clip the CBC header.
+     The container's overflow:hidden (inherited from .webcam-portal)
+     crops out the top ~80px of the CBC page (header/nav). */
+  padding-bottom: 70%;     /* make container taller to compensate for shift */
+  overflow: hidden;
 }
 
 .webcam-frame iframe {
@@ -460,25 +468,53 @@ body::after {
   border: none;
 }
 
-.webcam-fallback {
-  position: absolute;
-  inset: 0;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  gap: var(--s-sm);
-  color: var(--text-faint);
-  font-size: 0.8rem;
-  text-align: center;
-  padding: var(--s-md);
+/* Shift the iframe upward so the CBC header scrolls out of view */
+.webcam-frame--clipped iframe {
+  top: -80px;
+  height: calc(100% + 80px);
 }
 
-.webcam-fallback a {
-  color: var(--folk-accent);
-  text-decoration: underline;
-  text-underline-offset: 2px;
-  font-size: 0.75rem;
+/* Portal footer with glowing CTA button */
+.webcam-portal-footer {
+  padding: var(--s-md);
+  display: flex;
+  justify-content: center;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  background: rgba(0, 0, 0, 0.15);
+}
+
+.webcam-open-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 28px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--folk-accent);
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(180, 83, 9, 0.35));
+  color: var(--folk-accent-bright);
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-decoration: none;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  transition: all 0.25s ease;
+  /* The fireside glow */
+  box-shadow:
+    0 0 16px rgba(217, 119, 6, 0.15),
+    0 0 40px rgba(217, 119, 6, 0.06);
+}
+
+.webcam-open-btn:hover {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.35), rgba(180, 83, 9, 0.5));
+  box-shadow:
+    0 0 24px rgba(217, 119, 6, 0.25),
+    0 0 60px rgba(217, 119, 6, 0.1);
+  transform: translateY(-1px);
+}
+
+.webcam-open-btn:active {
+  transform: scale(0.97);
 }
 
 /* ─── DEALS SECTION ──────────────────────────── */
@@ -861,11 +897,6 @@ body::after {
 @media (min-width: 480px) {
   .weather-temp { font-size: 3.4rem; }
   .brand-name { font-size: 1.8rem; }
-
-  .webcam-grid {
-    flex-direction: row;
-  }
-  .webcam-grid .webcam-card { flex: 1; }
 }
 
 @media (min-width: 768px) {
