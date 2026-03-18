@@ -3,14 +3,15 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-  <meta name="theme-color" content="#0F172A">
+  <meta name="theme-color" content="#080E1A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="description" content="RDF: Fairy-Led St. John's Passport — Your hyper-local guide to indoor activities and deals when it's Rain, Drizzle, or Fog in St. John's, Newfoundland.">
 
-  <title>RDF: Fairy-Led St. John's Passport</title>
+  <title>RDF · Fairy-Led St. John's Passport</title>
 
   <link rel="manifest" href="./manifest.json">
+  <!-- Emoji favicon — swap for a real .png icon in production -->
   <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧚</text></svg>">
   <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧚</text></svg>">
 
@@ -20,116 +21,155 @@
 
   <div id="app">
 
-    <!-- ═══════════ TAB 1: THE RADAR (Home View) ═══════════ -->
+    <!-- ═══════════════════════════════════════════
+         TAB 1: THE RADAR (Home View)
+         ═══════════════════════════════════════════ -->
     <div id="view-radar" class="view active">
 
-      <!-- App Header -->
+      <!-- ── App Header ── -->
       <header class="app-header">
         <div class="app-brand">
-          <span class="app-brand-icon">🧚</span>
-          <h1 class="app-title"><span>RDF</span> · Fairy-Led Passport</h1>
+          <span class="brand-fairy" aria-hidden="true">🧚</span>
+          <h1 class="brand-name"><span class="brand-accent">RDF</span> · Fairy-Led Passport</h1>
         </div>
-        <p class="app-subtitle">Rain, Drizzle &amp; Fog — St. John's, NL</p>
-        <div class="header-rule"></div>
+        <p class="brand-tagline">Rain, Drizzle &amp; Fog — St. John's, NL</p>
+        <div class="header-divider" aria-hidden="true"></div>
       </header>
 
-      <!-- Weather Block -->
-      <section class="weather-block" aria-label="Current weather">
+      <!-- ── Live Weather ── -->
+      <section class="weather-card glass" aria-label="Current weather in St. John's">
         <div id="weather-content">
-          <!-- Populated by app.js -->
+          <!-- Populated by app.js fetchWeather() -->
         </div>
       </section>
 
-      <!-- NTV Sky Cam -->
-      <section class="skycam-section">
-        <div class="section-header">
-          <span class="section-icon">📹</span>
-          <h2 class="section-title">NTV Sky Cam — Signal Hill</h2>
-        </div>
-        <div class="skycam-container">
-          <!--
-            NTV St. John's Sky Cam embed.
-            If the iframe fails to load or is blocked by CORS/X-Frame-Options,
-            the fallback message below will be visible.
-          -->
-          <div class="skycam-fallback" id="skycam-fallback">
-            <div class="skycam-fallback-icon">📹</div>
-            <span>Sky Cam feed unavailable</span>
-            <a href="https://www.ntv.ca/skycam/" target="_blank" rel="noopener" style="color: var(--accent-tarnished-brass); text-decoration: underline; font-size: 0.8rem;">
-              Watch on NTV.ca →
-            </a>
+      <!-- ── RDF Alerts (Push Notifications) ── -->
+      <section class="alert-section">
+        <div class="alert-card folk-glass">
+          <div class="alert-icon-wrap">🔔</div>
+          <div class="alert-info">
+            <div class="alert-heading">RDF Rain Alerts</div>
+            <div class="alert-sub">Get guilt-tripped by a fairy when it's miserable outside.</div>
           </div>
+          <button class="alert-btn" id="btn-enable-alerts" aria-label="Enable push notifications">
+            Enable
+          </button>
         </div>
       </section>
 
-      <!-- The Fog Horn Deals -->
+      <!-- ── NTV Webcams ── -->
+      <section class="webcam-section">
+        <div class="section-head">
+          <span class="section-icon">📹</span>
+          <h2 class="section-title">Live Cams — St. John's</h2>
+        </div>
+        <div class="webcam-grid">
+
+          <!-- Cam 1: Sky Cam -->
+          <div class="webcam-card glass">
+            <div class="webcam-label">
+              <span class="live-dot"></span> Sky Cam — Signal Hill
+            </div>
+            <div class="webcam-frame">
+              <iframe
+                src="https://ntvplus.ca/pages/webcam-stjohns-sky"
+                title="NTV St. John's Sky Cam"
+                loading="lazy"
+                allow="autoplay; encrypted-media"
+                referrerpolicy="no-referrer"
+              ></iframe>
+              <div class="webcam-fallback" id="fallback-sky">
+                <span>📹</span>
+                <span>Feed may be unavailable</span>
+                <a href="https://ntvplus.ca/pages/webcam-stjohns-sky" target="_blank" rel="noopener">Watch on NTV →</a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Cam 2: George Street -->
+          <div class="webcam-card glass">
+            <div class="webcam-label">
+              <span class="live-dot"></span> George Street
+            </div>
+            <div class="webcam-frame">
+              <iframe
+                src="https://ntvplus.ca/pages/webcam-georgestreet"
+                title="NTV George Street Cam"
+                loading="lazy"
+                allow="autoplay; encrypted-media"
+                referrerpolicy="no-referrer"
+              ></iframe>
+              <div class="webcam-fallback" id="fallback-george">
+                <span>📹</span>
+                <span>Feed may be unavailable</span>
+                <a href="https://ntvplus.ca/pages/webcam-georgestreet" target="_blank" rel="noopener">Watch on NTV →</a>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- ── Fog Horn Deals ── -->
       <section class="deals-section">
-        <div class="section-header">
+        <div class="section-head">
           <span class="section-icon">📯</span>
           <h2 class="section-title">The Fog Horn Deals</h2>
         </div>
-
-        <div class="deal-card">
-          <div class="deal-badge">📯 RDF Deal</div>
-          <div class="deal-title">15% off at Bannerman Brewing</div>
-          <div class="deal-slang">"Luh! Get on the go, b'y — pints are cheap and the fog's thick."</div>
-          <div class="deal-meta">Valid on RDF days · Downtown St. John's</div>
+        <div class="deal-card glass">
+          <span class="deal-icon">📯</span>
+          <div class="deal-heading">Fog Horn Flash Deals coming soon!</div>
+          <div class="deal-sub">Exclusive discounts from St. John's businesses — activated when it's RDF weather.</div>
         </div>
-
-        <!-- [PHASE 2: Additional deal cards will be dynamically populated from a CMS or Supabase table] -->
       </section>
 
-    </div>
-    <!-- end view-radar -->
+    </div><!-- /view-radar -->
 
 
-    <!-- ═══════════ TAB 2: THE DIRECTORY (List View) ═══════════ -->
+    <!-- ═══════════════════════════════════════════
+         TAB 2: THE DIRECTORY (List View)
+         ═══════════════════════════════════════════ -->
     <div id="view-directory" class="view">
-
       <div class="directory-view">
+
         <div class="directory-header">
           <h2 class="directory-title">The Directory</h2>
           <p class="directory-subtitle">Where to go when it's not fit outside</p>
         </div>
 
-        <!-- Filter Chips -->
-        <div class="filter-bar" role="tablist" aria-label="Filter venues">
-          <button class="filter-chip active" data-filter="All" role="tab" aria-selected="true">All</button>
-          <button class="filter-chip" data-filter="Family Friendly" role="tab" aria-selected="false">Family Friendly</button>
-          <button class="filter-chip" data-filter="Dry Parking" role="tab" aria-selected="false">Dry Parking</button>
-          <button class="filter-chip" data-filter="Pubs" role="tab" aria-selected="false">Pubs</button>
+        <!-- Filter Chips — rendered by app.js -->
+        <div class="filter-bar" id="filter-bar" role="tablist" aria-label="Filter venues by category">
+          <!-- Chips injected here -->
         </div>
 
-        <!-- Venue List -->
-        <div id="venue-list" class="venue-list" role="list">
-          <!-- Populated by app.js -->
+        <!-- Venue Cards -->
+        <div id="venue-list" class="venue-list" role="list" aria-label="Indoor venues">
+          <!-- Populated by app.js renderDirectory() -->
         </div>
+
       </div>
-
-    </div>
-    <!-- end view-directory -->
+    </div><!-- /view-directory -->
 
 
     <!-- [PHASE 2 PLACEHOLDER: view-fairy-hunt]
-         The third tab: an interactive map showing fairy hotspot locations
-         around St. John's. Uses HTML5 Geolocation to track user position
-         and triggers the "card-hearth" win state when they arrive. -->
+         Third tab: interactive fairy hunt map.
+         HTML5 Geolocation tracks the user. Fairy hotspot
+         proximity triggers the folk-glass "win" state. -->
 
-  </div>
-  <!-- end #app -->
+  </div><!-- /#app -->
 
 
   <!-- ═══════════ BOTTOM NAVIGATION ═══════════ -->
   <nav class="bottom-nav" aria-label="Main navigation">
-    <button class="nav-tab active" data-tab="radar" aria-label="Radar">
-      <span class="nav-tab-icon">📡</span>
-      <span class="nav-tab-label">Radar</span>
+    <button class="nav-tab active" data-tab="radar" aria-label="Radar — home view">
+      <span class="nav-icon">📡</span>
+      <span class="nav-label">Radar</span>
     </button>
-    <button class="nav-tab" data-tab="directory" aria-label="Directory">
-      <span class="nav-tab-icon">📖</span>
-      <span class="nav-tab-label">Directory</span>
+    <button class="nav-tab" data-tab="directory" aria-label="Directory — venues list">
+      <span class="nav-icon">📖</span>
+      <span class="nav-label">Directory</span>
     </button>
-    <!-- [PHASE 2: Add a third tab here for "The Hunt" 🧚] -->
+    <!-- [PHASE 2: Third tab "The Hunt" 🧚 goes here] -->
   </nav>
 
   <script src="./app.js"></script>
