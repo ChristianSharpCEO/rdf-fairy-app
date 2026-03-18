@@ -403,7 +403,7 @@ body::after {
   color: var(--text-frost);
 }
 
-/* ─── WEBCAM PORTAL (YouTube Harbour Cam) ─────── */
+/* ─── WEBCAM PORTAL (Ventusky Weather Map) ─────── */
 .webcam-section {
   margin: var(--s-lg) var(--s-md);
 }
@@ -444,11 +444,11 @@ body::after {
   50% { opacity: 0.3; }
 }
 
-/* Responsive 16:9 iframe wrapper — works for YouTube, WebcamTaxi, etc. */
+/* Responsive iframe wrapper — 3:2 ratio for map readability on mobile */
 .iframe-wrapper {
   position: relative;
   width: 100%;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
+  padding-bottom: 66.67%; /* 3:2 aspect ratio — gives maps vertical breathing room */
   background: rgba(0, 0, 0, 0.4);
   overflow: hidden;
 }
@@ -460,7 +460,7 @@ body::after {
   width: 100%;
   height: 100%;
   border: none;
-  border-radius: 0; /* flush inside portal card; corners handled by parent */
+  border-radius: 0;
 }
 
 /* Portal footer with glowing CTA button */
