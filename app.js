@@ -6,7 +6,7 @@
    1. Configuration & Constants
    2. Venue Directory Database (JSON)
    3. Newfoundland Slang Weather Engine
-   4. Weather API Integration (OpenWeatherMap)
+   4. Weather API Integration (Open-Meteo — no key needed)
    5. Directory Rendering & Filtering
    6. Push Notifications ("Duolingo" Guilt-Trip)
    7. Tab Navigation
@@ -17,17 +17,19 @@
 
 /* ═══════════════════════════════════════════════
    1. CONFIGURATION
+   ───────────────────────────────────────────────
+   Using Open-Meteo API — free, no API key required.
+   https://open-meteo.com/
    ═══════════════════════════════════════════════ */
-
-// ⚠️ REPLACE THIS with your OpenWeatherMap API key
-// Get a free key at: https://openweathermap.org/api
-const API_KEY = 'YOUR_API_KEY_HERE';
 
 const CONFIG = {
   // St. John's, NL coordinates
   LAT: 47.5615,
   LON: -52.7126,
   CITY: "St. John's, NL",
+
+  // Open-Meteo endpoint (no key needed)
+  WEATHER_URL: 'https://api.open-meteo.com/v1/forecast',
 
   // Weather refresh interval (milliseconds)
   WEATHER_REFRESH: 10 * 60 * 1000, // 10 minutes
@@ -109,79 +111,138 @@ const VENUES = [
 /* ═══════════════════════════════════════════════
    3. NEWFOUNDLAND SLANG WEATHER ENGINE
    ───────────────────────────────────────────────
-   Maps OpenWeather condition codes to NL slang.
-   Reference: https://openweathermap.org/weather-conditions
+   Maps WMO Weather Interpretation Codes (used by
+   Open-Meteo) to NL slang and emoji.
+   Reference: https://open-meteo.com/en/docs
+   
+   WMO Code Groups:
+     0       = Clear sky
+     1-3     = Partly cloudy → Overcast
+     45, 48  = Fog / Depositing rime fog
+     51-55   = Drizzle (light → dense)
+     56-57   = Freezing drizzle
+     61-65   = Rain (slight → heavy)
+     66-67   = Freezing rain
+     71-77   = Snowfall / Snow grains
+     80-82   = Rain showers
+     85-86   = Snow showers
+     95      = Thunderstorm
+     96, 99  = Thunderstorm with hail
    ═══════════════════════════════════════════════ */
 
 /**
- * Returns an HTML string with NL slang for the current weather.
- * @param {number} weatherId — OpenWeather condition code (e.g. 300, 800)
+ * Returns an HTML string with NL slang for current weather.
+ * @param {number} wmo — WMO weather interpretation code
  * @param {number} temp — Temperature in Celsius
- * @returns {string} — HTML with .slang-bold spans for emphasis
+ * @returns {string} — HTML with .slang-bold spans
  */
-function getWeatherSlang(weatherId, temp) {
-  // 2xx: Thunderstorm
-  if (weatherId >= 200 && weatherId < 300) {
+function getWeatherSlang(wmo, temp) {
+  // Thunderstorm (95, 96, 99)
+  if (wmo >= 95) {
     return `<span class="slang-bold">Lard tunderin'!</span> She's blowin' a gale. Stay put, me son.`;
   }
-  // 3xx: Drizzle — quintessential RDF weather
-  if (weatherId >= 300 && weatherId < 400) {
-    return `'Tis <span class="slang-bold">mauzy</span> out — damp enough to rot ya. Proper RDF weather, b'y.`;
+  // Snow showers (85-86)
+  if (wmo >= 85 && wmo <= 86) {
+    return `Snow squalls on the go. <span class="slang-bold">Not fit</span> — stay where it's warm, b'y.`;
   }
-  // 5xx: Rain
-  if (weatherId >= 500 && weatherId < 600) {
-    return `Weather: <span class="slang-bold">Not Fit.</span> She's lashing rain — ye'd be drownded out there.`;
+  // Rain showers (80-82)
+  if (wmo >= 80 && wmo <= 82) {
+    return `Weather: <span class="slang-bold">Not Fit.</span> RDF in full effect — showers lashing down.`;
   }
-  // 6xx: Snow
-  if (weatherId >= 600 && weatherId < 700) {
+  // Snowfall & snow grains (71-77)
+  if (wmo >= 71 && wmo <= 77) {
     if (temp <= -10) {
-      return `<span class="slang-bold">Skin alive!</span> Freezin' and sideways snow. Don't be at it.`;
+      return `<span class="slang-bold">Skin alive!</span> Freezin' cold and snow sideways. Don't be at it.`;
     }
     return `Snow on the go. Bit <span class="slang-bold">civil</span> if ya bundle up, but we got indoor spots.`;
   }
-  // 7xx: Atmosphere (fog, mist, haze)
-  if (weatherId >= 700 && weatherId < 800) {
+  // Freezing rain (66-67)
+  if (wmo >= 66 && wmo <= 67) {
+    return `<span class="slang-bold">Glitter!</span> Freezing rain — the roads are glass. Stay in, me duckie.`;
+  }
+  // Rain (61-65)
+  if (wmo >= 61 && wmo <= 65) {
+    return `Weather: <span class="slang-bold">Not Fit.</span> She's lashing rain — ye'd be drownded out there.`;
+  }
+  // Freezing drizzle (56-57)
+  if (wmo >= 56 && wmo <= 57) {
+    return `Freezing drizzle — <span class="slang-bold">mauzy</span> AND slippery. The worst combo, b'y.`;
+  }
+  // Drizzle (51-55) — quintessential RDF weather
+  if (wmo >= 51 && wmo <= 55) {
+    return `'Tis <span class="slang-bold">mauzy</span> out — damp enough to rot ya. Proper RDF weather, b'y.`;
+  }
+  // Fog (45, 48)
+  if (wmo === 45 || wmo === 48) {
     return `<span class="slang-bold">Pea soup fog</span> — can't see yer hand before yer face. Classic St. John's.`;
   }
-  // 800: Clear sky
-  if (weatherId === 800) {
-    if (temp > 18) {
-      return `<span class="slang-bold">Deadly!</span> Sun's out — a rare gift. Go enjoy it, or don't, we got ya.`;
-    }
-    return `Clear out, but don't get <span class="slang-bold">cracked</span> — could change in five minutes.`;
-  }
-  // 80x: Clouds
-  if (weatherId > 800) {
+  // Overcast (3)
+  if (wmo === 3) {
     return `<span class="slang-bold">Overcast</span> and moody. The fog's thinkin' about it. Grand day to explore inside.`;
+  }
+  // Partly cloudy (1-2)
+  if (wmo >= 1 && wmo <= 2) {
+    return `A few clouds about. Don't get <span class="slang-bold">cracked</span> — could change in five minutes.`;
+  }
+  // Clear sky (0)
+  if (wmo === 0) {
+    if (temp > 18) {
+      return `Weather: <span class="slang-bold">Best Kind!</span> Sun's out — a rare gift. Go enjoy it, or don't.`;
+    }
+    return `Weather: <span class="slang-bold">Best Kind.</span> Clear skies — but this is St. John's, so give it a minute.`;
   }
   // Fallback
   return `Some <span class="slang-bold">weather</span> out there, b'y. Check the cams.`;
 }
 
 /**
- * Returns an emoji for the given weather condition code.
+ * Returns an emoji for the given WMO weather code.
  */
-function getWeatherEmoji(weatherId) {
-  if (weatherId >= 200 && weatherId < 300) return '⛈️';
-  if (weatherId >= 300 && weatherId < 400) return '🌧️';
-  if (weatherId >= 500 && weatherId < 600) return '🌧️';
-  if (weatherId >= 600 && weatherId < 700) return '🌨️';
-  if (weatherId >= 700 && weatherId < 800) return '🌫️';
-  if (weatherId === 800) return '☀️';
-  if (weatherId > 800 && weatherId <= 802) return '⛅';
-  return '☁️';
+function getWeatherEmoji(wmo) {
+  if (wmo >= 95) return '⛈️';          // Thunderstorm
+  if (wmo >= 85) return '🌨️';          // Snow showers
+  if (wmo >= 80) return '🌧️';          // Rain showers
+  if (wmo >= 71) return '🌨️';          // Snow
+  if (wmo >= 66) return '🧊';          // Freezing rain
+  if (wmo >= 61) return '🌧️';          // Rain
+  if (wmo >= 51) return '🌧️';          // Drizzle
+  if (wmo === 45 || wmo === 48) return '🌫️'; // Fog
+  if (wmo >= 1) return '⛅';            // Cloudy
+  return '☀️';                          // Clear
+}
+
+/**
+ * Returns a human-readable description for a WMO code.
+ */
+function getWmoDescription(wmo) {
+  const descriptions = {
+    0: 'Clear sky', 1: 'Mainly clear', 2: 'Partly cloudy', 3: 'Overcast',
+    45: 'Fog', 48: 'Depositing rime fog',
+    51: 'Light drizzle', 53: 'Moderate drizzle', 55: 'Dense drizzle',
+    56: 'Light freezing drizzle', 57: 'Dense freezing drizzle',
+    61: 'Slight rain', 63: 'Moderate rain', 65: 'Heavy rain',
+    66: 'Light freezing rain', 67: 'Heavy freezing rain',
+    71: 'Slight snowfall', 73: 'Moderate snowfall', 75: 'Heavy snowfall',
+    77: 'Snow grains', 80: 'Slight rain showers', 81: 'Moderate rain showers',
+    82: 'Violent rain showers', 85: 'Slight snow showers', 86: 'Heavy snow showers',
+    95: 'Thunderstorm', 96: 'Thunderstorm with slight hail', 99: 'Thunderstorm with heavy hail',
+  };
+  return descriptions[wmo] || 'Unknown';
 }
 
 
 /* ═══════════════════════════════════════════════
-   4. WEATHER API INTEGRATION
+   4. WEATHER API INTEGRATION (Open-Meteo)
+   ───────────────────────────────────────────────
+   Free API, no key required. Returns current
+   conditions via WMO weather codes.
+   https://open-meteo.com/en/docs
    ═══════════════════════════════════════════════ */
 
 /**
- * Fetches current weather from OpenWeatherMap and
- * renders it into the #weather-content container.
- * Falls back to simulated "mauzy" demo data if the
- * API key is missing or the request fails.
+ * Fetches current weather from Open-Meteo and renders
+ * it into the #weather-content container.
+ * Falls back to simulated "mauzy" data on failure.
  */
 async function fetchWeather() {
   const container = document.getElementById('weather-content');
@@ -195,18 +256,20 @@ async function fetchWeather() {
     </div>
   `;
 
-  // If no API key, show demo/fallback weather
-  if (!API_KEY || API_KEY === 'YOUR_API_KEY_HERE') {
-    renderWeatherFallback(container);
-    return;
-  }
-
   try {
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${CONFIG.LAT}&lon=${CONFIG.LON}&appid=${API_KEY}&units=metric`;
-    const res = await fetch(url);
+    // Open-Meteo: request current weather with the fields we need
+    const params = new URLSearchParams({
+      latitude: CONFIG.LAT,
+      longitude: CONFIG.LON,
+      current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m',
+      wind_speed_unit: 'kmh',
+      timezone: 'America/St_Johns',
+    });
+
+    const res = await fetch(`${CONFIG.WEATHER_URL}?${params}`);
 
     if (!res.ok) {
-      throw new Error(`OpenWeather API returned status ${res.status}`);
+      throw new Error(`Open-Meteo returned status ${res.status}`);
     }
 
     const data = await res.json();
@@ -218,17 +281,24 @@ async function fetchWeather() {
 }
 
 /**
- * Renders live weather data from the API response.
+ * Renders live weather from Open-Meteo response.
+ * Open-Meteo response shape:
+ *   data.current.temperature_2m
+ *   data.current.apparent_temperature
+ *   data.current.relative_humidity_2m
+ *   data.current.weather_code (WMO)
+ *   data.current.wind_speed_10m
  */
 function renderWeatherLive(container, data) {
-  const temp      = Math.round(data.main.temp);
-  const feelsLike = Math.round(data.main.feels_like);
-  const weatherId = data.weather[0].id;
-  const desc      = data.weather[0].description;
-  const humidity  = data.main.humidity;
-  const wind      = Math.round(data.wind.speed * 3.6); // m/s → km/h
-  const emoji     = getWeatherEmoji(weatherId);
-  const slang     = getWeatherSlang(weatherId, temp);
+  const current   = data.current;
+  const temp      = Math.round(current.temperature_2m);
+  const feelsLike = Math.round(current.apparent_temperature);
+  const wmo       = current.weather_code;
+  const humidity  = current.relative_humidity_2m;
+  const wind      = Math.round(current.wind_speed_10m);
+  const desc      = getWmoDescription(wmo);
+  const emoji     = getWeatherEmoji(wmo);
+  const slang     = getWeatherSlang(wmo, temp);
 
   container.innerHTML = `
     <div class="weather-row">
@@ -250,7 +320,7 @@ function renderWeatherLive(container, data) {
 }
 
 /**
- * Renders simulated "mauzy" weather for demo / missing API key.
+ * Renders simulated "mauzy" weather when API fails.
  */
 function renderWeatherFallback(container) {
   container.innerHTML = `
