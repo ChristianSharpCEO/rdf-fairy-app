@@ -852,32 +852,116 @@ async function registerServiceWorker() {
    ═══════════════════════════════════════════════ */
 
 /**
- * Fairy location database — real St. John's businesses.
- * Each has coords, a cryptic folklore clue, and a reward.
+ * Fairy database — populated at runtime from Google Sheet CSV.
+ * Columns: Name, Lat, Lng, Clue, Reward, ImageURL
  */
-const fairyLocations = [
-  {
-    name: "Bannerman Brewing",
-    lat: 47.5675,
-    lng: -52.7072,
-    clue: "Where the water meets the grain and the barrels dream of old ships, a fairy hides among the taps. Look for warmth on Waterfront Drive.",
-    reward: "🍺 10% off a pint — tell 'em the fairy sent ya."
-  },
-  {
-    name: "The Duke of Duckworth",
-    lat: 47.5694,
-    lng: -52.6984,
-    clue: "On the oldest street where the duke once drank, she waits behind a wooden door. Follow the smell of fish and chips and the sound of trad fiddles.",
-    reward: "🍟 Free side of fries with any entrée."
-  },
-  {
-    name: "The Rooms",
-    lat: 47.5720,
-    lng: -52.7100,
-    clue: "High on the hill where the past is kept in glass and stone, a fairy perches above the harbour. Three rooms, one roof, and a secret in the archives.",
-    reward: "🎟️ Buy one admission, get one free."
-  },
-];
+let fairyDatabase = [];
+
+// ⚠️ PASTE YOUR PUBLISHED GOOGLE SHEET CSV URL HERE
+// (Google Sheets → File → Share → Publish to Web → CSV)
+const SHEET_URL = 'YOUR_CSV_URL_HERE';
+
+/**
+ * Fetches the Google Sheet CSV and parses it into fairyDatabase.
+ * Falls back to a small hardcoded set if the fetch fails.
+ *
+ * CSV Parser: Splits by newlines, then by commas.
+ * Handles quoted fields containing commas (basic RFC 4180).
+ */
+async function initDatabase() {
+  try {
+    const res = await fetch(SHEET_URL);
+    if (!res.ok) throw new Error(`Sheet returned ${res.status}`);
+
+    const csvText = await res.text();
+    fairyDatabase = parseCSV(csvText);
+
+    console.log(`[RDF] 🧚 Fairy database loaded: ${fairyDatabase.length} locations.`);
+  } catch (err) {
+    console.warn('[RDF] CSV fetch failed, using fallback data:', err.message);
+
+    // Fallback — 3 hardcoded locations so the app always works
+    fairyDatabase = [
+      {
+        Name: "Bannerman Brewing",
+        Lat: "47.5675", Lng: "-52.7072",
+        Clue: "Where the water meets the grain and the barrels dream of old ships, a fairy hides among the taps. Look for warmth on Waterfront Drive.",
+        Reward: "🍺 10% off a pint — tell 'em the fairy sent ya.",
+        ImageURL: ""
+      },
+      {
+        Name: "The Duke of Duckworth",
+        Lat: "47.5694", Lng: "-52.6984",
+        Clue: "On the oldest street where the duke once drank, she waits behind a wooden door. Follow the smell of fish and chips and the sound of trad fiddles.",
+        Reward: "🍟 Free side of fries with any entrée.",
+        ImageURL: ""
+      },
+      {
+        Name: "The Rooms",
+        Lat: "47.5720", Lng: "-52.7100",
+        Clue: "High on the hill where the past is kept in glass and stone, a fairy perches above the harbour. Three rooms, one roof, and a secret in the archives.",
+        Reward: "🎟️ Buy one admission, get one free.",
+        ImageURL: ""
+      },
+    ];
+  }
+}
+
+/**
+ * Simple CSV-to-JSON parser.
+ * Handles quoted fields with commas inside them.
+ * Returns array of objects keyed by header row.
+ */
+function parseCSV(csvText) {
+  const lines = csvText.trim().split('\n');
+  if (lines.length < 2) return [];
+
+  // Parse header row
+  const headers = splitCSVLine(lines[0]);
+
+  // Parse data rows
+  const results = [];
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (!line) continue;
+
+    const values = splitCSVLine(line);
+    const obj = {};
+    headers.forEach((h, idx) => {
+      obj[h.trim()] = (values[idx] || '').trim();
+    });
+
+    // Skip rows missing required fields
+    if (obj.Name && obj.Lat && obj.Lng && obj.Clue) {
+      results.push(obj);
+    }
+  }
+  return results;
+}
+
+/**
+ * Splits a single CSV line by commas, respecting quoted fields.
+ * e.g., 'hello,"world, foo",bar' → ['hello', 'world, foo', 'bar']
+ */
+function splitCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      inQuotes = !inQuotes;
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current);
+      current = '';
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current);
+  return result;
+}
 
 // ── Active hunt state ──
 let activeHunt = null;   // Current fairy location object
@@ -904,15 +988,25 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 }
 
 /**
- * Randomly selects a fairy location, hides the name,
- * and displays the cryptic clue in the UI.
+ * Randomly selects a fairy location from the database,
+ * hides the name, and displays the cryptic clue in the UI.
  */
 function generateMysteryCrawl() {
   // Clean up any previous hunt
   stopTracking();
 
+  // Guard: database not loaded yet
+  if (fairyDatabase.length === 0) {
+    const errorEl = document.getElementById('hunt-error');
+    if (errorEl) {
+      errorEl.style.display = 'block';
+      errorEl.textContent = "Hold on b'y — the fairy database isn't loaded yet. Give it a sec and try again.";
+    }
+    return;
+  }
+
   // Pick a random fairy location
-  activeHunt = fairyLocations[Math.floor(Math.random() * fairyLocations.length)];
+  activeHunt = fairyDatabase[Math.floor(Math.random() * fairyDatabase.length)];
 
   // DOM references
   const clueEl     = document.getElementById('hunt-clue');
@@ -923,6 +1017,8 @@ function generateMysteryCrawl() {
   const catchBtn   = document.getElementById('btn-catch-fairy');
   const genBtn     = document.getElementById('btn-generate-crawl');
   const card       = document.getElementById('fairy-hunt-card');
+  const fairyImg   = document.getElementById('fairy-image');
+  const rewardDisp = document.getElementById('reward-display');
 
   if (!clueEl) return;
 
@@ -935,9 +1031,11 @@ function generateMysteryCrawl() {
   errorEl.style.display   = 'none';
   distEl.className        = 'hunt-distance';
   genBtn.textContent      = 'New Mystery';
+  if (fairyImg)   { fairyImg.style.display = 'none'; fairyImg.src = ''; }
+  if (rewardDisp) { rewardDisp.style.display = 'none'; rewardDisp.textContent = ''; }
 
   // Show the clue
-  clueEl.textContent = `"${activeHunt.clue}"`;
+  clueEl.textContent = `"${activeHunt.Clue}"`;
   distEl.textContent = 'Summoning the fairies... acquiring your location.';
 
   // Start GPS tracking
@@ -968,7 +1066,7 @@ function startTracking() {
 
       const userLat = position.coords.latitude;
       const userLng = position.coords.longitude;
-      const dist    = calculateDistance(userLat, userLng, activeHunt.lat, activeHunt.lng);
+      const dist    = calculateDistance(userLat, userLng, parseFloat(activeHunt.Lat), parseFloat(activeHunt.Lng));
       const catchBtn = document.getElementById('btn-catch-fairy');
 
       // Update distance readout
@@ -1039,25 +1137,43 @@ function stopTracking() {
 }
 
 /**
- * WIN STATE — Triggered when user taps "Catch Fairy"
- * within 75m of the target. Reveals the location,
- * shows the reward, and transitions the card to
- * the warm Hearth theme.
+ * Cheeky consolation messages for locations with no reward.
+ * Randomly selected when foundFairy.Reward is empty.
  */
-function catchFairy() {
+const NO_REWARD_QUIPS = [
+  "✨ You found the {NAME}! No coupon here today, but it's about the journey, not the destination, and the friends you made along the way. Sorry if you didn't make any...",
+  "✨ You found the {NAME}! No deal this time. The fairy said she left it in her other wings. Classic fairy behaviour.",
+  "✨ You found the {NAME}! The reward? The warm feeling in your heart. What, you wanted a discount too? Greedy.",
+  "✨ You found the {NAME}! No coupon, but the fairy did leave you an imaginary high-five. You're welcome.",
+  "✨ You found the {NAME}! The fairy was here but she spent the reward budget on screech. Can't blame her really.",
+  "✨ You found the {NAME}! Your reward is the knowledge that you walked here in mauzy weather like a true Newfoundlander. Best kind.",
+  "✨ You found the {NAME}! No deal unlocked — but the fairy says you looked wonderful doing it. She's very supportive.",
+  "✨ You found the {NAME}! The deal fairy called in sick. The vibes fairy is covering her shift. Enjoy the vibes.",
+];
+
+/**
+ * WIN STATE — Called when user taps "Catch Fairy" within 75m.
+ * Reveals the location, applies conditional reward logic,
+ * sets the fairy image, and transitions to Hearth theme.
+ */
+function revealFairy() {
   if (!activeHunt) return;
+
+  const foundFairy = activeHunt;
 
   // Stop tracking — hunt is over
   stopTracking();
 
   // DOM references
-  const card      = document.getElementById('fairy-hunt-card');
-  const clueEl    = document.getElementById('hunt-clue');
-  const distEl    = document.getElementById('hunt-distance');
-  const revealEl  = document.getElementById('hunt-location-reveal');
-  const rewardEl  = document.getElementById('hunt-reward');
-  const catchBtn  = document.getElementById('btn-catch-fairy');
-  const genBtn    = document.getElementById('btn-generate-crawl');
+  const card       = document.getElementById('fairy-hunt-card');
+  const clueEl     = document.getElementById('hunt-clue');
+  const distEl     = document.getElementById('hunt-distance');
+  const revealEl   = document.getElementById('hunt-location-reveal');
+  const rewardEl   = document.getElementById('hunt-reward');
+  const catchBtn   = document.getElementById('btn-catch-fairy');
+  const genBtn     = document.getElementById('btn-generate-crawl');
+  const fairyImg   = document.getElementById('fairy-image');
+  const rewardDisp = document.getElementById('reward-display');
 
   // ── Transition to Hearth theme ──
   if (card) {
@@ -1067,19 +1183,50 @@ function catchFairy() {
 
   // Reveal the location name
   if (revealEl) {
-    revealEl.textContent = `🧚 ${activeHunt.name}`;
+    revealEl.textContent = `🧚 ${foundFairy.Name}`;
     revealEl.style.display = 'block';
   }
 
-  // Show the reward
-  if (rewardEl) {
-    rewardEl.textContent = activeHunt.reward;
-    rewardEl.style.display = 'block';
+  // ── Conditional Reward Logic ──
+  const hasReward = foundFairy.Reward && foundFairy.Reward.trim().length > 0;
+
+  if (hasReward) {
+    // Has a deal — show it prominently
+    if (rewardDisp) {
+      rewardDisp.innerHTML = `<span class="reward-badge">🎁 DEAL UNLOCKED</span><span class="reward-text">${foundFairy.Reward}</span><span class="reward-cta">Show this screen to staff to claim.</span>`;
+      rewardDisp.style.display = 'block';
+    }
+    if (clueEl) {
+      clueEl.textContent = "You found her! The fairy's been caught and she brought a gift.";
+    }
+  } else {
+    // No deal — pick a random cheeky message
+    const quip = NO_REWARD_QUIPS[Math.floor(Math.random() * NO_REWARD_QUIPS.length)];
+    if (rewardDisp) {
+      rewardDisp.innerHTML = `<span class="reward-text reward-text--quip">${quip.replace('{NAME}', foundFairy.Name)}</span>`;
+      rewardDisp.style.display = 'block';
+    }
+    if (clueEl) {
+      clueEl.textContent = "You found her! No deal this time, but the fairy appreciates the effort.";
+    }
   }
 
-  // Update clue text to victory message
-  if (clueEl) {
-    clueEl.textContent = "You found her! The fairy's been caught. Show this screen to claim your deal.";
+  // Hide the old reward element (replaced by reward-display)
+  if (rewardEl) rewardEl.style.display = 'none';
+
+  // ── Image Logic ──
+  if (fairyImg && foundFairy.ImageURL && foundFairy.ImageURL.trim().length > 0) {
+    fairyImg.src = foundFairy.ImageURL.trim();
+    fairyImg.alt = `Photo of ${foundFairy.Name}`;
+    fairyImg.style.display = 'block';
+
+    // Handle broken image gracefully
+    fairyImg.onerror = () => {
+      fairyImg.style.display = 'none';
+      console.warn(`[RDF] Failed to load image for ${foundFairy.Name}`);
+    };
+  } else if (fairyImg) {
+    fairyImg.style.display = 'none';
   }
 
   // Update distance text
@@ -1088,7 +1235,7 @@ function catchFairy() {
     distEl.className = 'hunt-distance';
   }
 
-  // Hide catch button, show "New Mystery" for next round
+  // Hide catch button, update generate button for next round
   if (catchBtn) catchBtn.style.display = 'none';
   if (genBtn) genBtn.textContent = 'Hunt Another Fairy';
 
@@ -1097,18 +1244,25 @@ function catchFairy() {
 
   // Fire a celebratory notification if permission granted
   if ('Notification' in window && Notification.permission === 'granted') {
+    const notifBody = hasReward
+      ? `You found her at ${foundFairy.Name}! Show your phone to claim: ${foundFairy.Reward}`
+      : `You found her at ${foundFairy.Name}! No deal this time, but you're a legend.`;
+
     new Notification('🧚 Fairy Caught!', {
-      body: `You found her at ${revealEl.textContent.replace('🧚 ', '')}! Show your phone to claim: ${rewardEl.textContent}`,
+      body: notifBody,
       tag: 'rdf-fairy-catch',
     });
   }
 }
 
 /**
- * Initializes the Fairy Hunt: wires Generate and
- * Catch buttons.
+ * Initializes the Fairy Hunt: loads the CSV database,
+ * wires Generate and Catch buttons.
  */
-function initFairyHunt() {
+async function initFairyHunt() {
+  // Load fairy locations from Google Sheet CSV
+  await initDatabase();
+
   const genBtn   = document.getElementById('btn-generate-crawl');
   const catchBtn = document.getElementById('btn-catch-fairy');
 
@@ -1116,7 +1270,7 @@ function initFairyHunt() {
     genBtn.addEventListener('click', generateMysteryCrawl);
   }
   if (catchBtn) {
-    catchBtn.addEventListener('click', catchFairy);
+    catchBtn.addEventListener('click', revealFairy);
   }
 }
 
