@@ -12,6 +12,7 @@
    7. Tab Navigation
    8. Service Worker Registration
    9. Initialization
+   10. The Fairy Hunt (Mystery Crawl GPS Engine)
    ============================================ */
 
 
@@ -840,22 +841,284 @@ async function registerServiceWorker() {
    Runs on DOMContentLoaded. Boots all modules.
    ═══════════════════════════════════════════════ */
 
-// [PHASE 2 PLACEHOLDER: HTML5 GEOLOCATION]
-// ─────────────────────────────────────────
-// function initGeolocation() {
-//   if ('geolocation' in navigator) {
-//     navigator.geolocation.watchPosition(
-//       (pos) => {
-//         const { latitude, longitude } = pos.coords;
-//         // TODO: Check proximity to fairy hotspot coordinates
-//         // TODO: Trigger folk-glass "win state" on venue cards
-//         // TODO: Update fairy markers on hunt map
-//       },
-//       (err) => console.warn('[RDF] Geo error:', err),
-//       { enableHighAccuracy: true, maximumAge: 30000 }
-//     );
-//   }
-// }
+/* ═══════════════════════════════════════════════
+   10. THE FAIRY HUNT — Mystery Crawl GPS Engine
+   ───────────────────────────────────────────────
+   Phase 3: Gamified GPS tracker. User generates a
+   random mystery location, follows a folklore clue,
+   and catches a fairy when within 75m.
+   
+   Uses Haversine formula + navigator.geolocation.
+   ═══════════════════════════════════════════════ */
+
+/**
+ * Fairy location database — real St. John's businesses.
+ * Each has coords, a cryptic folklore clue, and a reward.
+ */
+const fairyLocations = [
+  {
+    name: "Bannerman Brewing",
+    lat: 47.5675,
+    lng: -52.7072,
+    clue: "Where the water meets the grain and the barrels dream of old ships, a fairy hides among the taps. Look for warmth on Waterfront Drive.",
+    reward: "🍺 10% off a pint — tell 'em the fairy sent ya."
+  },
+  {
+    name: "The Duke of Duckworth",
+    lat: 47.5694,
+    lng: -52.6984,
+    clue: "On the oldest street where the duke once drank, she waits behind a wooden door. Follow the smell of fish and chips and the sound of trad fiddles.",
+    reward: "🍟 Free side of fries with any entrée."
+  },
+  {
+    name: "The Rooms",
+    lat: 47.5720,
+    lng: -52.7100,
+    clue: "High on the hill where the past is kept in glass and stone, a fairy perches above the harbour. Three rooms, one roof, and a secret in the archives.",
+    reward: "🎟️ Buy one admission, get one free."
+  },
+];
+
+// ── Active hunt state ──
+let activeHunt = null;   // Current fairy location object
+let geoWatchId = null;   // Geolocation watch ID for cleanup
+
+/**
+ * Haversine formula — calculates the great-circle distance
+ * between two lat/lng points in meters.
+ * @returns {number} Distance in meters
+ */
+function calculateDistance(lat1, lon1, lat2, lon2) {
+  const R = 6371000; // Earth's radius in meters
+  const toRad = (deg) => (deg * Math.PI) / 180;
+
+  const dLat = toRad(lat2 - lat1);
+  const dLon = toRad(lon2 - lon1);
+  const a =
+    Math.sin(dLat / 2) * Math.sin(dLat / 2) +
+    Math.cos(toRad(lat1)) * Math.cos(toRad(lat2)) *
+    Math.sin(dLon / 2) * Math.sin(dLon / 2);
+  const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+
+  return R * c;
+}
+
+/**
+ * Randomly selects a fairy location, hides the name,
+ * and displays the cryptic clue in the UI.
+ */
+function generateMysteryCrawl() {
+  // Clean up any previous hunt
+  stopTracking();
+
+  // Pick a random fairy location
+  activeHunt = fairyLocations[Math.floor(Math.random() * fairyLocations.length)];
+
+  // DOM references
+  const clueEl     = document.getElementById('hunt-clue');
+  const distEl     = document.getElementById('hunt-distance');
+  const revealEl   = document.getElementById('hunt-location-reveal');
+  const rewardEl   = document.getElementById('hunt-reward');
+  const errorEl    = document.getElementById('hunt-error');
+  const catchBtn   = document.getElementById('btn-catch-fairy');
+  const genBtn     = document.getElementById('btn-generate-crawl');
+  const card       = document.getElementById('fairy-hunt-card');
+
+  if (!clueEl) return;
+
+  // Reset UI to hunt state
+  card.classList.remove('card-hearth');
+  card.classList.add('card-hunt');
+  revealEl.style.display  = 'none';
+  rewardEl.style.display  = 'none';
+  catchBtn.style.display  = 'none';
+  errorEl.style.display   = 'none';
+  distEl.className        = 'hunt-distance';
+  genBtn.textContent      = 'New Mystery';
+
+  // Show the clue
+  clueEl.textContent = `"${activeHunt.clue}"`;
+  distEl.textContent = 'Summoning the fairies... acquiring your location.';
+
+  // Start GPS tracking
+  startTracking();
+}
+
+/**
+ * Starts the GPS watcher. Updates distance in real-time.
+ * Handles permission denial with NL slang error.
+ */
+function startTracking() {
+  const distEl  = document.getElementById('hunt-distance');
+  const errorEl = document.getElementById('hunt-error');
+
+  // Check for geolocation support
+  if (!('geolocation' in navigator)) {
+    if (errorEl) {
+      errorEl.style.display = 'block';
+      errorEl.textContent = "Luh, b'y — yer browser don't support GPS. Try a different one.";
+    }
+    return;
+  }
+
+  geoWatchId = navigator.geolocation.watchPosition(
+    // ── SUCCESS: Got a position ──
+    (position) => {
+      if (!activeHunt) return;
+
+      const userLat = position.coords.latitude;
+      const userLng = position.coords.longitude;
+      const dist    = calculateDistance(userLat, userLng, activeHunt.lat, activeHunt.lng);
+      const catchBtn = document.getElementById('btn-catch-fairy');
+
+      // Update distance readout
+      if (distEl) {
+        if (dist > 1000) {
+          distEl.textContent = `📍 ~${(dist / 1000).toFixed(1)} km away — keep going, b'y.`;
+          distEl.className = 'hunt-distance';
+        } else if (dist > 200) {
+          distEl.textContent = `📍 ${Math.round(dist)}m away — you're getting warmer.`;
+          distEl.className = 'hunt-distance';
+        } else if (dist > 75) {
+          distEl.textContent = `📍 ${Math.round(dist)}m away — she's close! The fairy can feel ya.`;
+          distEl.className = 'hunt-distance close';
+        } else {
+          distEl.textContent = `📍 ${Math.round(dist)}m — YOU'RE HERE! Catch her!`;
+          distEl.className = 'hunt-distance very-close';
+
+          // Show the catch button
+          if (catchBtn) catchBtn.style.display = 'inline-flex';
+        }
+      }
+
+      // Hide catch button if user drifts away
+      if (dist > 75 && catchBtn) {
+        catchBtn.style.display = 'none';
+      }
+    },
+
+    // ── ERROR: GPS denied or failed ──
+    (error) => {
+      if (errorEl) {
+        errorEl.style.display = 'block';
+
+        switch (error.code) {
+          case error.PERMISSION_DENIED:
+            errorEl.textContent = "The arse is gone out of 'er! We need your location to find the fairies. Enable GPS in your browser settings, b'y.";
+            break;
+          case error.POSITION_UNAVAILABLE:
+            errorEl.textContent = "Can't get a fix — must be the pea soup fog jammin' the signal. Try again in a minute.";
+            break;
+          case error.TIMEOUT:
+            errorEl.textContent = "Took too long to find ya. The fairies are impatient — give it another go.";
+            break;
+          default:
+            errorEl.textContent = "Something's gone crooked with the GPS, b'y. Try again.";
+        }
+      }
+      console.warn('[RDF] Geolocation error:', error.message);
+    },
+
+    // ── OPTIONS ──
+    {
+      enableHighAccuracy: true,
+      maximumAge: 15000,   // Accept positions up to 15s old
+      timeout: 20000,      // Wait up to 20s for a fix
+    }
+  );
+}
+
+/**
+ * Stops the GPS watcher to conserve battery.
+ */
+function stopTracking() {
+  if (geoWatchId !== null) {
+    navigator.geolocation.clearWatch(geoWatchId);
+    geoWatchId = null;
+  }
+}
+
+/**
+ * WIN STATE — Triggered when user taps "Catch Fairy"
+ * within 75m of the target. Reveals the location,
+ * shows the reward, and transitions the card to
+ * the warm Hearth theme.
+ */
+function catchFairy() {
+  if (!activeHunt) return;
+
+  // Stop tracking — hunt is over
+  stopTracking();
+
+  // DOM references
+  const card      = document.getElementById('fairy-hunt-card');
+  const clueEl    = document.getElementById('hunt-clue');
+  const distEl    = document.getElementById('hunt-distance');
+  const revealEl  = document.getElementById('hunt-location-reveal');
+  const rewardEl  = document.getElementById('hunt-reward');
+  const catchBtn  = document.getElementById('btn-catch-fairy');
+  const genBtn    = document.getElementById('btn-generate-crawl');
+
+  // ── Transition to Hearth theme ──
+  if (card) {
+    card.classList.remove('card-hunt');
+    card.classList.add('card-hearth');
+  }
+
+  // Reveal the location name
+  if (revealEl) {
+    revealEl.textContent = `🧚 ${activeHunt.name}`;
+    revealEl.style.display = 'block';
+  }
+
+  // Show the reward
+  if (rewardEl) {
+    rewardEl.textContent = activeHunt.reward;
+    rewardEl.style.display = 'block';
+  }
+
+  // Update clue text to victory message
+  if (clueEl) {
+    clueEl.textContent = "You found her! The fairy's been caught. Show this screen to claim your deal.";
+  }
+
+  // Update distance text
+  if (distEl) {
+    distEl.textContent = '✨ Fairy Charm collected!';
+    distEl.className = 'hunt-distance';
+  }
+
+  // Hide catch button, show "New Mystery" for next round
+  if (catchBtn) catchBtn.style.display = 'none';
+  if (genBtn) genBtn.textContent = 'Hunt Another Fairy';
+
+  // Clear active hunt
+  activeHunt = null;
+
+  // Fire a celebratory notification if permission granted
+  if ('Notification' in window && Notification.permission === 'granted') {
+    new Notification('🧚 Fairy Caught!', {
+      body: `You found her at ${revealEl.textContent.replace('🧚 ', '')}! Show your phone to claim: ${rewardEl.textContent}`,
+      tag: 'rdf-fairy-catch',
+    });
+  }
+}
+
+/**
+ * Initializes the Fairy Hunt: wires Generate and
+ * Catch buttons.
+ */
+function initFairyHunt() {
+  const genBtn   = document.getElementById('btn-generate-crawl');
+  const catchBtn = document.getElementById('btn-catch-fairy');
+
+  if (genBtn) {
+    genBtn.addEventListener('click', generateMysteryCrawl);
+  }
+  if (catchBtn) {
+    catchBtn.addEventListener('click', catchFairy);
+  }
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   // Boot weather
@@ -873,6 +1136,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot Local Lingo slang card
   initSlang();
+
+  // Boot Fairy Hunt (Mystery Crawl GPS)
+  initFairyHunt();
 
   // Boot service worker
   registerServiceWorker();
