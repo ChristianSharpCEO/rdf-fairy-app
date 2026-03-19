@@ -30,6 +30,10 @@
   --folk-accent-bright: #F59E0B;
   --folk-accent-dim: #B45309;
 
+  /* Sou'wester (GPS Hunt accent — vibrant amber-orange) */
+  --accent-souwester: #F97316;
+  --accent-souwester-glow: rgba(249, 115, 22, 0.35);
+
   /* Text */
   --text-white: #FFFFFF;
   --text-frost: #F1F5F9;
@@ -720,6 +724,223 @@ body::after {
 
 .slang-btn:active {
   transform: scale(0.96);
+}
+
+/* ─── FAIRY HUNT (Mystery Crawl Card) ────────── */
+.hunt-section {
+  margin: var(--s-md);
+}
+
+/* Default state — dark glass hunt card */
+.card-hunt {
+  padding: 0;
+  overflow: hidden;
+  position: relative;
+  transition: background 0.6s ease, border-color 0.6s ease, box-shadow 0.6s ease;
+}
+
+.hunt-header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-sm);
+  padding: 12px var(--s-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.hunt-header-icon {
+  font-size: 1.1rem;
+  animation: fairy-bob 3.5s ease-in-out infinite;
+}
+
+.hunt-header-title {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--folk-accent);
+}
+
+.hunt-body {
+  padding: var(--s-lg) var(--s-md);
+  text-align: center;
+}
+
+.hunt-clue {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 1.05rem;
+  color: var(--text-candlelight);
+  line-height: 1.55;
+  margin-bottom: var(--s-md);
+  min-height: 3.2em;
+}
+
+.hunt-distance {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-mist);
+  margin-bottom: var(--s-md);
+  transition: color 0.3s ease;
+}
+
+.hunt-distance.close {
+  color: var(--accent-souwester);
+}
+
+.hunt-distance.very-close {
+  color: #4ADE80;
+  animation: pulse-text 1s ease-in-out infinite;
+}
+
+@keyframes pulse-text {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+.hunt-reward {
+  font-family: var(--font-folk);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--folk-accent-bright);
+  margin-bottom: var(--s-sm);
+  display: none;
+}
+
+.hunt-location-reveal {
+  font-family: var(--font-folk);
+  font-size: 1.4rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: var(--s-sm);
+  display: none;
+  text-shadow: 0 0 20px rgba(217, 119, 6, 0.2);
+}
+
+.hunt-error {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: #F87171;
+  line-height: 1.5;
+  display: none;
+}
+
+.hunt-footer {
+  padding: var(--s-sm) var(--s-md) var(--s-md);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--s-sm);
+}
+
+/* Generate button */
+.hunt-btn-generate {
+  padding: 12px 28px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--folk-accent);
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(180, 83, 9, 0.35));
+  color: var(--folk-accent-bright);
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 0 16px rgba(217, 119, 6, 0.1);
+}
+
+.hunt-btn-generate:hover {
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.35), rgba(180, 83, 9, 0.5));
+  box-shadow: 0 0 24px rgba(217, 119, 6, 0.2);
+  transform: translateY(-1px);
+}
+
+.hunt-btn-generate:active { transform: scale(0.96); }
+
+/* Catch/Claim button — hidden by default, sou'wester accent */
+.hunt-btn-catch {
+  display: none;
+  padding: 14px 32px;
+  border-radius: var(--r-full);
+  border: 1px solid var(--accent-souwester);
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.25), rgba(249, 115, 22, 0.45));
+  color: #FFF;
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: all 0.25s ease;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow:
+    0 0 20px var(--accent-souwester-glow),
+    0 0 50px rgba(249, 115, 22, 0.1);
+  animation: catch-pulse 2s ease-in-out infinite;
+}
+
+@keyframes catch-pulse {
+  0%, 100% { box-shadow: 0 0 20px var(--accent-souwester-glow), 0 0 50px rgba(249, 115, 22, 0.1); }
+  50% { box-shadow: 0 0 30px var(--accent-souwester-glow), 0 0 70px rgba(249, 115, 22, 0.15); }
+}
+
+.hunt-btn-catch:hover {
+  background: linear-gradient(135deg, rgba(249, 115, 22, 0.4), rgba(249, 115, 22, 0.6));
+  transform: translateY(-1px);
+}
+
+.hunt-btn-catch:active { transform: scale(0.96); }
+
+/* ── THE HEARTH: Win State ──
+   JS swaps .card-hunt → .card-hearth on catch.
+   Warm pub glow overrides the glass. */
+.card-hearth {
+  background: linear-gradient(145deg, #451A03, #5C2A0E) !important;
+  border-color: var(--folk-accent) !important;
+  color: #FEF3C7 !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 0 40px rgba(217, 119, 6, 0.15),
+    inset 0 1px 0 rgba(254, 243, 199, 0.06) !important;
+}
+
+/* Override inner text colors in hearth state */
+.card-hearth .hunt-header-title {
+  color: var(--text-candlelight);
+}
+
+.card-hearth .hunt-clue {
+  color: #FEF3C7;
+  font-style: normal;
+}
+
+.card-hearth .hunt-distance {
+  color: #FDE68A;
+}
+
+.card-hearth .hunt-location-reveal {
+  display: block;
+  color: #FFF;
+}
+
+.card-hearth .hunt-reward {
+  display: block;
+  color: #FDE68A;
+  font-size: 1.15rem;
+}
+
+/* Hearth inner glow */
+.card-hearth::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 70% 50% at 30% 85%, rgba(217, 119, 6, 0.1), transparent 70%);
+  pointer-events: none;
 }
 
 /* ─── NOTIFICATION ALERT SECTION ─────────────── */
