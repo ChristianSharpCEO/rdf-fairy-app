@@ -897,18 +897,31 @@ body::after {
 
 /* ── THE HEARTH: Win State ──
    JS swaps .card-hunt → .card-hearth on catch.
-   Warm pub glow overrides the glass. */
+   Warm Old Pub glow with candlelight flicker. */
 .card-hearth {
-  background: linear-gradient(145deg, #451A03, #5C2A0E) !important;
-  border-color: var(--folk-accent) !important;
+  background: linear-gradient(135deg, #451a03 0%, #2b1002 100%) !important;
+  border: 2px solid #f59e0b !important;
   color: #FEF3C7 !important;
   box-shadow:
     0 8px 32px rgba(0, 0, 0, 0.4),
-    0 0 40px rgba(217, 119, 6, 0.15),
-    inset 0 1px 0 rgba(254, 243, 199, 0.06) !important;
+    0 0 20px rgba(245, 158, 11, 0.4),
+    inset 0 1px 0 rgba(254, 243, 199, 0.08) !important;
+  animation: candlelight-flicker 3s ease-in-out infinite;
+}
+
+@keyframes candlelight-flicker {
+  0%   { border-color: #f59e0b; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(245,158,11,0.4); }
+  25%  { border-color: #d97706; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 14px rgba(217,119,6,0.3); }
+  50%  { border-color: #f59e0b; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 25px rgba(245,158,11,0.45); }
+  75%  { border-color: #b45309; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 16px rgba(180,83,9,0.35); }
+  100% { border-color: #f59e0b; box-shadow: 0 8px 32px rgba(0,0,0,0.4), 0 0 20px rgba(245,158,11,0.4); }
 }
 
 /* Override inner text colors in hearth state */
+.card-hearth .hunt-header {
+  border-bottom-color: rgba(245, 158, 11, 0.2);
+}
+
 .card-hearth .hunt-header-title {
   color: var(--text-candlelight);
 }
@@ -939,8 +952,81 @@ body::after {
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: radial-gradient(ellipse 70% 50% at 30% 85%, rgba(217, 119, 6, 0.1), transparent 70%);
+  background:
+    radial-gradient(ellipse 70% 50% at 30% 85%, rgba(245, 158, 11, 0.08), transparent 70%),
+    radial-gradient(ellipse 40% 30% at 70% 20%, rgba(254, 243, 199, 0.03), transparent 60%);
   pointer-events: none;
+}
+
+/* ── Fairy Image (revealed on catch) ── */
+.hunt-image {
+  display: none;
+  width: 100%;
+  max-height: 220px;
+  object-fit: cover;
+  border-radius: var(--r-md);
+  margin: var(--s-md) 0;
+  border: 1px solid rgba(245, 158, 11, 0.25);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.3);
+}
+
+.card-hearth .hunt-image {
+  border-color: rgba(245, 158, 11, 0.4);
+}
+
+/* ── Reward Display (conditional) ── */
+.hunt-reward-display {
+  display: none;
+  margin: var(--s-md) 0;
+  padding: var(--s-md);
+  border-radius: var(--r-md);
+  text-align: center;
+}
+
+.card-hearth .hunt-reward-display {
+  display: block;
+  background: rgba(245, 158, 11, 0.1);
+  border: 1px solid rgba(245, 158, 11, 0.2);
+}
+
+.reward-badge {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: #F59E0B;
+  margin-bottom: var(--s-xs);
+}
+
+.reward-text {
+  display: block;
+  font-family: var(--font-folk);
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #FEF3C7;
+  line-height: 1.5;
+  margin-bottom: var(--s-sm);
+}
+
+.reward-text--quip {
+  font-style: italic;
+  font-weight: 400;
+  font-size: 0.92rem;
+  color: #FDE68A;
+  opacity: 0.9;
+}
+
+.reward-cta {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--text-candlelight);
+  opacity: 0.7;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
 }
 
 /* ─── NOTIFICATION ALERT SECTION ─────────────── */
