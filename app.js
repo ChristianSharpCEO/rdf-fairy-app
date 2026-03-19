@@ -437,6 +437,199 @@ function renderDirectory() {
 
 
 /* ═══════════════════════════════════════════════
+   5b. LOCAL LINGO — Newfoundland Slang Teacher
+   ───────────────────────────────────────────────
+   Teaches tourists (CFAs) authentic NL slang.
+   25 entries with word, meaning, and example.
+   Randomly cycles on load and on button click.
+   ═══════════════════════════════════════════════ */
+
+const nlSlangList = [
+  {
+    word: "CFA",
+    meaning: "Come From Away — anyone not born in Newfoundland.",
+    example: "\"Don't mind him, he's a CFA. Only moved here last year.\""
+  },
+  {
+    word: "Mauzy",
+    meaning: "Damp, foggy, misty weather that clings to your skin.",
+    example: "\"'Tis right mauzy out — yer clothes'll be damp before ya reach the car.\""
+  },
+  {
+    word: "Best Kind",
+    meaning: "Everything is great. The highest compliment.",
+    example: "\"How's she going?\" \"Best kind, b'y. Best kind.\""
+  },
+  {
+    word: "Rotted",
+    meaning: "Extremely annoyed, upset, or furious.",
+    example: "\"She was right rotted when they cancelled the flight.\""
+  },
+  {
+    word: "B'y",
+    meaning: "Universal term of address. Boy, girl, friend, stranger — anyone.",
+    example: "\"Yes b'y!\" / \"Stay where you're to 'til I comes where you're at, b'y.\""
+  },
+  {
+    word: "Streel",
+    meaning: "A messy, untidy person — clothes all over the place.",
+    example: "\"Look at the state of ya, ya proper streel.\""
+  },
+  {
+    word: "Who Knit Ya?",
+    meaning: "Who raised you? Said when someone does something foolish.",
+    example: "\"You wore sneakers in a snowstorm? Who knit ya?\""
+  },
+  {
+    word: "Stogged",
+    meaning: "Completely stuffed full — usually from eating too much.",
+    example: "\"I'm stogged to the gills after that Jiggs dinner.\""
+  },
+  {
+    word: "Sin",
+    meaning: "A shame, or something that evokes pity.",
+    example: "\"The cat was out all night in the rain. What a sin.\""
+  },
+  {
+    word: "Luh!",
+    meaning: "Look! An exclamation to get someone's attention.",
+    example: "\"Luh! There's a moose on the highway again!\""
+  },
+  {
+    word: "Get On the Go",
+    meaning: "To get going, head out, start doing something.",
+    example: "\"Come on, get on the go — the pub won't wait forever.\""
+  },
+  {
+    word: "Screeched In",
+    meaning: "The honorary Newfoundlander ceremony — involves rum, cod, and an oath.",
+    example: "\"Are ye a Newfoundlander?\" \"I got screeched in on George Street last night.\""
+  },
+  {
+    word: "Long May Your Big Jib Draw",
+    meaning: "A toast wishing you good fortune. Refers to a sailing ship's jib sail catching wind.",
+    example: "\"Long may your big jib draw, me son!\" *clinks glass*"
+  },
+  {
+    word: "Pea Soup",
+    meaning: "Extremely thick fog — so dense you can barely see.",
+    example: "\"Can't drive tonight, it's pea soup from here to Bay Bulls.\""
+  },
+  {
+    word: "Jiggs Dinner",
+    meaning: "Traditional Sunday boiled dinner — salt beef, cabbage, pease pudding, root vegetables, and figgy duff.",
+    example: "\"Come over Sunday — nan's doing a Jiggs dinner.\""
+  },
+  {
+    word: "Arse Over Kettle",
+    meaning: "To fall head over heels, take a bad tumble.",
+    example: "\"Hit a patch of ice and went arse over kettle on Water Street.\""
+  },
+  {
+    word: "Stay Where You're To",
+    meaning: "Stay right where you are — I'm coming to you.",
+    example: "\"Stay where you're to 'til I comes where you're at.\""
+  },
+  {
+    word: "On the Go",
+    meaning: "Happening right now. In progress.",
+    example: "\"What's on the go tonight?\" \"Kitchen party at Jim's.\""
+  },
+  {
+    word: "Deadly",
+    meaning: "Awesome, amazing, excellent.",
+    example: "\"That fish and chips was deadly, b'y.\""
+  },
+  {
+    word: "Not Fit",
+    meaning: "The weather is terrible — not suitable for going outside.",
+    example: "\"Don't bother. It's not fit out — blowin' a gale.\""
+  },
+  {
+    word: "Gutfounded",
+    meaning: "Starving, extremely hungry.",
+    example: "\"I'm gutfounded — haven't had a bite since breakfast.\""
+  },
+  {
+    word: "Ducky",
+    meaning: "Term of endearment. Can be used for anyone.",
+    example: "\"How are ya, me ducky?\" said every nan in Newfoundland."
+  },
+  {
+    word: "Figgy Duff",
+    meaning: "A traditional Newfoundland boiled pudding with raisins. Served with Jiggs dinner.",
+    example: "\"Save room for the figgy duff — she's after making a big pot.\""
+  },
+  {
+    word: "Lard Tunderin'",
+    meaning: "An exclamation of surprise or frustration. The NL version of \"oh my god.\"",
+    example: "\"Lard tunderin' Jesus, b'y — did ya see the size of that wave?\""
+  },
+  {
+    word: "Screech",
+    meaning: "Cheap, dark Jamaican rum that's become Newfoundland's unofficial spirit.",
+    example: "\"Two glasses of screech and he was singin' shanties on the table.\""
+  },
+  {
+    word: "Whaddya At?",
+    meaning: "What are you doing? The universal Newfoundland greeting and conversation starter.",
+    example: "\"Whaddya at tonight, b'y?\" \"Nuttin' — come over for a beer.\""
+  },
+  {
+    word: "Whaddya Too?",
+    meaning: "What are you up to? Variation of 'Whaddya At' — slightly more pointed, like asking someone's plan.",
+    example: "\"Whaddya too this weekend?\" \"Heading out the bay if the weather's best kind.\""
+  },
+];
+
+/**
+ * Picks a random slang entry and injects it into
+ * the #slang-word, #slang-meaning, and #slang-example
+ * elements inside the Local Lingo card.
+ */
+function displayRandomSlang() {
+  const wordEl    = document.getElementById('slang-word');
+  const meaningEl = document.getElementById('slang-meaning');
+  const exampleEl = document.getElementById('slang-example');
+  if (!wordEl || !meaningEl || !exampleEl) return;
+
+  // Pick a random entry
+  const entry = nlSlangList[Math.floor(Math.random() * nlSlangList.length)];
+
+  // Fade out, swap content, fade back in
+  const card = wordEl.closest('.slang-card');
+  if (card) {
+    card.classList.add('slang-swap');
+    setTimeout(() => {
+      wordEl.textContent    = entry.word;
+      meaningEl.textContent = entry.meaning;
+      exampleEl.textContent = entry.example;
+      card.classList.remove('slang-swap');
+    }, 150);
+  } else {
+    wordEl.textContent    = entry.word;
+    meaningEl.textContent = entry.meaning;
+    exampleEl.textContent = entry.example;
+  }
+}
+
+/**
+ * Wires up the "Learn Another" button and fires the
+ * first random slang on load.
+ */
+function initSlang() {
+  // Display first word immediately
+  displayRandomSlang();
+
+  // "Learn Another" button
+  const btn = document.getElementById('btn-next-slang');
+  if (btn) {
+    btn.addEventListener('click', displayRandomSlang);
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
    6. PUSH NOTIFICATIONS — "DUOLINGO" GUILT-TRIP
    ───────────────────────────────────────────────
    Uses the browser Notification API to request
@@ -677,6 +870,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot notifications
   initNotifications();
+
+  // Boot Local Lingo slang card
+  initSlang();
 
   // Boot service worker
   registerServiceWorker();
