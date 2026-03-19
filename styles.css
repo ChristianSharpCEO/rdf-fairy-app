@@ -403,32 +403,12 @@ body::after {
   color: var(--text-frost);
 }
 
-/* ─── WEBCAM PORTAL (Ventusky Weather Map) ─────── */
+/* ─── LIVE FEEDS (Collapsible Tab Panels) ─────── */
 .webcam-section {
   margin: var(--s-lg) var(--s-md);
-}
-
-.webcam-portal {
-  padding: 0;
-  overflow: hidden;
-  box-shadow:
-    var(--glass-shadow),
-    0 0 40px rgba(217, 119, 6, 0.06),
-    inset 0 1px 0 rgba(255, 255, 255, 0.06);
-}
-
-.webcam-label {
-  padding: 10px var(--s-md);
-  font-family: var(--font-ui);
-  font-size: 0.7rem;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: var(--text-slate);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
   display: flex;
-  align-items: center;
-  gap: 6px;
+  flex-direction: column;
+  gap: var(--s-sm);
 }
 
 .live-dot {
@@ -444,11 +424,106 @@ body::after {
   50% { opacity: 0.3; }
 }
 
-/* Responsive iframe wrapper — 3:2 ratio for map readability on mobile */
+/* Each collapsible feed panel */
+.feed-panel {
+  overflow: hidden;
+}
+
+/* The clickable tab header — <summary> element */
+.feed-tab {
+  display: flex;
+  align-items: center;
+  gap: var(--s-sm);
+  padding: 14px var(--s-md);
+  cursor: pointer;
+  list-style: none; /* remove default disclosure triangle */
+  -webkit-tap-highlight-color: transparent;
+  transition: background 0.2s ease;
+  user-select: none;
+}
+
+/* Hide the default marker in all browsers */
+.feed-tab::-webkit-details-marker { display: none; }
+.feed-tab::marker { content: ''; }
+
+.feed-tab:hover {
+  background: var(--glass-bg-hover);
+}
+
+.feed-tab-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+}
+
+.feed-tab-title {
+  flex: 1;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--text-frost);
+}
+
+.feed-tab-chevron {
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  transition: transform 0.3s ease;
+  flex-shrink: 0;
+}
+
+/* Rotate chevron when open */
+.feed-panel[open] .feed-tab-chevron {
+  transform: rotate(180deg);
+}
+
+/* Highlight the active/open tab header */
+.feed-panel[open] .feed-tab {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feed-panel[open] .feed-tab-title {
+  color: var(--folk-accent-bright);
+}
+
+/* The expandable content area */
+.feed-content {
+  animation: feed-slide 0.3s ease;
+}
+
+@keyframes feed-slide {
+  from { opacity: 0; max-height: 0; }
+  to { opacity: 1; max-height: 600px; }
+}
+
+/* Placeholder card (for link-only panels like Harbour Cam) */
+.feed-placeholder {
+  padding: var(--s-lg) var(--s-md);
+  text-align: center;
+}
+
+.feed-placeholder-icon {
+  font-size: 2.2rem;
+  display: block;
+  margin-bottom: var(--s-sm);
+  opacity: 0.6;
+}
+
+.feed-placeholder-text {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-mist);
+  line-height: 1.5;
+  max-width: 300px;
+  margin: 0 auto;
+}
+
+/* Responsive iframe wrapper — 3:2 for map readability on mobile */
 .iframe-wrapper {
   position: relative;
   width: 100%;
-  padding-bottom: 66.67%; /* 3:2 aspect ratio — gives maps vertical breathing room */
+  padding-bottom: 66.67%; /* 3:2 aspect ratio */
   background: rgba(0, 0, 0, 0.4);
   overflow: hidden;
 }
@@ -463,13 +538,13 @@ body::after {
   border-radius: 0;
 }
 
-/* Portal footer with glowing CTA button */
-.webcam-portal-footer {
+/* Footer with glowing CTA — shared by both panels */
+.feed-footer {
   padding: var(--s-md);
   display: flex;
   justify-content: center;
   border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(0, 0, 0, 0.15);
+  background: rgba(0, 0, 0, 0.1);
 }
 
 .webcam-open-btn {
@@ -488,7 +563,6 @@ body::after {
   text-transform: uppercase;
   letter-spacing: 0.06em;
   transition: all 0.25s ease;
-  /* The fireside glow */
   box-shadow:
     0 0 16px rgba(217, 119, 6, 0.15),
     0 0 40px rgba(217, 119, 6, 0.06);
