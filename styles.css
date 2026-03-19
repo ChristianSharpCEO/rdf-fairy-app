@@ -610,6 +610,118 @@ body::after {
   font-style: italic;
 }
 
+/* ─── LOCAL LINGO (Slang Card) ───────────────── */
+.slang-section {
+  margin: var(--s-md);
+}
+
+.slang-card {
+  padding: 0;
+  overflow: hidden;
+}
+
+/* Swap animation — quick fade for word cycling */
+.slang-card.slang-swap .slang-body {
+  opacity: 0;
+  transform: translateY(4px);
+}
+
+.slang-header {
+  display: flex;
+  align-items: center;
+  gap: var(--s-sm);
+  padding: 12px var(--s-md);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.12);
+}
+
+.slang-header-icon {
+  font-size: 1.1rem;
+}
+
+.slang-header-title {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--folk-accent);
+}
+
+.slang-body {
+  padding: var(--s-lg) var(--s-md);
+  text-align: center;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+.slang-word {
+  font-family: var(--font-folk);
+  font-size: 1.8rem;
+  font-weight: 800;
+  color: var(--text-white);
+  margin-bottom: var(--s-sm);
+  line-height: 1.2;
+  /* Warm text glow for emphasis */
+  text-shadow: 0 0 30px rgba(217, 119, 6, 0.12);
+}
+
+.slang-meaning {
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  font-weight: 400;
+  color: var(--text-frost);
+  line-height: 1.55;
+  margin-bottom: var(--s-md);
+  max-width: 340px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.slang-example {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-candlelight);
+  line-height: 1.5;
+  max-width: 320px;
+  margin-left: auto;
+  margin-right: auto;
+  opacity: 0.85;
+}
+
+.slang-footer {
+  padding: var(--s-sm) var(--s-md) var(--s-md);
+  display: flex;
+  justify-content: center;
+}
+
+.slang-btn {
+  padding: 11px 28px;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  color: var(--text-frost);
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.slang-btn:hover {
+  background: rgba(217, 119, 6, 0.15);
+  border-color: var(--folk-accent);
+  color: var(--folk-accent-bright);
+  box-shadow: 0 0 16px rgba(217, 119, 6, 0.1);
+}
+
+.slang-btn:active {
+  transform: scale(0.96);
+}
+
 /* ─── NOTIFICATION ALERT SECTION ─────────────── */
 .alert-section {
   margin: var(--s-md);
