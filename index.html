@@ -57,37 +57,69 @@
         </div>
       </section>
 
-      <!-- ── Live Weather Map (Ventusky) ── -->
+      <!-- ── Live Feeds (Collapsible Tabs) ── -->
       <section class="webcam-section">
         <div class="section-head">
-          <span class="section-icon">🌀</span>
-          <h2 class="section-title">Live Storm Radar — Newfoundland</h2>
+          <span class="section-icon">📡</span>
+          <h2 class="section-title">Live Feeds — St. John's</h2>
         </div>
 
-        <div class="webcam-portal glass">
-          <div class="webcam-label">
-            <span class="live-dot"></span> Live — Ventusky Weather Map
+        <!-- Tab 1: Harbour Cam (YouTube link, no iframe) -->
+        <details class="feed-panel glass">
+          <summary class="feed-tab">
+            <span class="feed-tab-icon">🌊</span>
+            <span class="feed-tab-title">Harbour Cam</span>
+            <span class="live-dot"></span>
+            <span class="feed-tab-chevron">▾</span>
+          </summary>
+          <div class="feed-content">
+            <div class="feed-placeholder">
+              <span class="feed-placeholder-icon">📹</span>
+              <p class="feed-placeholder-text">Live video of St. John's Harbour — icebergs, ships, and fog rolling through the Narrows.</p>
+            </div>
+            <div class="feed-footer">
+              <a
+                class="webcam-open-btn"
+                href="https://www.youtube.com/watch?v=RCeWw24Qj1c"
+                target="_blank"
+                rel="noopener"
+              >
+                Open Live Harbour Feed →
+              </a>
+            </div>
           </div>
-          <div class="iframe-wrapper">
-            <iframe
-              src="https://www.ventusky.com/?p=48.6;-54.3;5"
-              title="Ventusky Live Weather Map — Newfoundland"
-              loading="lazy"
-              allow="geolocation"
-              referrerpolicy="no-referrer"
-            ></iframe>
+        </details>
+
+        <!-- Tab 2: Wind Map (Windy.com embed) -->
+        <details class="feed-panel glass">
+          <summary class="feed-tab">
+            <span class="feed-tab-icon">🌀</span>
+            <span class="feed-tab-title">Wind &amp; Storm Map</span>
+            <span class="live-dot"></span>
+            <span class="feed-tab-chevron">▾</span>
+          </summary>
+          <div class="feed-content">
+            <div class="iframe-wrapper">
+              <iframe
+                src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=8&overlay=wind&product=ecmwf&level=surface&lat=47.561&lon=-52.713"
+                title="Windy.com Live Wind Map — St. John's, NL"
+                loading="lazy"
+                allow="geolocation"
+                referrerpolicy="no-referrer"
+              ></iframe>
+            </div>
+            <div class="feed-footer">
+              <a
+                class="webcam-open-btn"
+                href="https://www.windy.com/47.561/-52.713?47.561,-52.713,8"
+                target="_blank"
+                rel="noopener"
+              >
+                Open Full Wind Map →
+              </a>
+            </div>
           </div>
-          <div class="webcam-portal-footer">
-            <a
-              class="webcam-open-btn"
-              href="https://www.ventusky.com/?p=48.6;-54.3;5"
-              target="_blank"
-              rel="noopener"
-            >
-              Open Full Weather Map →
-            </a>
-          </div>
-        </div>
+        </details>
       </section>
 
       <!-- ── Fog Horn Deals ── -->
