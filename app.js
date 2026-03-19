@@ -859,7 +859,7 @@ let fairyDatabase = [];
 
 // ⚠️ PASTE YOUR PUBLISHED GOOGLE SHEET CSV URL HERE
 // (Google Sheets → File → Share → Publish to Web → CSV)
-const SHEET_URL = 'YOUR_CSV_URL_HERE';
+const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiOoFFaCMgboUK_oSpPsexOTVMbBF-dGzZDmWdgZ_nZtOiya7cjafbgSGj2zfDs9IbgqSg7tmsYnjC/pub?gid=0&single=true&output=csv';
 
 /**
  * Fetches the Google Sheet CSV and parses it into fairyDatabase.
