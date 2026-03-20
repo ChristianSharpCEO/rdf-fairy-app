@@ -212,6 +212,22 @@
     </div><!-- /view-directory -->
 
 
+    <!-- ═══════════════════════════════════════════
+         TAB 3: THE PASSPORT (Collected Fairies)
+         ═══════════════════════════════════════════ -->
+    <div id="view-passport" class="view">
+      <div class="passport-view">
+        <div class="passport-header">
+          <h2 class="passport-title">✨ My Fairy Passport</h2>
+          <p class="passport-subtitle">Every fairy you've caught on the hunt</p>
+        </div>
+        <div id="passport-grid" class="passport-grid">
+          <!-- Populated by app.js renderPassport() -->
+        </div>
+      </div>
+    </div><!-- /view-passport -->
+
+
     <!-- [PHASE 2 PLACEHOLDER: view-fairy-hunt]
          Third tab: interactive fairy hunt map.
          HTML5 Geolocation tracks the user. Fairy hotspot
@@ -230,7 +246,10 @@
       <span class="nav-icon">📖</span>
       <span class="nav-label">Directory</span>
     </button>
-    <!-- [PHASE 2: Third tab "The Hunt" 🧚 goes here] -->
+    <button class="nav-tab" data-tab="passport" id="nav-passport" aria-label="Passport — collected fairies">
+      <span class="nav-icon">⭐</span>
+      <span class="nav-label">Passport</span>
+    </button>
   </nav>
 
   <!-- ⚠️ TEMPORARY DEV TOOL — DELETE BEFORE PRODUCTION ⚠️ -->
