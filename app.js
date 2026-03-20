@@ -2278,7 +2278,80 @@ function renderPastimes() {
 }
 
 
+/* ═══════════════════════════════════════════════
+   14. ONBOARDING — Gruffy Install Modal
+   ───────────────────────────────────────────────
+   One-time slide-up modal on first visit.
+   Detects iOS vs Android and shows PWA install
+   instructions. Dismissed state saved in localStorage.
+   ═══════════════════════════════════════════════ */
+
+/**
+ * Shows the onboarding modal on first visit.
+ * Detects OS and injects the correct install instructions.
+ * Remembered via localStorage so it only shows once.
+ */
+function initOnboarding() {
+  const overlay = document.getElementById('onboarding-overlay');
+  const instructions = document.getElementById('os-install-instructions');
+  const btn = document.getElementById('btn-start-hunting');
+
+  if (!overlay || !instructions || !btn) return;
+
+  // ── Check if user has already seen the onboarding ──
+  try {
+    if (localStorage.getItem('hasSeenGruffyOnboarding') === 'true') {
+      return; // Already onboarded — do nothing
+    }
+  } catch (e) {
+    // localStorage unavailable — show it anyway
+  }
+
+  // ── OS Detection ──
+  const ua = navigator.userAgent || '';
+  const isIOS = /iPhone|iPad|iPod/i.test(ua);
+  const isAndroid = /Android/i.test(ua);
+
+  if (isIOS) {
+    instructions.innerHTML = `
+      <strong>🍎 iPhone Users:</strong> Tap the <strong>'Share'</strong> button
+      (the square with the arrow) at the bottom of Safari, then scroll down and
+      tap <strong>'Add to Home Screen'</strong> to make me a real app. No App Store needed!
+    `;
+  } else if (isAndroid) {
+    instructions.innerHTML = `
+      <strong>🤖 Android Users:</strong> Tap the <strong>three dots</strong> at the
+      top right of Chrome and hit <strong>'Install App'</strong> or
+      <strong>'Add to Home Screen'</strong>. That's it — Bob's yer uncle!
+    `;
+  } else {
+    // Desktop / other
+    instructions.innerHTML = `
+      <strong>💻 Desktop Users:</strong> In Chrome, click the <strong>install icon</strong>
+      in the address bar (or the three dots → 'Install app'). On other browsers,
+      look for <strong>'Add to Home Screen'</strong> in the menu. Works just like a real app!
+    `;
+  }
+
+  // ── Show the overlay ──
+  overlay.classList.remove('hidden');
+
+  // ── Dismiss handler ──
+  btn.addEventListener('click', () => {
+    overlay.classList.add('hidden');
+    try {
+      localStorage.setItem('hasSeenGruffyOnboarding', 'true');
+    } catch (e) {
+      console.warn('[RDF] Could not save onboarding state:', e);
+    }
+  });
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
+  // Boot onboarding modal (first visit only)
+  initOnboarding();
+
   // Boot weather
   fetchWeather();
 
