@@ -1168,6 +1168,272 @@ body::after {
   margin-top: var(--s-sm);
 }
 
+/* ─── LORE TAB (Ghost Stories & Folklore) ─────── */
+.lore-view {
+  padding: var(--s-md);
+}
+
+.lore-header {
+  margin-bottom: var(--s-lg);
+}
+
+.lore-title {
+  font-family: var(--font-folk);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-spindrift, var(--text-white));
+  margin-bottom: 2px;
+}
+
+.lore-subtitle {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-slate);
+}
+
+/* ── Gruffy's Chat Bubble ── */
+.gruffy-bubble {
+  display: flex;
+  gap: var(--s-md);
+  padding: var(--s-md);
+  margin-bottom: var(--s-lg);
+  background: rgba(12, 50, 91, 0.8) !important;
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  position: relative;
+  overflow: visible;
+}
+
+/* Decorative tail on the bubble */
+.gruffy-bubble::after {
+  content: '';
+  position: absolute;
+  bottom: -8px;
+  left: 32px;
+  width: 16px;
+  height: 16px;
+  background: rgba(12, 50, 91, 0.8);
+  border-right: 1px solid var(--glass-border);
+  border-bottom: 1px solid var(--glass-border);
+  transform: rotate(45deg);
+}
+
+.gruffy-avatar {
+  flex-shrink: 0;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: rgba(217, 119, 6, 0.12);
+  border: 1px solid rgba(217, 119, 6, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+.gruffy-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 50%;
+}
+
+.gruffy-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.gruffy-name {
+  font-family: var(--font-folk);
+  font-size: 0.75rem;
+  font-weight: 700;
+  color: var(--folk-accent);
+  margin-bottom: var(--s-xs);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+}
+
+.gruffy-speech {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.84rem;
+  color: var(--text-spindrift, var(--text-frost));
+  line-height: 1.55;
+  margin-bottom: var(--s-sm);
+}
+
+.gruffy-dismiss {
+  padding: 7px 18px;
+  border-radius: var(--r-full);
+  border: none;
+  background: var(--accent-sunset, #FD5E53);
+  color: #FFF;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.gruffy-dismiss:hover {
+  background: var(--accent-sunset-hover, #E04B41);
+}
+
+.gruffy-dismiss:active {
+  transform: scale(0.96);
+}
+
+/* ── Lore Accordion (Details/Summary) ── */
+.lore-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-sm);
+}
+
+.lore-item {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  transition: border-color 0.25s ease;
+}
+
+.lore-item[open] {
+  border-color: var(--glass-border-bright);
+}
+
+.lore-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--s-sm);
+  padding: 14px var(--s-md);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.lore-summary::-webkit-details-marker { display: none; }
+.lore-summary::marker { content: ''; }
+
+.lore-summary:hover {
+  background: var(--glass-bg-hover);
+}
+
+.lore-summary-icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.lore-summary-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.lore-summary-title {
+  font-family: var(--font-folk);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-spindrift, var(--text-white));
+  line-height: 1.3;
+}
+
+.lore-summary-category {
+  font-family: var(--font-ui);
+  font-size: 0.65rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--folk-accent);
+  margin-top: 2px;
+}
+
+.lore-chevron {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  transition: transform 0.3s ease;
+}
+
+.lore-item[open] .lore-chevron {
+  transform: rotate(180deg);
+}
+
+.lore-item[open] .lore-summary-title {
+  color: var(--folk-accent-bright, var(--folk-accent));
+}
+
+.lore-body {
+  padding: 0 var(--s-md) var(--s-md);
+  animation: lore-expand 0.3s ease;
+}
+
+@keyframes lore-expand {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+.lore-teaser {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-candlelight);
+  line-height: 1.5;
+  margin-bottom: var(--s-sm);
+  padding-bottom: var(--s-sm);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.lore-full-text {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  color: var(--text-spindrift, var(--text-mist));
+  line-height: 1.65;
+}
+
+/* Staggered lore entrance */
+.lore-item {
+  opacity: 0;
+  animation: card-rise 0.4s ease forwards;
+}
+
+.lore-item:nth-child(1) { animation-delay: 0.04s; }
+.lore-item:nth-child(2) { animation-delay: 0.08s; }
+.lore-item:nth-child(3) { animation-delay: 0.12s; }
+.lore-item:nth-child(4) { animation-delay: 0.16s; }
+.lore-item:nth-child(5) { animation-delay: 0.20s; }
+.lore-item:nth-child(6) { animation-delay: 0.24s; }
+.lore-item:nth-child(7) { animation-delay: 0.28s; }
+.lore-item:nth-child(8) { animation-delay: 0.32s; }
+
+/* Lore empty state */
+.lore-empty {
+  text-align: center;
+  padding: var(--s-2xl) var(--s-md);
+}
+
+.lore-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--s-md);
+  opacity: 0.4;
+  display: block;
+}
+
+.lore-empty-text {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--text-slate);
+}
+
 /* ─── NOTIFICATION ALERT SECTION ─────────────── */
 .alert-section {
   margin: var(--s-md);
