@@ -13,13 +13,19 @@
 
 /* ─── DESIGN TOKENS ──────────────────────────── */
 :root {
+  /* Atlantic Blue & Sunset Orange — Primary Palette */
+  --bg-atlantic: #0C325B;
+  --accent-sunset: #FD5E53;
+  --accent-sunset-hover: #E04B41;
+  --text-spindrift: #F8FAFC;
+
   /* Glass Theme */
-  --glass-bg: rgba(255, 255, 255, 0.07);
-  --glass-bg-hover: rgba(255, 255, 255, 0.11);
-  --glass-border: rgba(255, 255, 255, 0.12);
-  --glass-border-bright: rgba(255, 255, 255, 0.22);
-  --glass-blur: blur(16px);
-  --glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+  --glass-bg: rgba(12, 50, 91, 0.4);
+  --glass-bg-hover: rgba(12, 50, 91, 0.55);
+  --glass-border: rgba(248, 250, 252, 0.15);
+  --glass-border-bright: rgba(248, 250, 252, 0.25);
+  --glass-blur: blur(12px);
+  --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
 
   /* Old Folk (Fairy-Led) Theme */
   --folk-bg: rgba(69, 26, 3, 0.35);
@@ -81,50 +87,50 @@ html {
 /* ─── FIXED STORM BACKGROUND ─────────────────── */
 body {
   font-family: var(--font-ui);
-  color: var(--text-white);
+  color: var(--text-spindrift);
   line-height: 1.6;
   min-height: 100dvh;
   overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
 
-  /* Moody coastal rainstorm — fixed behind all content */
-  background-color: #080E1A;
+  /* Atlantic Navy — deep ocean base with layered atmosphere */
+  background-color: var(--bg-atlantic);
   background-image:
     /* Rain streak effect — fine diagonal lines */
     repeating-linear-gradient(
       115deg,
       transparent,
       transparent 3px,
-      rgba(148, 163, 184, 0.015) 3px,
-      rgba(148, 163, 184, 0.015) 4px
+      rgba(248, 250, 252, 0.012) 3px,
+      rgba(248, 250, 252, 0.012) 4px
     ),
     /* Fog bank — bottom of viewport */
     radial-gradient(
       ellipse 120% 40% at 50% 105%,
-      rgba(100, 116, 139, 0.12) 0%,
+      rgba(12, 50, 91, 0.3) 0%,
       transparent 70%
     ),
     /* Storm light leak — top right */
     radial-gradient(
       ellipse 60% 50% at 85% 10%,
-      rgba(51, 65, 85, 0.35) 0%,
+      rgba(20, 60, 100, 0.35) 0%,
       transparent 60%
     ),
     /* Deep ocean — bottom left */
     radial-gradient(
       ellipse 80% 60% at 10% 90%,
-      rgba(7, 11, 22, 0.9) 0%,
+      rgba(4, 15, 35, 0.9) 0%,
       transparent 60%
     ),
-    /* Core storm gradient */
+    /* Core Atlantic gradient */
     linear-gradient(
       175deg,
-      #0C1322 0%,
-      #111B2E 20%,
-      #15243B 40%,
-      #111D30 65%,
-      #0A1120 85%,
-      #060D18 100%
+      #08213E 0%,
+      #0A2A4D 20%,
+      #0C325B 40%,
+      #0A2A4D 65%,
+      #071D38 85%,
+      #04122A 100%
     );
   background-attachment: fixed;
 }
@@ -184,12 +190,13 @@ body::after {
   border: 1px solid var(--glass-border);
   border-radius: var(--r-lg);
   box-shadow: var(--glass-shadow);
-  transition: background 0.25s ease, border-color 0.25s ease;
+  transition: background 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .glass:hover {
   background: var(--glass-bg-hover);
   border-color: var(--glass-border-bright);
+  box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.5);
 }
 
 /* ─── SHARED: OLD FOLK GLASS ─────────────────── */
