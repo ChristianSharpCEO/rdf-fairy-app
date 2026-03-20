@@ -1434,6 +1434,166 @@ body::after {
   color: var(--text-slate);
 }
 
+/* ─── PASTIMES TAB (Yarns, Antics & Games) ────── */
+.pastimes-view {
+  padding: var(--s-md);
+}
+
+.pastimes-header {
+  margin-bottom: var(--s-lg);
+}
+
+.pastimes-title {
+  font-family: var(--font-folk);
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: var(--text-spindrift, var(--text-white));
+  margin-bottom: var(--s-xs);
+}
+
+.pastimes-intro {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.84rem;
+  color: var(--text-spindrift, var(--text-mist));
+  line-height: 1.55;
+}
+
+.pastimes-accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-lg);
+}
+
+/* Category group header */
+.pastimes-category-head {
+  font-family: var(--font-folk);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-spindrift, var(--text-white));
+  padding: 10px var(--s-md);
+  margin-bottom: var(--s-xs);
+  background: rgba(4, 18, 42, 0.5);
+  border-radius: var(--r-md);
+  border-left: 3px solid var(--accent-sunset, #FD5E53);
+}
+
+.pastimes-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-sm);
+}
+
+/* Individual game accordion item */
+.pastimes-item {
+  background: rgba(12, 50, 91, 0.4);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
+  transition: border-color 0.25s ease;
+}
+
+.pastimes-item[open] {
+  border-color: var(--glass-border-bright);
+}
+
+.pastimes-summary {
+  display: flex;
+  align-items: center;
+  gap: var(--s-sm);
+  padding: 14px var(--s-md);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.pastimes-summary::-webkit-details-marker { display: none; }
+.pastimes-summary::marker { content: ''; }
+
+.pastimes-summary:hover {
+  background: rgba(12, 50, 91, 0.55);
+}
+
+.pastimes-summary-icon {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+}
+
+.pastimes-summary-name {
+  flex: 1;
+  font-family: var(--font-folk);
+  font-size: 0.95rem;
+  font-weight: 600;
+  color: var(--text-spindrift, var(--text-white));
+  line-height: 1.3;
+}
+
+.pastimes-chevron {
+  flex-shrink: 0;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  transition: transform 0.3s ease;
+}
+
+.pastimes-item[open] .pastimes-chevron {
+  transform: rotate(180deg);
+}
+
+.pastimes-item[open] .pastimes-summary-name {
+  color: var(--accent-sunset, #FD5E53);
+}
+
+.pastimes-body {
+  padding: 0 var(--s-md) var(--s-md);
+  animation: lore-expand 0.3s ease;
+}
+
+.pastimes-rules {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  color: var(--text-spindrift, var(--text-mist));
+  line-height: 1.65;
+  white-space: pre-line;
+}
+
+/* Staggered entrance */
+.pastimes-item {
+  opacity: 0;
+  animation: card-rise 0.4s ease forwards;
+}
+
+.pastimes-item:nth-child(1) { animation-delay: 0.04s; }
+.pastimes-item:nth-child(2) { animation-delay: 0.08s; }
+.pastimes-item:nth-child(3) { animation-delay: 0.12s; }
+.pastimes-item:nth-child(4) { animation-delay: 0.16s; }
+.pastimes-item:nth-child(5) { animation-delay: 0.20s; }
+.pastimes-item:nth-child(6) { animation-delay: 0.24s; }
+
+/* Pastimes empty state */
+.pastimes-empty {
+  text-align: center;
+  padding: var(--s-2xl) var(--s-md);
+}
+
+.pastimes-empty-icon {
+  font-size: 2.5rem;
+  margin-bottom: var(--s-md);
+  opacity: 0.4;
+  display: block;
+}
+
+.pastimes-empty-text {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.92rem;
+  color: var(--text-slate);
+}
+
 /* ─── NOTIFICATION ALERT SECTION ─────────────── */
 .alert-section {
   margin: var(--s-md);
