@@ -1342,6 +1342,9 @@ function initNavigation() {
 
       // Scroll to top on tab change
       window.scrollTo({ top: 0, behavior: 'smooth' });
+
+      // Render passport gallery when switching to that tab
+      if (target === 'passport') renderPassport();
     });
   });
 }
@@ -1767,6 +1770,9 @@ function revealFairy() {
   if (catchBtn) catchBtn.style.display = 'none';
   if (genBtn) genBtn.textContent = 'Hunt Another Fairy';
 
+  // ── Save to Passport ──
+  saveCaughtFairy(foundFairy.Name);
+
   // Clear active hunt
   activeHunt = null;
 
@@ -1800,6 +1806,120 @@ async function initFairyHunt() {
   if (catchBtn) {
     catchBtn.addEventListener('click', revealFairy);
   }
+}
+
+
+/* ═══════════════════════════════════════════════
+   11. DIGITAL PASSPORT GALLERY
+   ───────────────────────────────────────────────
+   Tracks which fairies the user has caught using
+   localStorage. Renders a grid of collected fairy
+   cards in the Passport tab.
+   ═══════════════════════════════════════════════ */
+
+/**
+ * Saves a caught fairy's name to localStorage.
+ * Prevents duplicates. Called from revealFairy().
+ * @param {string} fairyName — The Name field from the fairy database
+ */
+function saveCaughtFairy(fairyName) {
+  if (!fairyName) return;
+
+  let caught = [];
+  try {
+    const stored = localStorage.getItem('caughtFairies');
+    if (stored) caught = JSON.parse(stored);
+  } catch (e) {
+    console.warn('[RDF] Failed to read caughtFairies from localStorage:', e);
+    caught = [];
+  }
+
+  // Don't add duplicates
+  if (caught.includes(fairyName)) {
+    console.log(`[RDF] Fairy "${fairyName}" already in passport.`);
+    return;
+  }
+
+  caught.push(fairyName);
+
+  try {
+    localStorage.setItem('caughtFairies', JSON.stringify(caught));
+    console.log(`[RDF] 🧚 Fairy saved to passport: "${fairyName}" (${caught.length} total)`);
+  } catch (e) {
+    console.warn('[RDF] Failed to save to localStorage:', e);
+  }
+}
+
+/**
+ * Retrieves the list of caught fairy names from localStorage.
+ * @returns {string[]}
+ */
+function getCaughtFairies() {
+  try {
+    const stored = localStorage.getItem('caughtFairies');
+    return stored ? JSON.parse(stored) : [];
+  } catch (e) {
+    console.warn('[RDF] Failed to read caughtFairies:', e);
+    return [];
+  }
+}
+
+/**
+ * Renders the Passport Gallery grid.
+ * Matches saved fairy names against fairyDatabase to
+ * retrieve ImageURL. Falls back to an emoji placeholder
+ * if no image exists.
+ */
+function renderPassport() {
+  const grid = document.getElementById('passport-grid');
+  if (!grid) return;
+
+  const caught = getCaughtFairies();
+
+  // ── Empty state ──
+  if (caught.length === 0) {
+    grid.innerHTML = `
+      <div class="passport-empty">
+        <span class="passport-empty-icon">🧚</span>
+        <p class="passport-empty-text">
+          Empty as a dory in drydock, b'y.<br>
+          Get out in the RDF and catch some fairies!
+        </p>
+      </div>
+    `;
+    return;
+  }
+
+  // ── Build cards ──
+  const cards = caught.map(name => {
+    // Try to find the fairy in our database for the image
+    let imageURL = '';
+    if (typeof fairyDatabase !== 'undefined' && Array.isArray(fairyDatabase)) {
+      const match = fairyDatabase.find(f => f.Name === name);
+      if (match && match.ImageURL && match.ImageURL.trim()) {
+        imageURL = match.ImageURL.trim();
+      }
+    }
+
+    const imageHTML = imageURL
+      ? `<img class="collected-card-img" src="${imageURL}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
+         <div class="collected-card-placeholder" style="display:none;">🧚</div>`
+      : `<div class="collected-card-placeholder">🧚</div>`;
+
+    return `
+      <div class="collected-card">
+        ${imageHTML}
+        <div class="collected-card-name">${name}</div>
+      </div>
+    `;
+  }).join('');
+
+  grid.innerHTML = `
+    ${cards}
+    <div class="passport-count" style="grid-column: 1 / -1; justify-content: center; padding-top: var(--s-sm);">
+      🧚 ${caught.length} ${caught.length === 1 ? 'fairy' : 'fairies'} collected
+    </div>
+  `;
 }
 
 document.addEventListener('DOMContentLoaded', () => {
