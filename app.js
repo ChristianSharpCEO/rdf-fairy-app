@@ -1345,6 +1345,12 @@ function initNavigation() {
 
       // Render passport gallery when switching to that tab
       if (target === 'passport') renderPassport();
+
+      // Render lore accordion + check Gruffy when switching to lore tab
+      if (target === 'lore') {
+        checkGruffyLore();
+        renderLore();
+      }
     });
   });
 }
@@ -1957,6 +1963,129 @@ function renderPassport() {
   `;
 }
 
+
+/* ═══════════════════════════════════════════════
+   12. LORE TAB — Ghost Stories & Folklore
+   ───────────────────────────────────────────────
+   Displays local Newfoundland legends in a
+   collapsible accordion. Features Gruffy's
+   one-time onboarding popup using localStorage.
+   ═══════════════════════════════════════════════ */
+
+const loreDB = [
+  {
+    Title: "The Ghost of the Southern Shore",
+    Category: "Lore",
+    Teaser: "A woman in white walks the cliffs near Ferryland on foggy nights...",
+    Full_Text: "For generations, fishermen along the Southern Shore have reported seeing a woman in a white dress standing on the cliffs above Ferryland. She appears only on the foggiest nights, when the horn blows and visibility drops to nothing. Some say she's the wife of a captain lost at sea in the 1800s, still waiting for a ship that will never come home. Those who've seen her say she turns to face you — but where her eyes should be, there's only fog. The old-timers say if you see her, you're not to speak. Just tip your cap and walk on. She means no harm, they say. She's just lonely."
+  },
+  {
+    Title: "The Fairies of the Baccalieu Trail",
+    Category: "Fairytale",
+    Teaser: "Never build on a fairy path. The Doyles found that out the hard way...",
+    Full_Text: "In Newfoundland, fairies aren't the gentle creatures from storybooks. They're the Hidden People — small, quick, and easily offended. Along the Baccalieu Trail, there are paths the fairies have used for centuries, invisible to most but known to those who pay attention. The Doyle family of Conception Bay built their new house across one such path in the 1940s. Within a week, doors slammed on their own, dishes flew off shelves, and the children wouldn't stop crying. A local woman told them they'd blocked a fairy road. They moved the door to the other side of the house, and the trouble stopped overnight. To this day, the old folks say: never block a fairy path, never whistle at night near one, and if you hear music in the hills with no source, walk the other way."
+  },
+  {
+    Title: "The Old Hag",
+    Category: "Lore",
+    Teaser: "You wake up paralysed. Something is sitting on your chest. You can't scream...",
+    Full_Text: "Every Newfoundlander knows the Old Hag. You're asleep — or you think you are — and you wake up unable to move. Your eyes are open but your body is frozen. And then you feel it: a weight on your chest, pressing down. Some people see a dark figure. Others just feel a presence. The medical term is sleep paralysis, but in Newfoundland it's always been the Old Hag, and she's been visiting people on this island for as long as anyone can remember. The old cure? Sleep with a Bible under your pillow, or put your shoes at the foot of the bed pointing in opposite directions. Whether you believe in the science or the folklore, one thing is certain: if you've been hagged, you never forget it."
+  },
+  {
+    Title: "The Masterless Men",
+    Category: "History",
+    Teaser: "They fled the merchant ships and lived wild in the Avalon interior...",
+    Full_Text: "In the 1700s and 1800s, indentured servants brought from Ireland to work the Newfoundland fishery sometimes escaped into the wilderness rather than endure another season of brutal labour. These men — and sometimes women — became known as the Masterless Men. They lived in the dense forests of the Avalon Peninsula, building hidden camps, hunting caribou, and raiding outport stores when desperate. Some say they formed their own society with rules and leaders. The Butter Pot Barrens, that eerie stretch of bog between St. John's and Placentia, was said to be their territory. Few dared cross it alone. By the mid-1800s, the Masterless Men had faded into history — or into the fog. But hikers on the old paths still sometimes find stone foundations in the woods with no explanation."
+  },
+  {
+    Title: "The Phantom Ship of Conception Bay",
+    Category: "Lore",
+    Teaser: "A burning ship that never sinks, seen by hundreds over the centuries...",
+    Full_Text: "Since at least the 1700s, residents around Conception Bay have reported seeing a ship engulfed in flames drifting across the water. It appears at dusk, always moving slowly, never sinking. Witnesses describe full rigging ablaze, sometimes even figures moving on deck. By the time anyone rows out to help, the ship has vanished. Dozens of sober, credible people have reported seeing it — fishermen, priests, schoolteachers. In the 1800s, it appeared so frequently that it was discussed in the colonial legislature. No one has ever explained it. Some say it's the ghost of a ship lost in a storm centuries ago, replaying its final moments for eternity. Others say it's a warning: when the phantom ship appears, bad weather follows."
+  },
+  {
+    Title: "The Hounds of Signal Hill",
+    Category: "Lore",
+    Teaser: "At 3 AM, if the fog is thick enough, you can hear them running...",
+    Full_Text: "Signal Hill has been a military lookout for centuries, and the old soldiers posted there kept large hounds to patrol the perimeter at night. When the French attacked St. John's in the 1700s, the hounds were killed in the fighting and buried somewhere on the hill. Locals say that on the foggiest nights — the kind where you can't see three feet ahead — you can hear them. Claws on stone. Heavy breathing. A low growl from somewhere just behind you in the dark. Hikers on the North Head Trail have reported the sound dozens of times. No one has ever seen a dog. The sound always comes from the fog behind you, and when you turn around, there's nothing there. The old-timers say the hounds are still on patrol. They don't mean harm. They're just doing their job."
+  },
+  {
+    Title: "Jack the Lantern",
+    Category: "Fairytale",
+    Teaser: "Follow the light in the marsh and you'll never find your way home...",
+    Full_Text: "In the bogs and barrens of Newfoundland, strange lights have been seen floating just above the ground for centuries. The old people call them Jack the Lantern — flickering orbs that hover in the darkness, always just out of reach. Science calls them will-o'-the-wisps, caused by swamp gas igniting. The old folks have a different explanation: they're fairy lights, meant to lure travellers off the path and into the bog. Once you follow one, you lose all sense of direction. Hours pass like minutes. When the sun finally comes up, you're miles from where you started, soaked to the bone, with no memory of how you got there. The cure, they say, is to turn your coat inside out the moment you see one. The fairies lose interest in you if you've outsmarted them."
+  },
+  {
+    Title: "The Bell Island Boom",
+    Category: "History",
+    Teaser: "April 2, 1978: a massive explosion, a beam of light, and no explanation to this day...",
+    Full_Text: "On the morning of April 2, 1978, residents of Bell Island in Conception Bay were jolted by a massive explosion. A beam of light struck the ground near some chicken coops, blowing out electrical equipment, splitting a barn, and leaving a crater. Television sets sparked. Dogs howled. The boom was heard for miles. Investigators came from the Canadian military and, reportedly, from the United States — including personnel from Los Alamos National Laboratory. They tested the area and left without giving a clear answer. The official explanation was ball lightning, but many on Bell Island have never accepted that. Conspiracy theories range from secret weapons tests to something stranger. Whatever happened that morning, the scorch marks lasted for years, and the people of Bell Island still talk about it like it was yesterday."
+  },
+];
+
+/**
+ * Shows or hides Gruffy's cucumber rant based on localStorage.
+ */
+function checkGruffyLore() {
+  const bubble = document.getElementById('gruffy-cuke-warning');
+  if (!bubble) return;
+  try {
+    bubble.style.display = (localStorage.getItem('seenCucumberRant') === 'true') ? 'none' : 'flex';
+  } catch (e) {
+    bubble.style.display = 'flex';
+  }
+}
+
+/**
+ * Wires Gruffy's dismiss button to hide bubble + set localStorage.
+ */
+function initGruffy() {
+  const btn = document.getElementById('btn-dismiss-gruffy');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const bubble = document.getElementById('gruffy-cuke-warning');
+    if (bubble) bubble.style.display = 'none';
+    try { localStorage.setItem('seenCucumberRant', 'true'); }
+    catch (e) { console.warn('[RDF] Could not save Gruffy state:', e); }
+  });
+}
+
+/**
+ * Renders the lore accordion from the loreDB array.
+ */
+function renderLore() {
+  const container = document.getElementById('lore-accordion-container');
+  if (!container) return;
+
+  if (!loreDB || loreDB.length === 0) {
+    container.innerHTML = '<div class="lore-empty"><span class="lore-empty-icon">🕯️</span><p class="lore-empty-text">No tales to tell just yet, b\'y. The storytellers must be at the pub.</p></div>';
+    return;
+  }
+
+  const catIcons = { 'History':'⚔️', 'Humor':'😂', 'Lore':'👻', 'Fairytale':'🧚' };
+
+  container.innerHTML = loreDB.map(story => {
+    const icon = catIcons[story.Category] || '🕯️';
+    return `
+      <details class="lore-item">
+        <summary class="lore-summary">
+          <span class="lore-summary-icon">${icon}</span>
+          <div class="lore-summary-text">
+            <div class="lore-summary-title">${story.Title}</div>
+            <div class="lore-summary-category">${story.Category}</div>
+          </div>
+          <span class="lore-chevron">▾</span>
+        </summary>
+        <div class="lore-body">
+          <p class="lore-teaser">${story.Teaser}</p>
+          <p class="lore-full-text">${story.Full_Text}</p>
+        </div>
+      </details>
+    `;
+  }).join('');
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   // Boot weather
   fetchWeather();
@@ -1976,6 +2105,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot Fairy Hunt (Mystery Crawl GPS)
   initFairyHunt();
+
+  // Boot Gruffy's one-time popup
+  initGruffy();
 
   // Boot service worker
   registerServiceWorker();
