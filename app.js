@@ -106,6 +106,534 @@ const VENUES = [
     description: "One of St. John's oldest buildings — a 200-year-old wine cellar where port was once aged. Guided tours run seasonally. Dark, atmospheric, and dripping with history (literally).",
     tags: ["Culture", "Historic"],
   },
+  {
+    id: 9,
+    name: "Boreal Café",
+    category: "Café",
+    description: "A bright, modern coffee bar on Water Street serving single-origin pour-overs and seasonal lattes. Clean lines, warm wood, and the kind of flat white that makes you forget it's lashing outside.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 10,
+    name: "Birdie",
+    category: "Café",
+    description: "Airy specialty coffee spot on Water Street with a focus on quality roasts and simple, beautiful food. The pastry case alone is worth the walk downtown in the rain.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 11,
+    name: "Rocket Bakery",
+    category: "Café & Bakery",
+    description: "A cultural hub of downtown St. John's and arguably where the local specialty coffee scene began. French-inspired baked goods, scratch soups, and legendary fish cakes. Eclectic, busy, and best kind.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 12,
+    name: "Jumping Bean",
+    category: "Café",
+    description: "Newfoundland's own coffee roaster with multiple locations. The Water Street spot has solid Wi-Fi, comfy seats, and locally roasted beans. A reliable go-to when you need caffeine and a dry chair.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 13,
+    name: "Terre Café",
+    category: "Café & Restaurant",
+    description: "A harbour-view café on Water Street serving food inspired by the local landscape and sea. Traditional cooking methods, modern plating, and coffee worth lingering over while watching the fog roll in.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 14,
+    name: "Estée Café",
+    category: "Café",
+    description: "A stylish little café on Water Street with carefully crafted espresso drinks and light bites. Minimalist vibes with maximum flavour — the kind of spot that punches well above its square footage.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 15,
+    name: "Cookie Shop Café",
+    category: "Café & Bakery",
+    description: "Exactly what it sounds like — a café on Water Street built around freshly baked cookies. Grab a warm one with a coffee and try to eat just one. You won't. Nobody does.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 16,
+    name: "Postmaster's Bakery",
+    category: "Café & Bakery",
+    description: "Started as a micro-bakery in the back of a B&B, now a proper bakery and café at Rawlin's Cross on Military Road. Sourdough, pastries, and excellent coffee in a space that feels like a well-kept secret.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 17,
+    name: "Parlour",
+    category: "Café & Ice Cream",
+    description: "A charming café and ice cream parlour on Military Road. Great coffee, house-made ice cream, and a warm atmosphere that'll take the chill off any mauzy afternoon.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 18,
+    name: "Toslow",
+    category: "Café & Restaurant",
+    description: "A sleek, modern café on Duckworth Street with a farm-to-table ethos. Seasonal menus, excellent brunch, and specialty coffee in a space that feels effortlessly cool. Often packed — a good sign.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 19,
+    name: "Theatre Hill",
+    category: "Café & Bar",
+    description: "A café by day, bar and performance space by night — all under one roof on Duckworth Street. Grab a coffee, settle into a corner, and you might catch a live set by evening. A proper St. John's gem.",
+    tags: ["Café", "Pubs & Breweries", "Entertainment"],
+  },
+  {
+    id: 20,
+    name: "Memorial Café",
+    category: "Café",
+    description: "A cozy neighbourhood café on Duckworth Street serving solid coffee and comfort food. Unpretentious, friendly, and the kind of place where regulars know the staff by name.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 21,
+    name: "Coffee Matters",
+    category: "Café",
+    description: "Italian-inspired coffee house with multiple locations around St. John's. Known for proper espresso, homemade soups, fresh sandwiches, and gluten-free options. The Military Road spot is a local favourite.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 22,
+    name: "Homage",
+    category: "Café",
+    description: "A neighbourhood café tucked away on Dennisoff Street. Thoughtful coffee, a small rotating menu, and a calm atmosphere that feels miles away from the downtown bustle.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 23,
+    name: "Denissoff Coffee",
+    category: "Café",
+    description: "A specialty coffee shop on Cookstown Road with a focus on quality beans and precise brewing. A bit off the beaten path, which keeps it quiet — perfect for a mauzy morning escape.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 24,
+    name: "Cape Coffee",
+    category: "Café",
+    description: "A neighbourhood coffee spot serving well-crafted drinks and baked goods. Friendly staff, good vibes, and the kind of place that makes you feel like a local even if you're a CFA.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 25,
+    name: "Casablanca Bakery & Café",
+    category: "Café & Bakery",
+    description: "A beloved St. John's bakery and café known for handmade pastries, custom cakes, and hearty lunches. The baked goods are worth the trip alone — bring an extra bag.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 26,
+    name: "The Rooms Café",
+    category: "Café",
+    description: "Perched inside The Rooms with arguably the best harbour view of any café in the city. Scrumptious soups, salads, and chef's specials. Come for the exhibits, stay for the view and the coffee.",
+    tags: ["Café", "Family Friendly", "Dry Parking"],
+  },
+  {
+    id: 27,
+    name: "Bellissimo Bistro",
+    category: "Café & Bistro",
+    description: "An Italian-inspired bistro and café serving espresso, paninis, and house-made desserts. A warm, welcoming spot that feels like a little slice of the Mediterranean dropped into Newfoundland.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 28,
+    name: "Classic Café East",
+    category: "Café",
+    description: "A no-fuss café on the east end serving solid coffee, all-day breakfast, and comfort food. The kind of place your nan would approve of — hearty portions and friendly faces.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 29,
+    name: "Bagel Café",
+    category: "Café & Restaurant",
+    description: "A Duckworth Street institution with an all-day breakfast menu the size of a novel. Famous for toutons, bagel sandwiches, and stained-glass charm. Get there early or expect a wait — it's worth it.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 30,
+    name: "Market Family Café",
+    category: "Café",
+    description: "A family-friendly café built around wholesome food and a welcoming atmosphere. Great for parents with little ones on a rainy day — the menu has something for every age and every appetite.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 31,
+    name: "Hungry Heart Café",
+    category: "Café & Restaurant",
+    description: "An award-winning social enterprise café on Military Road run by Stella's Circle. Full-service restaurant with nutritious, delicious meals and a mission to do good. Great food with a greater purpose.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 32,
+    name: "Fixed Coffee & Baking",
+    category: "Café",
+    description: "A local favourite since 2012, this bustling corner café by Harbourside Park serves premium coffee brewed six cups at a time or by pour-over. Eclectic furnishings, bright interior, and serious substance.",
+    tags: ["Café", "Cozy Spots"],
+  },
+  {
+    id: 33,
+    name: "Newfoundland Chocolate Café",
+    category: "Café & Chocolate Shop",
+    description: "Chocolates as unique as the province, world-class gelato, and rich hot cocoa. Multiple locations around St. John's. A sweet escape when the weather's not fit — and honestly, even when it is.",
+    tags: ["Café", "Family Friendly"],
+  },
+  {
+    id: 34,
+    name: "The Pantry",
+    category: "Café & Garden",
+    description: "A full-service café and restaurant by the Autism Society of NL. Explore the gardens and enjoy a daily menu featuring fresh produce grown right on-site. Wholesome food, meaningful work.",
+    tags: ["Café", "Family Friendly"],
+  },
+  // ── PUBS, BARS & BREWERIES ──────────────────
+  {
+    id: 35,
+    name: "The Duke of Duckworth",
+    category: "Pub & Kitchen",
+    description: "A Duckworth Street institution since the '90s. Cozy basement pub with the best fish & chips in town — get 'em Newfoundland-style with dressing and gravy. Premier League on the screens, cold beer on tap, and strangers become friends.",
+    tags: ["Pubs & Breweries", "Groups"],
+  },
+  {
+    id: 36,
+    name: "The Ship Pub",
+    category: "Pub & Live Music",
+    description: "The beating heart of the St. John's arts scene, tucked down an alley off Duckworth. Wednesday folk night has been running since 1976. Proper pub grub, eclectic crowd, and live music Wed through Sat. If you only hit one pub, make it this one.",
+    tags: ["Pubs & Breweries", "Entertainment"],
+  },
+  {
+    id: 37,
+    name: "The Merchant Tavern",
+    category: "Restaurant & Bar",
+    description: "Upscale dining in a stunning industrial-meets-rustic space on Water Street. Locally sourced seasonal menus — the cod is legendary. Not a cheap night out, but worth every penny for a special occasion or a proper feed.",
+    tags: ["Pubs & Breweries", "Cozy Spots"],
+  },
+  {
+    id: 38,
+    name: "O'Reilly's Irish Newfoundland Pub",
+    category: "Pub & Live Music",
+    description: "A two-floor George Street institution where Irish and Newfoundland culture collide. Live music every night, open mic on Tuesdays, and Screech-Ins for $15. The mussels are unreal and the craic is mighty.",
+    tags: ["Pubs & Breweries", "Entertainment", "Groups"],
+  },
+  {
+    id: 39,
+    name: "The Adelaide Oyster House",
+    category: "Bar & Seafood",
+    description: "A vibrant Water Street spot where craft cocktails meet fresh oysters from four provinces. Asian-fusion small plates, local craft beer, and an atmosphere that shifts from chill afternoon to buzzing nightlife.",
+    tags: ["Pubs & Breweries", "Cozy Spots"],
+  },
+  {
+    id: 40,
+    name: "Quidi Vidi Brewery",
+    category: "Brewery & Taproom",
+    description: "Perched in the picturesque fishing village of Quidi Vidi, this is where they brew the famous Iceberg Beer from 10,000-year-old iceberg water. Tours, a heated patio, live music, and proper pub eats. A must-visit even in pea soup fog.",
+    tags: ["Pubs & Breweries", "Culture"],
+  },
+  {
+    id: 41,
+    name: "Shamrock City Pub",
+    category: "Pub & Live Music",
+    description: "A massive Water Street pub with a large outdoor patio, daily live trad music, and proper Irish hospitality. Try the moose burger if you're feeling adventurous. Gets lively after 6 PM — the music doesn't stop 'til late.",
+    tags: ["Pubs & Breweries", "Entertainment", "Groups"],
+  },
+  {
+    id: 42,
+    name: "Green Sleeves",
+    category: "Pub & Nightclub",
+    description: "A George Street classic with two clubs inside — folk music on Sundays, DJs on weekends, and pub fare all week. The Loose Tie cocktail bar upstairs is the best-kept secret on the street. An older, friendlier crowd than most.",
+    tags: ["Pubs & Breweries", "Entertainment"],
+  },
+  {
+    id: 43,
+    name: "The Black Sheep",
+    category: "Pub & Live Music",
+    description: "A musician's bar on George Street — no VLTs, no TVs, just quality live music in a converted garage. Rockabilly to jazz, local talent that rivals anyone. Intimate, unpretentious, and the perfect antidote to a rowdy George Street night.",
+    tags: ["Pubs & Breweries", "Entertainment"],
+  },
+  {
+    id: 44,
+    name: "Rob Roy",
+    category: "Pub & Dance Bar",
+    description: "The most popular dance floor on George Street. Live bands, accordion and fiddle sets on weekends, and legendary drink specials. It's loud, it's packed, and it's exactly the kind of night out St. John's does best.",
+    tags: ["Pubs & Breweries", "Entertainment", "Groups"],
+  },
+  {
+    id: 45,
+    name: "YellowBelly Brewery",
+    category: "Brewery & Restaurant",
+    description: "A historic brewpub on Water Street that's been anchoring the craft beer scene since 2008. House-brewed ales, wood-fired pizzas, and a beautiful old building with traces of its fire-scarred past. Two happy hours daily.",
+    tags: ["Pubs & Breweries", "Groups"],
+  },
+  {
+    id: 46,
+    name: "Trapper John's",
+    category: "Pub & Screech-In",
+    description: "A legendary George Street dive bar and the original Screech-In spot. Kiss a cod, down some rum, and become an honorary Newfoundlander. Rough around the edges and proud of it — this is the real deal, not the tourist-polished version.",
+    tags: ["Pubs & Breweries", "Entertainment"],
+  },
+  {
+    id: 47,
+    name: "Christian's Pub",
+    category: "Pub",
+    description: "A cozy George Street pub with live music and traditional Screech-In ceremonies. Friendly staff, cold beer, and the kind of unpretentious atmosphere where you can actually have a conversation between sets.",
+    tags: ["Pubs & Breweries", "Cozy Spots"],
+  },
+  {
+    id: 48,
+    name: "Ches's Famous Fish & Chips",
+    category: "Restaurant & Pub",
+    description: "A Newfoundland legend since 1951. Fresh cod straight off the boat, hand-cut fries, and the chips-dressing-and-gravy combo you didn't know you needed. Old-school diner vibes. Seven locations across NL — the Freshwater Road original is the one.",
+    tags: ["Pubs & Breweries", "Family Friendly"],
+  },
+  {
+    id: 49,
+    name: "Mallard Cottage",
+    category: "Restaurant & Bar",
+    description: "A rustic gem in the fishing village of Quidi Vidi, housed in one of the oldest wooden buildings in St. John's. The daily-rotating menu is locally sourced and seasonal — halibut cheeks, molasses-glazed pork belly, and whatever the boat brought in. Live local music some evenings. Worth the drive.",
+    tags: ["Pubs & Breweries", "Cozy Spots"],
+  },
+  {
+    id: 50,
+    name: "Bridie Molloy's",
+    category: "Pub & Kitchen",
+    description: "A cozy George Street Irish pub with braised lamb shepherd's pie, moose tacos with blueberry pickles, and the famous jiggs dinner pie that tastes like nan made it. Live music, cold drafts, and proper hospitality.",
+    tags: ["Pubs & Breweries", "Entertainment"],
+  },
+  {
+    id: 51,
+    name: "The Celtic Hearth",
+    category: "Pub & Restaurant",
+    description: "An Irish-Newfoundland pub on Water Street serving hearty brunch, seafood, and pub classics. Great for families — the fish & chips and sexy nachos are both winners. Draft Newfoundland beer and a warm, inviting atmosphere.",
+    tags: ["Pubs & Breweries", "Family Friendly"],
+  },
+  {
+    id: 52,
+    name: "Bitters Pub & Restaurant",
+    category: "Pub",
+    description: "The MUN campus pub, open to everyone. Solid fish & chips, reasonable prices, free pool, and trivia nights run by hilarious hosts. A neighbourhood pub feel in the heart of the university — great beer selection and no pretence.",
+    tags: ["Pubs & Breweries", "Groups"],
+  },
+  {
+    id: 53,
+    name: "Waterwest Kitchen & Meats",
+    category: "Restaurant & Bar",
+    description: "A butcher-driven restaurant, bar, deli, and bakery on the west end of Water Street. From the team behind Mallard Cottage — fresh pastas, charcuterie, and a community atmosphere that feels like a neighbourhood market with a liquor licence.",
+    tags: ["Pubs & Breweries", "Cozy Spots"],
+  },
+  {
+    id: 54,
+    name: "St. John's Fish Exchange",
+    category: "Restaurant & Bar",
+    description: "A seafood-focused kitchen and wet bar on Water Street — think raw bar, craft cocktails, and the freshest catch in town. The scallop crudo is a standout. A newer addition to the downtown scene and already a local favourite.",
+    tags: ["Pubs & Breweries", "Cozy Spots"],
+  },
+  {
+    id: 55,
+    name: "Chinched Bistro",
+    category: "Bistro & Bar",
+    description: "A beloved downtown bistro with a loyal following. Creative small plates, local ingredients, and a cozy room that fills up fast. The kind of place where the chef actually cares and you can taste it in every dish. Book ahead.",
+    tags: ["Pubs & Breweries", "Cozy Spots"],
+  },
+  // ── INDOOR ACTIVITIES & RAINY DAY SPOTS ─────
+  {
+    id: 56,
+    name: "Get Air Trampoline Park",
+    category: "Trampoline Park",
+    description: "Wall-to-wall trampolines, foam pits, dodgeball courts, and ninja obstacles. Club Air nights on Fridays and Saturdays add lights and music. Toddler hours on Tuesdays and Thursdays. Best way to burn off energy when it's bucketing down.",
+    tags: ["Entertainment", "Family Friendly"],
+  },
+  {
+    id: 57,
+    name: "Frontline Action",
+    category: "Laser Tag & Paintball",
+    description: "Indoor laser tag, Nerf wars, paintball, airsoft, and iCombat — all under one roof. Special weekly events keep it fresh. Perfect for groups, birthday parties, or just pretending you're in an action movie while it's lashing outside.",
+    tags: ["Entertainment", "Groups"],
+  },
+  {
+    id: 58,
+    name: "Wallnuts Climbing Centre",
+    category: "Indoor Climbing",
+    description: "A well-equipped indoor climbing and bouldering facility open year-round. Routes for all levels, youth programs, and drop-in sessions. Competitions like Bloc On The Rock draw climbers from across the island. Great workout, rain or shine.",
+    tags: ["Entertainment", "Groups"],
+  },
+  {
+    id: 59,
+    name: "The Cove Bouldering & Café",
+    category: "Indoor Climbing & Café",
+    description: "A bouldering gym with a built-in café — climb a wall, then grab a coffee. Welcoming community vibe with problems for beginners through to seasoned crushers. A uniquely St. John's way to spend a mauzy afternoon.",
+    tags: ["Entertainment", "Café", "Groups"],
+  },
+  {
+    id: 60,
+    name: "The Fluvarium",
+    category: "Nature Centre",
+    description: "Explore the life of a river from the inside — underwater viewing windows show brown trout in their natural habitat, plus aquariums with local species. In the heart of Pippy Park. Educational, weird, and completely unlike anything else in the city.",
+    tags: ["Culture", "Family Friendly"],
+  },
+  {
+    id: 61,
+    name: "Mad Catter Café",
+    category: "Cat Café",
+    description: "Newfoundland's first cat café and lounge. Grab a coffee, a freshly baked snack, and spend time with adoptable rescue cats. Therapeutic, adorable, and the perfect antidote to a grey RDF day. You will not want to leave.",
+    tags: ["Café", "Family Friendly", "Cozy Spots"],
+  },
+  {
+    id: 62,
+    name: "Mochanopoly",
+    category: "Board Game Café",
+    description: "St. John's premier board game café on Water Street. Hundreds of games to choose from, warm drinks, and a friendly atmosphere. Grab a group, pick a game, and lose track of time while the fog does its thing outside.",
+    tags: ["Entertainment", "Café", "Groups"],
+  },
+  {
+    id: 63,
+    name: "Holiday Lanes",
+    category: "Bowling Alley",
+    description: "A fully licensed 12-lane, 5-pin bowling alley with automatic scoring. Well-maintained lanes, clean rental shoes, and a solid snack bar. Old-school fun that never gets old — especially on a not-fit evening.",
+    tags: ["Entertainment", "Family Friendly", "Groups"],
+  },
+  {
+    id: 64,
+    name: "Breakout NL",
+    category: "Escape Rooms",
+    description: "Newfoundland's first escape game provider with four themed rooms. Challenge your crew's problem-solving, logic, and teamwork under pressure. A different flavour from Escape Quest — do both if you're competitive enough.",
+    tags: ["Entertainment", "Groups"],
+  },
+  {
+    id: 65,
+    name: "Spirit of Newfoundland",
+    category: "Dinner Theatre",
+    description: "Live dinner theatre productions that celebrate NL culture, music, and humour. Tribute shows, original productions, and a proper meal included. An evening of laughs, tunes, and storytelling — the most Newfoundland night out you can have indoors.",
+    tags: ["Entertainment", "Culture", "Groups"],
+  },
+  {
+    id: 66,
+    name: "Railway Coastal Museum",
+    category: "Museum",
+    description: "Housed in the beautifully restored 1903 railway station on Water Street. Exhibits on the history of Newfoundland's railway and coastal travel — real train cars to climb aboard. A hidden gem that most tourists walk right past.",
+    tags: ["Culture", "Family Friendly"],
+  },
+  {
+    id: 67,
+    name: "Axtion",
+    category: "Indoor Amusement",
+    description: "Amusement rides, massive bouncy castles, indoor snow tubes, go-karts, rope courses, and a toddler area. Basically an indoor fairground. If you've got kids and it's raining, this is where you go. End of discussion.",
+    tags: ["Entertainment", "Family Friendly"],
+  },
+  {
+    id: 68,
+    name: "Craft Council Shop & Gallery",
+    category: "Gallery & Shop",
+    description: "A curated gallery and shop showcasing the work of 150+ Newfoundland artisans. Ceramics, textiles, jewellery, prints — the best place to find a unique keepsake that isn't a moose magnet. Free to browse, dangerous for your wallet.",
+    tags: ["Culture", "Cozy Spots"],
+  },
+  {
+    id: 69,
+    name: "Quidi Vidi Village Plantation",
+    category: "Artisan Village",
+    description: "A vibrant artisan hub in the historic fishing village of Quidi Vidi. Emerging craftspeople, historical interpretation, and a gorgeous setting. Browse studios, watch artists at work, and pick up something handmade. Free admission.",
+    tags: ["Culture", "Family Friendly"],
+  },
+  {
+    id: 70,
+    name: "Wee Indoor Playground",
+    category: "Indoor Playground",
+    description: "Over 8,000 square feet of climbing structures, slides, and play zones for kids. One of the largest indoor playgrounds in St. John's. Parents can sit and breathe while the little ones go feral in a safe, padded environment.",
+    tags: ["Family Friendly"],
+  },
+  {
+    id: 71,
+    name: "Landwash Brewery",
+    category: "Brewery & Taproom",
+    description: "A newer face on the craft beer scene, known for flavour-forward brews served in a beer-hall taproom. The Saucy Mouth food truck parked outside keeps the kitchen game strong. A proper alternative to the downtown brewery crawl.",
+    tags: ["Pubs & Breweries"],
+  },
+  // ── BOOKSTORES & LIBRARIES ──────────────────
+  {
+    id: 72,
+    name: "Breakwater Books",
+    category: "Bookstore & Publisher",
+    description: "Newfoundland's premier publisher since 1973, with a retail shop on Duckworth Street. Fiction, poetry, children's books, and NL non-fiction — all championing local voices. If you want to understand this place through its writing, start here.",
+    tags: ["Bookstores & Libraries", "Culture"],
+  },
+  {
+    id: 73,
+    name: "Elaine's Books & Café",
+    category: "Bookstore & Café",
+    description: "A cozy Duckworth Street gem combining a curated bookshop with locally roasted coffee. New, used, and hard-to-find Newfoundland titles. Occasional readings and concerts. The kind of place where you come for one book and leave with five.",
+    tags: ["Bookstores & Libraries", "Café", "Cozy Spots"],
+  },
+  {
+    id: 74,
+    name: "Second Page Bookstore & Poster Shop",
+    category: "Bookstore",
+    description: "An independent bookstore with a lovingly curated selection of fiction, non-fiction, and local literature, plus a poster shop for art lovers. A quiet downtown retreat that smells exactly the way a bookshop should.",
+    tags: ["Bookstores & Libraries", "Cozy Spots"],
+  },
+  {
+    id: 75,
+    name: "Broken Books",
+    category: "Bookstore",
+    description: "An eclectic independent bookshop on Duckworth Street stocking quality books and magazines from some of the finest publishers around. Small, thoughtfully curated, and the kind of place book nerds dream about finding.",
+    tags: ["Bookstores & Libraries", "Cozy Spots"],
+  },
+  {
+    id: 76,
+    name: "Downtown Comics",
+    category: "Comic Book Store",
+    description: "St. John's friendliest comic shop since 1997. New and back-issue comics, graphic novels, manga, trading cards, board games, collectible figures, and NL literature. A welcoming atmosphere whether you're into Spider-Man or local zines.",
+    tags: ["Bookstores & Libraries", "Entertainment"],
+  },
+  {
+    id: 77,
+    name: "Granny Bates Children's Books",
+    category: "Bookstore",
+    description: "A dedicated children's bookshop — picture books, early readers, middle grade, and YA. Thoughtful recommendations, a warm atmosphere, and the best place in town to find a gift for a young reader. Every kid deserves a bookshop like this.",
+    tags: ["Bookstores & Libraries", "Family Friendly"],
+  },
+  {
+    id: 78,
+    name: "The Travel Bug",
+    category: "Bookstore & Travel Shop",
+    description: "A niche bookshop specializing in travel guides, maps, globes, and travel accessories. If you're planning your next adventure — or just dreaming about one on a mauzy day — this is the spot.",
+    tags: ["Bookstores & Libraries", "Cozy Spots"],
+  },
+  {
+    id: 79,
+    name: "Chapters St. John's",
+    category: "Bookstore",
+    description: "The big-box bookstore at Avalon Mall — massive selection across all genres, a Starbucks inside, and comfortable chairs to sink into. Grab a coffee, pick a shelf, and disappear for a few hours while the rain does its worst.",
+    tags: ["Bookstores & Libraries", "Family Friendly", "Dry Parking"],
+  },
+  {
+    id: 80,
+    name: "Johnny Ruth",
+    category: "Boutique & Bookshop",
+    description: "A beautifully curated Water Street boutique carrying NL-made goods, local books, art prints, clothing, and gifts. Part bookshop, part design store, all Newfoundland. The best place to buy something you'll actually keep.",
+    tags: ["Bookstores & Libraries", "Culture", "Cozy Spots"],
+  },
+  {
+    id: 81,
+    name: "A.C. Hunter Public Library",
+    category: "Public Library",
+    description: "St. John's main public library inside the Arts & Culture Centre on Allandale Road. Borrow books, board games, audio books, even musical instruments — all free. Separate adult and children's sections. A proper civic treasure on a rainy afternoon.",
+    tags: ["Bookstores & Libraries", "Family Friendly"],
+  },
+  {
+    id: 82,
+    name: "Michael Donovan Public Library",
+    category: "Public Library",
+    description: "A branch library in the Waterford Valley Mall on Topsail Road. Book clubs, storytime for kids, free Wi-Fi, and a solid collection. Convenient if you're on the west end of town and need somewhere warm and quiet to land.",
+    tags: ["Bookstores & Libraries", "Family Friendly", "Dry Parking"],
+  },
+  {
+    id: 83,
+    name: "Queen Elizabeth II Library (MUN)",
+    category: "University Library",
+    description: "Memorial University's main library on Prince Philip Drive. Open to the public for on-site reading — five floors of books, study space, and the Centre for Newfoundland Studies archive. The biggest library in the province, free to walk in.",
+    tags: ["Bookstores & Libraries", "Culture"],
+  },
 ];
 
 
@@ -1302,3 +1830,80 @@ document.addEventListener('DOMContentLoaded', () => {
 
   console.log('[RDF] 🧚 Fairy-Led Passport initialized. Stay dry, b\'y.');
 });
+
+
+/* ═══════════════════════════════════════════════
+   🛠️ TEMPORARY DEV TOOL — CSV EXPORT
+   ───────────────────────────────────────────────
+   Exports the hardcoded VENUES array to a
+   downloadable CSV file for Google Sheets import.
+   
+   ⚠️ DELETE THIS ENTIRE BLOCK BEFORE PRODUCTION.
+   ═══════════════════════════════════════════════ */
+
+function exportDirectoryToCSV() {
+  // Guard: make sure VENUES exists
+  if (typeof VENUES === 'undefined' || !Array.isArray(VENUES) || VENUES.length === 0) {
+    alert("No VENUES data found to export.");
+    return;
+  }
+
+  // Dynamically extract headers from the first object's keys
+  const headers = Object.keys(VENUES[0]);
+
+  /**
+   * Escapes a single CSV field value.
+   * - Converts arrays to semicolon-separated strings (e.g., tags)
+   * - Wraps in double quotes if it contains commas, quotes, or newlines
+   * - Escapes internal double quotes by doubling them ("")
+   */
+  function escapeCSVField(value) {
+    if (value === null || value === undefined) return '';
+
+    // Convert arrays to semicolon-delimited string
+    if (Array.isArray(value)) {
+      value = value.join('; ');
+    }
+
+    // Convert to string
+    let str = String(value);
+
+    // If it contains commas, quotes, or newlines — wrap in quotes
+    if (str.includes(',') || str.includes('"') || str.includes('\n') || str.includes('\r')) {
+      // Escape internal double quotes by doubling them
+      str = str.replace(/"/g, '""');
+      return `"${str}"`;
+    }
+
+    return str;
+  }
+
+  // Build CSV header row
+  const csvRows = [headers.join(',')];
+
+  // Build data rows
+  VENUES.forEach(venue => {
+    const row = headers.map(key => escapeCSVField(venue[key]));
+    csvRows.push(row.join(','));
+  });
+
+  // Join all rows with newlines
+  const csvString = csvRows.join('\n');
+
+  // Create Blob and trigger download
+  const blob = new Blob([csvString], { type: 'text/csv;charset=utf-8;' });
+  const url = URL.createObjectURL(blob);
+
+  const link = document.createElement('a');
+  link.href = url;
+  link.download = 'fairy_directory_export.csv';
+  link.style.display = 'none';
+  document.body.appendChild(link);
+  link.click();
+
+  // Cleanup
+  document.body.removeChild(link);
+  URL.revokeObjectURL(url);
+
+  console.log(`[RDF DEV] Exported ${VENUES.length} venues to CSV.`);
+}
