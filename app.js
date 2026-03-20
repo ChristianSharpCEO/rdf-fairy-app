@@ -1536,9 +1536,6 @@ function generateMysteryCrawl() {
     return;
   }
 
-  // Pick a random fairy location
-  activeHunt = fairyDatabase[Math.floor(Math.random() * fairyDatabase.length)];
-
   // DOM references
   const clueEl     = document.getElementById('hunt-clue');
   const distEl     = document.getElementById('hunt-distance');
@@ -1553,6 +1550,42 @@ function generateMysteryCrawl() {
 
   if (!clueEl) return;
 
+  // ── TASK 1: Filter out already-caught fairies ──
+  const caughtFairies = getCaughtFairies(); // returns [] if empty or missing
+  const availableFairies = fairyDatabase.filter(
+    fairy => !caughtFairies.includes(fairy.Name)
+  );
+
+  // ── TASK 2: 100% Completion State ──
+  if (availableFairies.length === 0) {
+    // Reset card to a warm hearth glow for the victory lap
+    card.classList.remove('card-hunt');
+    card.classList.add('card-hearth');
+
+    clueEl.textContent = "Lord t'underin', you've scoured the whole island! There's not a fairy left in the RDF right now. Kick back at the pub, or check back later for new ones.";
+    distEl.textContent = `🏆 ${caughtFairies.length} / ${fairyDatabase.length} fairies collected — 100% Complete!`;
+    distEl.className = 'hunt-distance';
+
+    revealEl.style.display  = 'none';
+    rewardEl.style.display  = 'none';
+    catchBtn.style.display  = 'none';
+    errorEl.style.display   = 'none';
+    if (fairyImg)   { fairyImg.style.display = 'none'; fairyImg.src = ''; }
+    if (rewardDisp) {
+      rewardDisp.innerHTML = '<span class="reward-badge">🏆 PASSPORT COMPLETE</span><span class="reward-text">You found every fairy on the island. You\'re an honorary Newfoundlander now, b\'y.</span>';
+      rewardDisp.style.display = 'block';
+    }
+
+    genBtn.textContent = 'All Fairies Caught!';
+    genBtn.disabled = true;
+    genBtn.style.opacity = '0.5';
+
+    return; // Don't start GPS — nothing left to hunt
+  }
+
+  // ── TASK 3: Standard Hunt — pick from uncaught fairies only ──
+  activeHunt = availableFairies[Math.floor(Math.random() * availableFairies.length)];
+
   // Reset UI to hunt state
   card.classList.remove('card-hearth');
   card.classList.add('card-hunt');
@@ -1562,12 +1595,14 @@ function generateMysteryCrawl() {
   errorEl.style.display   = 'none';
   distEl.className        = 'hunt-distance';
   genBtn.textContent      = 'New Mystery';
+  genBtn.disabled         = false;
+  genBtn.style.opacity    = '1';
   if (fairyImg)   { fairyImg.style.display = 'none'; fairyImg.src = ''; }
   if (rewardDisp) { rewardDisp.style.display = 'none'; rewardDisp.textContent = ''; }
 
-  // Show the clue
+  // Show the clue + progress count
   clueEl.textContent = `"${activeHunt.Clue}"`;
-  distEl.textContent = 'Summoning the fairies... acquiring your location.';
+  distEl.textContent = `Summoning the fairies... (${caughtFairies.length}/${fairyDatabase.length} caught)`;
 
   // Start GPS tracking
   startTracking();
