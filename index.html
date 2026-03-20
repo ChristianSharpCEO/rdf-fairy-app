@@ -233,6 +233,29 @@
     <!-- [PHASE 2: Third tab "The Hunt" 🧚 goes here] -->
   </nav>
 
+  <!-- ⚠️ TEMPORARY DEV TOOL — DELETE BEFORE PRODUCTION ⚠️ -->
+  <button
+    onclick="exportDirectoryToCSV()"
+    style="
+      position: fixed;
+      top: 12px;
+      right: 12px;
+      z-index: 9999;
+      padding: 10px 16px;
+      background: #DC2626;
+      color: #FFF;
+      border: 2px solid #FCA5A5;
+      border-radius: 8px;
+      font-family: monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    "
+  >🛠️ DEV: Export to CSV</button>
+
   <script src="./app.js"></script>
 </body>
 </html>
