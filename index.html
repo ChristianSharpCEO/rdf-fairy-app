@@ -228,6 +228,38 @@
     </div><!-- /view-passport -->
 
 
+    <!-- ═══════════════════════════════════════════
+         TAB 4: LORE (Ghost Stories & Folklore)
+         ═══════════════════════════════════════════ -->
+    <div id="view-lore" class="view">
+      <div class="lore-view">
+
+        <!-- Gruffy's One-Time Cucumber Rant -->
+        <div id="gruffy-cuke-warning" class="gruffy-bubble glass" style="display:none;">
+          <div class="gruffy-avatar">
+            <span class="gruffy-emoji">👴🏻⚓</span>
+            <img class="gruffy-img" src="" alt="Gruffy the Bayman" style="display:none;">
+          </div>
+          <div class="gruffy-text">
+            <div class="gruffy-name">Gruffy says:</div>
+            <p class="gruffy-speech">Did ye hear tell that we only got cucumbers on the Rock back in the '80s? Found it unnatural, I did. Blinding half of Mount Pearl with them orange lights! I says we ought to stick to root vegetables. Have a read of the lore, b'y... don't worry, it's in The King's English.</p>
+            <button class="gruffy-dismiss" id="btn-dismiss-gruffy">Got it, Gruffy</button>
+          </div>
+        </div>
+
+        <div class="lore-header">
+          <h2 class="lore-title">🕯️ Tales from the Rock</h2>
+          <p class="lore-subtitle">Ghost stories, folklore &amp; outport legends</p>
+        </div>
+
+        <div id="lore-accordion-container" class="lore-accordion">
+          <!-- Populated by app.js renderLore() -->
+        </div>
+
+      </div>
+    </div><!-- /view-lore -->
+
+
     <!-- [PHASE 2 PLACEHOLDER: view-fairy-hunt]
          Third tab: interactive fairy hunt map.
          HTML5 Geolocation tracks the user. Fairy hotspot
@@ -249,6 +281,10 @@
     <button class="nav-tab" data-tab="passport" id="nav-passport" aria-label="Passport — collected fairies">
       <span class="nav-icon">⭐</span>
       <span class="nav-label">Passport</span>
+    </button>
+    <button class="nav-tab" data-tab="lore" id="nav-lore" aria-label="Lore — ghost stories and folklore">
+      <span class="nav-icon">🕯️</span>
+      <span class="nav-label">Lore</span>
     </button>
   </nav>
 
