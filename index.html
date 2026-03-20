@@ -19,6 +19,25 @@
 </head>
 <body>
 
+  <!-- ═══════════ ONBOARDING: GRUFFY INSTALL MODAL ═══════════ -->
+  <div id="onboarding-overlay" class="onboarding-overlay hidden">
+    <div id="gruffy-modal" class="gruffy-modal">
+      <div class="gruffy-modal-avatar">
+        <span class="gruffy-modal-emoji">👴🏻⚓</span>
+        <img class="gruffy-modal-img" src="" alt="Gruffy the Bayman" style="display:none;">
+      </div>
+      <p class="gruffy-modal-speech">
+        Lord t'underin', b'y! The mainlanders at Apple and Google wanted a fortune to put me in their fancy App Stores. I told 'em to go jump in the harbor. We're doing this the Bayman way.
+      </p>
+      <div id="os-install-instructions" class="gruffy-modal-instructions">
+        <!-- Populated by JS based on OS detection -->
+      </div>
+      <button id="btn-start-hunting" class="gruffy-modal-btn">
+        Understood, let's hunt! ➔
+      </button>
+    </div>
+  </div>
+
   <div id="app">
 
     <!-- ═══════════════════════════════════════════
