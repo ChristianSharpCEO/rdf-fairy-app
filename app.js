@@ -1351,6 +1351,12 @@ function initNavigation() {
         checkGruffyLore();
         renderLore();
       }
+
+      // Render pastimes when switching to that tab
+      if (target === 'pastimes') {
+        checkGruffyPastimes();
+        renderPastimes();
+      }
     });
   });
 }
@@ -2086,6 +2092,192 @@ function renderLore() {
 }
 
 
+/* ═══════════════════════════════════════════════
+   13. YARNS & ANTICS — Games & Pastimes
+   ───────────────────────────────────────────────
+   Pub games, café solo activities, and retail
+   store pastimes. Grouped by Category and
+   rendered as collapsible accordions.
+   
+   CSV Columns: Category, Game Name, Rules / Description
+   ═══════════════════════════════════════════════ */
+
+const gamesDB = [
+  // ── PUB GAMES ──
+  {
+    "Category": "Pub",
+    "Game Name": "Screech-In Trivia",
+    "Rules / Description": "Split the bar into two teams. The quizmaster reads NL trivia questions — history, slang, geography, and pop culture. Wrong answers earn a penalty sip of Screech. First team to 10 points wins a round on the losers. Works best with 6+ people and a bartender willing to referee."
+  },
+  {
+    "Category": "Pub",
+    "Game Name": "Liar's Dice",
+    "Rules / Description": "Each player gets 5 dice and a cup. Roll under the cup so only you can see. Take turns bidding on how many of a certain number are showing across ALL cups combined. The next player can raise the bid or call 'Liar!' If the caller is right, the liar loses a die. Last player with dice wins. A Newfoundland pub staple — bring your own dice or ask the bartender."
+  },
+  {
+    "Category": "Pub",
+    "Game Name": "Yarn Spinner",
+    "Rules / Description": "One person starts telling a story — true or completely made up. After 60 seconds, the group votes: Real or Yarn? If the majority guesses wrong, the spinner earns a point. First to 5 points wins. The key is delivery — the best liars on the Rock have been training for this their whole lives."
+  },
+  {
+    "Category": "Pub",
+    "Game Name": "The Cod Game",
+    "Rules / Description": "A card game played with a standard deck. Deal 7 cards each. Players take turns asking opponents for specific cards to complete sets of 4 (like Go Fish, but you must ask in NL slang — e.g., 'Got any sixes, me duckie?'). If you break character and speak normally, you drink. Most sets at the end wins."
+  },
+  {
+    "Category": "Pub",
+    "Game Name": "Darts — Newfoundland Rules",
+    "Rules / Description": "Standard 501 rules, but with a local twist: before each throw, you must use a Newfoundland slang word in a sentence. If the group decides your usage was wrong, your throw doesn't count. Keeps the vocabulary sharp and the competition fierce. Double out to finish."
+  },
+  {
+    "Category": "Pub",
+    "Game Name": "Name That Tune: Kitchen Party Edition",
+    "Rules / Description": "Someone hums or whistles the first few bars of a traditional Newfoundland song (Great Big Sea, Buddy Wasisname, Ron Hynes, etc.). First person to correctly name the song and artist gets a point. 10 points wins. Bonus round: the winner has to sing the chorus. No backing out."
+  },
+  // ── CAFÉ / SOLO ──
+  {
+    "Category": "Café",
+    "Game Name": "Fog Journaling",
+    "Rules / Description": "A solo mindfulness exercise. Sit by the window with your coffee. For 10 minutes, write continuously about what you can see, hear, smell, and feel — no stopping, no editing, no judgment. When the fog rolls in, describe it like you're writing a letter to someone who's never seen fog. Keep the journal. Read it in a year. You'll be surprised what you noticed."
+  },
+  {
+    "Category": "Café",
+    "Game Name": "The Bayman's Crossword",
+    "Rules / Description": "A printable crossword puzzle (or make your own on a napkin) using only Newfoundland slang as answers. Clues like: 'Damp, foggy weather (5 letters)' → MAUZY. 'Universal greeting, b'y (7 letters)' → WHADDYA. Great solo activity or pass it to a friend and race to finish."
+  },
+  {
+    "Category": "Café",
+    "Game Name": "Sketch the Narrows",
+    "Rules / Description": "Grab a napkin or notebook. Pick something you can see from your seat — the harbour, a colourful rowhouse, the person across from you — and sketch it. Doesn't matter if you can't draw. The point is observation, not perfection. Bonus: date it and note the weather. You're making a field journal."
+  },
+  {
+    "Category": "Café",
+    "Game Name": "Two Truths and a Yarn",
+    "Rules / Description": "Solo or with a friend. Write down three statements about Newfoundland — two true, one made up. Text them to someone or post in a group chat. See who can spot the yarn. Newfoundland is so weird that the true ones often sound fake. That's the beauty of it."
+  },
+  {
+    "Category": "Café",
+    "Game Name": "The Gratitude Dory",
+    "Rules / Description": "Draw a simple boat shape on a piece of paper. Inside the boat, write 5 things you're grateful for today — big or small. 'The fog lifted for 10 minutes.' 'Found a new café.' 'Didn't get lost.' Fold it up and put it in your pocket. Unfold it when the RDF gets to you. A small anchor for mauzy days."
+  },
+  // ── RETAIL / ANTIQUE STORE ──
+  {
+    "Category": "Antique Store",
+    "Game Name": "The Price Is Right: Outport Edition",
+    "Rules / Description": "Browse the store with a friend. Each person picks 5 items and guesses the price WITHOUT looking at the tag. Closest total wins. Bonus points if you can identify what the item was actually used for. In a Newfoundland antique shop, that's harder than it sounds."
+  },
+  {
+    "Category": "Antique Store",
+    "Game Name": "Origin Story",
+    "Rules / Description": "Pick up any object in the shop. Invent a completely fictional backstory for it — who owned it, where it came from, what happened to them. Tell it to your friend with a straight face. The more dramatic, the better. 'This teapot belonged to a lighthouse keeper in Fogo who used it to signal ships during a nor'easter...' Let the shop inspire the yarn."
+  },
+  {
+    "Category": "Retail",
+    "Game Name": "The Souvenir Challenge",
+    "Rules / Description": "Set a budget — say $15. You and a friend each have to find the most 'authentically Newfoundland' souvenir in the shop within that budget. Compare finds. The group votes on who found the most genuine item. Chain-store moose magnets score zero points. Handmade wins."
+  },
+  {
+    "Category": "Retail",
+    "Game Name": "Alphabet Hunt",
+    "Rules / Description": "Walk through the store and try to find one item starting with each letter of the alphabet — A through Z. Write them down. First to complete the list (or get closest in 15 minutes) wins. X and Z are always the hardest. Works in any shop, but NL craft stores make it interesting."
+  },
+];
+
+/**
+ * Category → emoji map for pastimes.
+ */
+const pastimeCatIcons = {
+  'Pub': '🍺',
+  'Café': '☕',
+  'Antique Store': '🏺',
+  'Retail': '🛍️',
+};
+
+/**
+ * Shows or hides Gruffy's pastimes note based on localStorage.
+ */
+function checkGruffyPastimes() {
+  const bubble = document.getElementById('gruffy-pastimes-warning');
+  if (!bubble) return;
+  try {
+    bubble.style.display = (localStorage.getItem('seenPastimesRant') === 'true') ? 'none' : 'flex';
+  } catch (e) {
+    bubble.style.display = 'flex';
+  }
+}
+
+/**
+ * Wires Gruffy's pastimes dismiss button.
+ */
+function initGruffyPastimes() {
+  const btn = document.getElementById('btn-dismiss-gruffy-pastimes');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const bubble = document.getElementById('gruffy-pastimes-warning');
+    if (bubble) bubble.style.display = 'none';
+    try { localStorage.setItem('seenPastimesRant', 'true'); }
+    catch (e) { console.warn('[RDF] Could not save Gruffy pastimes state:', e); }
+  });
+}
+
+/**
+ * Renders the pastimes accordion, grouped by Category.
+ * Uses bracket notation for CSV keys with spaces.
+ */
+function renderPastimes() {
+  const container = document.getElementById('pastimes-accordion-container');
+  if (!container) return;
+
+  if (!gamesDB || gamesDB.length === 0) {
+    container.innerHTML = `
+      <div class="pastimes-empty">
+        <span class="pastimes-empty-icon">🃏</span>
+        <p class="pastimes-empty-text">No games loaded yet, b'y. Check back soon.</p>
+      </div>
+    `;
+    return;
+  }
+
+  // ── Group items by Category ──
+  const groups = {};
+  gamesDB.forEach(item => {
+    const cat = item['Category'] || 'Other';
+    if (!groups[cat]) groups[cat] = [];
+    groups[cat].push(item);
+  });
+
+  // ── Build HTML for each category group ──
+  const html = Object.keys(groups).map(cat => {
+    const icon = pastimeCatIcons[cat] || '🎲';
+    const items = groups[cat];
+
+    const accordions = items.map(item => `
+      <details class="pastimes-item">
+        <summary class="pastimes-summary">
+          <span class="pastimes-summary-icon">${icon}</span>
+          <span class="pastimes-summary-name">${item['Game Name'] || 'Untitled'}</span>
+          <span class="pastimes-chevron">▾</span>
+        </summary>
+        <div class="pastimes-body">
+          <p class="pastimes-rules">${item['Rules / Description'] || ''}</p>
+        </div>
+      </details>
+    `).join('');
+
+    return `
+      <div>
+        <h3 class="pastimes-category-head">${icon} ${cat} Games</h3>
+        <div class="pastimes-group">
+          ${accordions}
+        </div>
+      </div>
+    `;
+  }).join('');
+
+  container.innerHTML = html;
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   // Boot weather
   fetchWeather();
@@ -2108,6 +2300,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot Gruffy's one-time popup
   initGruffy();
+
+  // Boot Gruffy's pastimes popup
+  initGruffyPastimes();
 
   // Boot service worker
   registerServiceWorker();
