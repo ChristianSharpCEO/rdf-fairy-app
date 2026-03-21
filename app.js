@@ -34,6 +34,15 @@ const CONFIG = {
 
   // Weather refresh interval (milliseconds)
   WEATHER_REFRESH: 10 * 60 * 1000, // 10 minutes
+
+  // ── Google Sheet CSV URLs (all tabs from the master spreadsheet) ──
+  SHEET_BASE: 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiOoFFaCMgboUK_oSpPsexOTVMbBF-dGzZDmWdgZ_nZtOiya7cjafbgSGj2zfDs9IbgqSg7tmsYnjC/pub',
+  SHEETS: {
+    FAIRY_HUNT:  '?gid=0&single=true&output=csv',
+    DIRECTORY:   '?gid=828648384&single=true&output=csv',
+    LORE:        '?gid=1883610755&single=true&output=csv',
+    PASTIMES:    '?gid=1186700664&single=true&output=csv',
+  },
 };
 
 
@@ -1402,7 +1411,7 @@ let fairyDatabase = [];
 
 // ⚠️ PASTE YOUR PUBLISHED GOOGLE SHEET CSV URL HERE
 // (Google Sheets → File → Share → Publish to Web → CSV)
-const SHEET_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vSiOoFFaCMgboUK_oSpPsexOTVMbBF-dGzZDmWdgZ_nZtOiya7cjafbgSGj2zfDs9IbgqSg7tmsYnjC/pub?gid=0&single=true&output=csv';
+const SHEET_URL = CONFIG.SHEET_BASE + CONFIG.SHEETS.FAIRY_HUNT;
 
 /**
  * Fetches the Google Sheet CSV and parses it into fairyDatabase.
@@ -1973,61 +1982,31 @@ function renderPassport() {
 /* ═══════════════════════════════════════════════
    12. LORE TAB — Ghost Stories & Folklore
    ───────────────────────────────────────────────
-   Displays local Newfoundland legends in a
-   collapsible accordion. Features Gruffy's
-   one-time onboarding popup using localStorage.
+   Fetched live from Google Sheet (gid=1883610755).
+   CSV Columns: Title, Category, Teaser, Full_Text
+   Categories: History, Humor, Lore, Fairytale
    ═══════════════════════════════════════════════ */
 
-const loreDB = [
-  {
-    Title: "The Ghost of the Southern Shore",
-    Category: "Lore",
-    Teaser: "A woman in white walks the cliffs near Ferryland on foggy nights...",
-    Full_Text: "For generations, fishermen along the Southern Shore have reported seeing a woman in a white dress standing on the cliffs above Ferryland. She appears only on the foggiest nights, when the horn blows and visibility drops to nothing. Some say she's the wife of a captain lost at sea in the 1800s, still waiting for a ship that will never come home. Those who've seen her say she turns to face you — but where her eyes should be, there's only fog. The old-timers say if you see her, you're not to speak. Just tip your cap and walk on. She means no harm, they say. She's just lonely."
-  },
-  {
-    Title: "The Fairies of the Baccalieu Trail",
-    Category: "Fairytale",
-    Teaser: "Never build on a fairy path. The Doyles found that out the hard way...",
-    Full_Text: "In Newfoundland, fairies aren't the gentle creatures from storybooks. They're the Hidden People — small, quick, and easily offended. Along the Baccalieu Trail, there are paths the fairies have used for centuries, invisible to most but known to those who pay attention. The Doyle family of Conception Bay built their new house across one such path in the 1940s. Within a week, doors slammed on their own, dishes flew off shelves, and the children wouldn't stop crying. A local woman told them they'd blocked a fairy road. They moved the door to the other side of the house, and the trouble stopped overnight. To this day, the old folks say: never block a fairy path, never whistle at night near one, and if you hear music in the hills with no source, walk the other way."
-  },
-  {
-    Title: "The Old Hag",
-    Category: "Lore",
-    Teaser: "You wake up paralysed. Something is sitting on your chest. You can't scream...",
-    Full_Text: "Every Newfoundlander knows the Old Hag. You're asleep — or you think you are — and you wake up unable to move. Your eyes are open but your body is frozen. And then you feel it: a weight on your chest, pressing down. Some people see a dark figure. Others just feel a presence. The medical term is sleep paralysis, but in Newfoundland it's always been the Old Hag, and she's been visiting people on this island for as long as anyone can remember. The old cure? Sleep with a Bible under your pillow, or put your shoes at the foot of the bed pointing in opposite directions. Whether you believe in the science or the folklore, one thing is certain: if you've been hagged, you never forget it."
-  },
-  {
-    Title: "The Masterless Men",
-    Category: "History",
-    Teaser: "They fled the merchant ships and lived wild in the Avalon interior...",
-    Full_Text: "In the 1700s and 1800s, indentured servants brought from Ireland to work the Newfoundland fishery sometimes escaped into the wilderness rather than endure another season of brutal labour. These men — and sometimes women — became known as the Masterless Men. They lived in the dense forests of the Avalon Peninsula, building hidden camps, hunting caribou, and raiding outport stores when desperate. Some say they formed their own society with rules and leaders. The Butter Pot Barrens, that eerie stretch of bog between St. John's and Placentia, was said to be their territory. Few dared cross it alone. By the mid-1800s, the Masterless Men had faded into history — or into the fog. But hikers on the old paths still sometimes find stone foundations in the woods with no explanation."
-  },
-  {
-    Title: "The Phantom Ship of Conception Bay",
-    Category: "Lore",
-    Teaser: "A burning ship that never sinks, seen by hundreds over the centuries...",
-    Full_Text: "Since at least the 1700s, residents around Conception Bay have reported seeing a ship engulfed in flames drifting across the water. It appears at dusk, always moving slowly, never sinking. Witnesses describe full rigging ablaze, sometimes even figures moving on deck. By the time anyone rows out to help, the ship has vanished. Dozens of sober, credible people have reported seeing it — fishermen, priests, schoolteachers. In the 1800s, it appeared so frequently that it was discussed in the colonial legislature. No one has ever explained it. Some say it's the ghost of a ship lost in a storm centuries ago, replaying its final moments for eternity. Others say it's a warning: when the phantom ship appears, bad weather follows."
-  },
-  {
-    Title: "The Hounds of Signal Hill",
-    Category: "Lore",
-    Teaser: "At 3 AM, if the fog is thick enough, you can hear them running...",
-    Full_Text: "Signal Hill has been a military lookout for centuries, and the old soldiers posted there kept large hounds to patrol the perimeter at night. When the French attacked St. John's in the 1700s, the hounds were killed in the fighting and buried somewhere on the hill. Locals say that on the foggiest nights — the kind where you can't see three feet ahead — you can hear them. Claws on stone. Heavy breathing. A low growl from somewhere just behind you in the dark. Hikers on the North Head Trail have reported the sound dozens of times. No one has ever seen a dog. The sound always comes from the fog behind you, and when you turn around, there's nothing there. The old-timers say the hounds are still on patrol. They don't mean harm. They're just doing their job."
-  },
-  {
-    Title: "Jack the Lantern",
-    Category: "Fairytale",
-    Teaser: "Follow the light in the marsh and you'll never find your way home...",
-    Full_Text: "In the bogs and barrens of Newfoundland, strange lights have been seen floating just above the ground for centuries. The old people call them Jack the Lantern — flickering orbs that hover in the darkness, always just out of reach. Science calls them will-o'-the-wisps, caused by swamp gas igniting. The old folks have a different explanation: they're fairy lights, meant to lure travellers off the path and into the bog. Once you follow one, you lose all sense of direction. Hours pass like minutes. When the sun finally comes up, you're miles from where you started, soaked to the bone, with no memory of how you got there. The cure, they say, is to turn your coat inside out the moment you see one. The fairies lose interest in you if you've outsmarted them."
-  },
-  {
-    Title: "The Bell Island Boom",
-    Category: "History",
-    Teaser: "April 2, 1978: a massive explosion, a beam of light, and no explanation to this day...",
-    Full_Text: "On the morning of April 2, 1978, residents of Bell Island in Conception Bay were jolted by a massive explosion. A beam of light struck the ground near some chicken coops, blowing out electrical equipment, splitting a barn, and leaving a crater. Television sets sparked. Dogs howled. The boom was heard for miles. Investigators came from the Canadian military and, reportedly, from the United States — including personnel from Los Alamos National Laboratory. They tested the area and left without giving a clear answer. The official explanation was ball lightning, but many on Bell Island have never accepted that. Conspiracy theories range from secret weapons tests to something stranger. Whatever happened that morning, the scorch marks lasted for years, and the people of Bell Island still talk about it like it was yesterday."
-  },
-];
+let loreDB = [];
+
+/**
+ * Fetches the Lore sheet CSV and populates loreDB.
+ */
+async function initLoreDB() {
+  try {
+    const res = await fetch(CONFIG.SHEET_BASE + CONFIG.SHEETS.LORE);
+    if (!res.ok) throw new Error(`Lore sheet returned ${res.status}`);
+    loreDB = parseCSV(await res.text());
+    console.log(`[RDF] 🕯️ Lore database loaded: ${loreDB.length} stories.`);
+  } catch (err) {
+    console.warn('[RDF] Lore CSV fetch failed, using fallback:', err.message);
+    loreDB = [
+      { Title: "The Old Hag", Category: "Lore", Teaser: "You wake up paralysed. Something is sitting on your chest...", Full_Text: "Every Newfoundlander knows the Old Hag. You're asleep — or you think you are — and you wake up unable to move. Your eyes are open but your body is frozen. And then you feel it: a weight on your chest, pressing down. The medical term is sleep paralysis, but in Newfoundland it's always been the Old Hag." },
+      { Title: "The Masterless Men", Category: "History", Teaser: "They fled the merchant ships and lived wild in the Avalon interior...", Full_Text: "In the 1700s and 1800s, indentured servants brought from Ireland to work the Newfoundland fishery sometimes escaped into the wilderness. These men became known as the Masterless Men. They lived in the dense forests of the Avalon Peninsula, building hidden camps and raiding outport stores when desperate." },
+      { Title: "The Fairies of the Baccalieu Trail", Category: "Fairytale", Teaser: "Never build on a fairy path. The Doyles found that out the hard way...", Full_Text: "In Newfoundland, fairies aren't the gentle creatures from storybooks. They're the Hidden People — small, quick, and easily offended. The Doyle family built their new house across a fairy path in the 1940s. Within a week, doors slammed on their own and dishes flew off shelves. They moved the door to the other side of the house, and the trouble stopped overnight." },
+    ];
+  }
+}
 
 /**
  * Shows or hides Gruffy's cucumber rant based on localStorage.
@@ -2102,86 +2081,27 @@ function renderLore() {
    CSV Columns: Category, Game Name, Rules / Description
    ═══════════════════════════════════════════════ */
 
-const gamesDB = [
-  // ── PUB GAMES ──
-  {
-    "Category": "Pub",
-    "Game Name": "Screech-In Trivia",
-    "Rules / Description": "Split the bar into two teams. The quizmaster reads NL trivia questions — history, slang, geography, and pop culture. Wrong answers earn a penalty sip of Screech. First team to 10 points wins a round on the losers. Works best with 6+ people and a bartender willing to referee."
-  },
-  {
-    "Category": "Pub",
-    "Game Name": "Liar's Dice",
-    "Rules / Description": "Each player gets 5 dice and a cup. Roll under the cup so only you can see. Take turns bidding on how many of a certain number are showing across ALL cups combined. The next player can raise the bid or call 'Liar!' If the caller is right, the liar loses a die. Last player with dice wins. A Newfoundland pub staple — bring your own dice or ask the bartender."
-  },
-  {
-    "Category": "Pub",
-    "Game Name": "Yarn Spinner",
-    "Rules / Description": "One person starts telling a story — true or completely made up. After 60 seconds, the group votes: Real or Yarn? If the majority guesses wrong, the spinner earns a point. First to 5 points wins. The key is delivery — the best liars on the Rock have been training for this their whole lives."
-  },
-  {
-    "Category": "Pub",
-    "Game Name": "The Cod Game",
-    "Rules / Description": "A card game played with a standard deck. Deal 7 cards each. Players take turns asking opponents for specific cards to complete sets of 4 (like Go Fish, but you must ask in NL slang — e.g., 'Got any sixes, me duckie?'). If you break character and speak normally, you drink. Most sets at the end wins."
-  },
-  {
-    "Category": "Pub",
-    "Game Name": "Darts — Newfoundland Rules",
-    "Rules / Description": "Standard 501 rules, but with a local twist: before each throw, you must use a Newfoundland slang word in a sentence. If the group decides your usage was wrong, your throw doesn't count. Keeps the vocabulary sharp and the competition fierce. Double out to finish."
-  },
-  {
-    "Category": "Pub",
-    "Game Name": "Name That Tune: Kitchen Party Edition",
-    "Rules / Description": "Someone hums or whistles the first few bars of a traditional Newfoundland song (Great Big Sea, Buddy Wasisname, Ron Hynes, etc.). First person to correctly name the song and artist gets a point. 10 points wins. Bonus round: the winner has to sing the chorus. No backing out."
-  },
-  // ── CAFÉ / SOLO ──
-  {
-    "Category": "Café",
-    "Game Name": "Fog Journaling",
-    "Rules / Description": "A solo mindfulness exercise. Sit by the window with your coffee. For 10 minutes, write continuously about what you can see, hear, smell, and feel — no stopping, no editing, no judgment. When the fog rolls in, describe it like you're writing a letter to someone who's never seen fog. Keep the journal. Read it in a year. You'll be surprised what you noticed."
-  },
-  {
-    "Category": "Café",
-    "Game Name": "The Bayman's Crossword",
-    "Rules / Description": "A printable crossword puzzle (or make your own on a napkin) using only Newfoundland slang as answers. Clues like: 'Damp, foggy weather (5 letters)' → MAUZY. 'Universal greeting, b'y (7 letters)' → WHADDYA. Great solo activity or pass it to a friend and race to finish."
-  },
-  {
-    "Category": "Café",
-    "Game Name": "Sketch the Narrows",
-    "Rules / Description": "Grab a napkin or notebook. Pick something you can see from your seat — the harbour, a colourful rowhouse, the person across from you — and sketch it. Doesn't matter if you can't draw. The point is observation, not perfection. Bonus: date it and note the weather. You're making a field journal."
-  },
-  {
-    "Category": "Café",
-    "Game Name": "Two Truths and a Yarn",
-    "Rules / Description": "Solo or with a friend. Write down three statements about Newfoundland — two true, one made up. Text them to someone or post in a group chat. See who can spot the yarn. Newfoundland is so weird that the true ones often sound fake. That's the beauty of it."
-  },
-  {
-    "Category": "Café",
-    "Game Name": "The Gratitude Dory",
-    "Rules / Description": "Draw a simple boat shape on a piece of paper. Inside the boat, write 5 things you're grateful for today — big or small. 'The fog lifted for 10 minutes.' 'Found a new café.' 'Didn't get lost.' Fold it up and put it in your pocket. Unfold it when the RDF gets to you. A small anchor for mauzy days."
-  },
-  // ── RETAIL / ANTIQUE STORE ──
-  {
-    "Category": "Antique Store",
-    "Game Name": "The Price Is Right: Outport Edition",
-    "Rules / Description": "Browse the store with a friend. Each person picks 5 items and guesses the price WITHOUT looking at the tag. Closest total wins. Bonus points if you can identify what the item was actually used for. In a Newfoundland antique shop, that's harder than it sounds."
-  },
-  {
-    "Category": "Antique Store",
-    "Game Name": "Origin Story",
-    "Rules / Description": "Pick up any object in the shop. Invent a completely fictional backstory for it — who owned it, where it came from, what happened to them. Tell it to your friend with a straight face. The more dramatic, the better. 'This teapot belonged to a lighthouse keeper in Fogo who used it to signal ships during a nor'easter...' Let the shop inspire the yarn."
-  },
-  {
-    "Category": "Retail",
-    "Game Name": "The Souvenir Challenge",
-    "Rules / Description": "Set a budget — say $15. You and a friend each have to find the most 'authentically Newfoundland' souvenir in the shop within that budget. Compare finds. The group votes on who found the most genuine item. Chain-store moose magnets score zero points. Handmade wins."
-  },
-  {
-    "Category": "Retail",
-    "Game Name": "Alphabet Hunt",
-    "Rules / Description": "Walk through the store and try to find one item starting with each letter of the alphabet — A through Z. Write them down. First to complete the list (or get closest in 15 minutes) wins. X and Z are always the hardest. Works in any shop, but NL craft stores make it interesting."
-  },
-];
+let gamesDB = [];
+
+/**
+ * Fetches the Pastimes sheet CSV and populates gamesDB.
+ */
+async function initPastimesDB() {
+  try {
+    const res = await fetch(CONFIG.SHEET_BASE + CONFIG.SHEETS.PASTIMES);
+    if (!res.ok) throw new Error(`Pastimes sheet returned ${res.status}`);
+    gamesDB = parseCSV(await res.text());
+    console.log(`[RDF] 🃏 Pastimes database loaded: ${gamesDB.length} entries.`);
+  } catch (err) {
+    console.warn('[RDF] Pastimes CSV fetch failed, using fallback:', err.message);
+    gamesDB = [
+      { "Category": "Pub", "Game Name": "Screech-In Trivia", "Rules / Description": "Split the bar into two teams. The quizmaster reads NL trivia questions. Wrong answers earn a penalty sip of Screech. First team to 10 points wins." },
+      { "Category": "Pub", "Game Name": "Yarn Spinner", "Rules / Description": "One person tells a story — true or made up. The group votes: Real or Yarn? If the majority guesses wrong, the spinner earns a point. First to 5 wins." },
+      { "Category": "Café", "Game Name": "Fog Journaling", "Rules / Description": "Sit by the window with your coffee. For 10 minutes, write continuously about what you can see, hear, smell, and feel — no stopping, no editing, no judgment." },
+      { "Category": "Retail", "Game Name": "The Souvenir Challenge", "Rules / Description": "Set a $15 budget. Find the most 'authentically Newfoundland' souvenir. The group votes on who found the most genuine item." },
+    ];
+  }
+}
 
 /**
  * Category → emoji map for pastimes.
@@ -2370,6 +2290,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot Fairy Hunt (Mystery Crawl GPS)
   initFairyHunt();
+
+  // Boot Lore database from Google Sheet
+  initLoreDB();
+
+  // Boot Pastimes database from Google Sheet
+  initPastimesDB();
 
   // Boot Gruffy's one-time popup
   initGruffy();
