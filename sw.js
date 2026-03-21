@@ -75,6 +75,13 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // ── Google Sheets CSV (all live data tabs): Network-first ──
+  // Fairy Hunt, Directory, Lore, Pastimes — always want fresh data.
+  if (url.hostname.includes('docs.google.com')) {
+    event.respondWith(networkFirst(request));
+    return;
+  }
+
   // ── Google Fonts: Cache-first ──
   // Fonts rarely change; cache them aggressively.
   if (
