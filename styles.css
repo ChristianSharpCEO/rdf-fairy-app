@@ -1619,10 +1619,10 @@ body::after {
 .gruffy-modal {
   width: 100%;
   max-width: 380px;
-  background: rgba(12, 50, 91, 0.9);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid var(--glass-border);
+  background: rgba(12, 50, 91, 0.95);
+  backdrop-filter: blur(15px);
+  -webkit-backdrop-filter: blur(15px);
+  border: 1px solid rgba(248, 250, 252, 0.2);
   border-radius: var(--r-xl);
   box-shadow:
     0 16px 64px rgba(0, 0, 0, 0.5),
