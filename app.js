@@ -2212,16 +2212,24 @@ function renderPastimes() {
  * Remembered via localStorage so it only shows once.
  */
 function initOnboarding() {
+  console.log('[RDF] 🎬 initOnboarding() called');
+
   const overlay = document.getElementById('onboarding-overlay');
   const instructions = document.getElementById('os-install-instructions');
   const btn = document.getElementById('btn-start-hunting');
 
-  if (!overlay || !instructions || !btn) return;
+  if (!overlay || !instructions || !btn) {
+    console.warn('[RDF] Onboarding elements not found:', { overlay: !!overlay, instructions: !!instructions, btn: !!btn });
+    return;
+  }
 
   // ── Check if user has already seen the onboarding ──
   try {
-    if (localStorage.getItem('hasSeenGruffyOnboarding') === 'true') {
-      return; // Already onboarded — do nothing
+    const seen = localStorage.getItem('hasSeenGruffyOnboarding');
+    console.log('[RDF] hasSeenGruffyOnboarding =', seen);
+    if (seen === 'true') {
+      console.log('[RDF] Onboarding already seen — skipping. (To reset: run resetOnboarding() in console)');
+      return;
     }
   } catch (e) {
     // localStorage unavailable — show it anyway
@@ -2231,6 +2239,8 @@ function initOnboarding() {
   const ua = navigator.userAgent || '';
   const isIOS = /iPhone|iPad|iPod/i.test(ua);
   const isAndroid = /Android/i.test(ua);
+
+  console.log('[RDF] OS detection:', { isIOS, isAndroid, ua: ua.substring(0, 60) + '...' });
 
   if (isIOS) {
     instructions.innerHTML = `
@@ -2255,6 +2265,7 @@ function initOnboarding() {
 
   // ── Show the overlay ──
   overlay.classList.remove('hidden');
+  console.log('[RDF] ✅ Onboarding overlay shown');
 
   // ── Dismiss handler ──
   btn.addEventListener('click', () => {
@@ -2265,6 +2276,19 @@ function initOnboarding() {
       console.warn('[RDF] Could not save onboarding state:', e);
     }
   });
+}
+
+/**
+ * DEV TOOL: Reset onboarding so the popup shows again on next load.
+ * Run in browser console: resetOnboarding()
+ */
+function resetOnboarding() {
+  try {
+    localStorage.removeItem('hasSeenGruffyOnboarding');
+    console.log('[RDF] ✅ Onboarding reset. Reload the page to see the popup.');
+  } catch (e) {
+    console.warn('[RDF] Could not reset:', e);
+  }
 }
 
 
