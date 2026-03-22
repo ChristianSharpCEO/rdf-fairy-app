@@ -1432,6 +1432,175 @@ body::after {
   transform: scale(0.96);
 }
 
+/* ── Featured Lore Article (Pinned) ── */
+.lore-featured {
+  background: linear-gradient(135deg, rgba(69, 26, 3, 0.35), rgba(12, 50, 91, 0.4));
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid rgba(217, 119, 6, 0.3);
+  border-radius: var(--r-lg);
+  box-shadow:
+    var(--glass-shadow),
+    inset 0 1px 0 rgba(245, 158, 11, 0.08);
+  overflow: hidden;
+  margin-bottom: var(--s-lg);
+}
+
+.lore-featured-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-sm);
+  padding: var(--s-md);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+}
+
+.lore-featured-summary::-webkit-details-marker { display: none; }
+.lore-featured-summary::marker { content: ''; }
+
+.lore-featured-badge {
+  font-family: var(--font-ui);
+  font-size: 0.6rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: #451a03;
+  background: var(--folk-accent-bright, #F59E0B);
+  padding: 3px 10px;
+  border-radius: var(--r-full);
+}
+
+.lore-featured-title {
+  flex: 1;
+  font-family: var(--font-folk);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-candlelight, #FEF3C7);
+  line-height: 1.35;
+  min-width: 0;
+}
+
+.lore-featured[open] .lore-chevron {
+  transform: rotate(180deg);
+}
+
+.lore-featured-body {
+  padding: 0 var(--s-md) var(--s-md);
+  animation: lore-expand 0.3s ease;
+}
+
+.lore-featured-body p {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  color: var(--text-spindrift, var(--text-mist));
+  line-height: 1.7;
+  margin-bottom: var(--s-md);
+}
+
+.lore-featured-lead {
+  font-family: var(--font-folk) !important;
+  font-style: italic;
+  font-size: 0.92rem !important;
+  color: var(--text-candlelight, #FEF3C7) !important;
+  line-height: 1.6;
+  padding-bottom: var(--s-sm);
+  border-bottom: 1px solid rgba(217, 119, 6, 0.15);
+}
+
+.lore-featured-heading {
+  font-family: var(--font-folk);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--folk-accent-bright, #F59E0B);
+  margin: var(--s-lg) 0 var(--s-sm);
+}
+
+.lore-featured-heading:first-of-type {
+  margin-top: var(--s-md);
+}
+
+.lore-featured-quote {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.85rem;
+  color: var(--text-spindrift, var(--text-frost));
+  line-height: 1.65;
+  margin: var(--s-md) 0;
+  padding: var(--s-md);
+  background: rgba(4, 18, 42, 0.4);
+  border-left: 3px solid var(--folk-accent, #D97706);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+}
+
+.lore-featured-quote cite {
+  display: block;
+  font-style: normal;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  font-weight: 600;
+  color: var(--folk-accent);
+  margin-top: var(--s-sm);
+}
+
+.lore-featured-rule {
+  display: flex;
+  gap: var(--s-sm);
+  align-items: flex-start;
+  margin-bottom: var(--s-md);
+  padding: var(--s-sm) var(--s-md);
+  background: rgba(4, 18, 42, 0.3);
+  border-radius: var(--r-md);
+}
+
+.lore-featured-rule-icon {
+  font-size: 1.3rem;
+  flex-shrink: 0;
+  margin-top: 2px;
+}
+
+.lore-featured-rule div {
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  color: var(--text-spindrift, var(--text-mist));
+  line-height: 1.6;
+}
+
+.lore-featured-closing {
+  font-family: var(--font-folk) !important;
+  font-weight: 700;
+  font-size: 0.9rem !important;
+  color: var(--text-candlelight, #FEF3C7) !important;
+  margin-top: var(--s-lg);
+  padding-top: var(--s-sm);
+  border-top: 1px solid rgba(217, 119, 6, 0.15);
+}
+
+.lore-featured-sources {
+  margin-top: var(--s-lg);
+  padding-top: var(--s-md);
+  border-top: 1px solid rgba(217, 119, 6, 0.12);
+}
+
+.lore-featured-sources p {
+  font-size: 0.78rem !important;
+  margin-bottom: var(--s-sm);
+}
+
+.lore-featured-sources a {
+  color: var(--accent-sunset, #FD5E53);
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.lore-featured-sources a:hover {
+  color: var(--folk-accent-bright, #F59E0B);
+  text-decoration: underline;
+}
+
 /* ── Lore Accordion (Details/Summary) ── */
 .lore-accordion {
   display: flex;
