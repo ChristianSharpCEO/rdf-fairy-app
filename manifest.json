@@ -1,6 +1,6 @@
 {
-  "name": "RDF Fairy-Led St. John's Passport",
-  "short_name": "RDF",
+  "name": "RDF: Fairy-Led St. John's Passport",
+  "short_name": "RDF Fairies",
   "description": "Your hyper-local guide to indoor activities and deals when it's Rain, Drizzle, or Fog in St. John's, Newfoundland.",
   "start_url": "./index.html",
   "display": "standalone",
