@@ -12,7 +12,7 @@
    Bump CACHE_VERSION when deploying updates.
    ============================================ */
 
-const CACHE_VERSION = 'rdf-v7';
+const CACHE_VERSION = 'rdf-v8';
 
 /* ─── APP SHELL ──────────────────────────────── */
 // Files that must be cached for the app to work offline.
