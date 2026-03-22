@@ -1426,7 +1426,7 @@ async function initDatabase() {
     if (!res.ok) throw new Error(`Sheet returned ${res.status}`);
 
     const csvText = await res.text();
-    fairyDatabase = parseCSV(csvText);
+    fairyDatabase = parseCSV(csvText).filter(f => f.Name && f.Lat && f.Lng && f.Clue);
 
     console.log(`[RDF] 🧚 Fairy database loaded: ${fairyDatabase.length} locations.`);
   } catch (err) {
@@ -1483,8 +1483,9 @@ function parseCSV(csvText) {
       obj[h.trim()] = (values[idx] || '').trim();
     });
 
-    // Skip rows missing required fields
-    if (obj.Name && obj.Lat && obj.Lng && obj.Clue) {
+    // Only include rows that have at least one non-empty value
+    const hasContent = Object.values(obj).some(v => v.length > 0);
+    if (hasContent) {
       results.push(obj);
     }
   }
@@ -1994,10 +1995,17 @@ let loreDB = [];
  */
 async function initLoreDB() {
   try {
-    const res = await fetch(CONFIG.SHEET_BASE + CONFIG.SHEETS.LORE);
+    const url = CONFIG.SHEET_BASE + CONFIG.SHEETS.LORE;
+    console.log('[RDF] 🕯️ Fetching lore from:', url);
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`Lore sheet returned ${res.status}`);
-    loreDB = parseCSV(await res.text());
+    const csvText = await res.text();
+    loreDB = parseCSV(csvText);
     console.log(`[RDF] 🕯️ Lore database loaded: ${loreDB.length} stories.`);
+    if (loreDB.length > 0) {
+      console.log('[RDF] 🕯️ First lore entry keys:', Object.keys(loreDB[0]));
+      console.log('[RDF] 🕯️ First lore entry:', loreDB[0]);
+    }
   } catch (err) {
     console.warn('[RDF] Lore CSV fetch failed, using fallback:', err.message);
     loreDB = [
@@ -2088,10 +2096,17 @@ let gamesDB = [];
  */
 async function initPastimesDB() {
   try {
-    const res = await fetch(CONFIG.SHEET_BASE + CONFIG.SHEETS.PASTIMES);
+    const url = CONFIG.SHEET_BASE + CONFIG.SHEETS.PASTIMES;
+    console.log('[RDF] 🃏 Fetching pastimes from:', url);
+    const res = await fetch(url);
     if (!res.ok) throw new Error(`Pastimes sheet returned ${res.status}`);
-    gamesDB = parseCSV(await res.text());
+    const csvText = await res.text();
+    gamesDB = parseCSV(csvText);
     console.log(`[RDF] 🃏 Pastimes database loaded: ${gamesDB.length} entries.`);
+    if (gamesDB.length > 0) {
+      console.log('[RDF] 🃏 First pastimes entry keys:', Object.keys(gamesDB[0]));
+      console.log('[RDF] 🃏 First pastimes entry:', gamesDB[0]);
+    }
   } catch (err) {
     console.warn('[RDF] Pastimes CSV fetch failed, using fallback:', err.message);
     gamesDB = [
