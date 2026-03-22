@@ -945,7 +945,7 @@ function renderDirectory() {
   if (filtered.length === 0) {
     list.innerHTML = `
       <div class="empty-state">
-        <div class="empty-icon">🧚</div>
+        <div class="empty-icon"><img class="fairy-empty-img" src="fairy.png" alt="Fairy"></div>
         <div class="empty-text">
           Nothing matches that filter, b'y.<br>
           The fairies must've hidden them. Try another.
@@ -1287,8 +1287,8 @@ function triggerRainAlert() {
 
   const notification = new Notification(msg.title, {
     body: msg.body,
-    icon: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🧚</text></svg>',
-    badge: 'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><text y=".9em" font-size="90">🧚</text></svg>',
+    icon: 'fairy.png',
+    badge: 'fairy.png',
     tag: 'rdf-rain-alert', // prevents stacking duplicates
     requireInteraction: false,
   });
@@ -1552,7 +1552,7 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
 function animateFairyFlight() {
   const sprite = document.createElement('div');
   sprite.className = 'fairy-sprite';
-  sprite.textContent = '🧚';
+  sprite.innerHTML = '<img src="fairy.png" alt="">';
   sprite.setAttribute('aria-hidden', 'true');
   document.body.appendChild(sprite);
 
@@ -1794,7 +1794,7 @@ function revealFairy() {
 
   // Reveal the location name
   if (revealEl) {
-    revealEl.textContent = `🧚 ${foundFairy.Name}`;
+    revealEl.innerHTML = `<img class="btn-fairy-icon" src="fairy.png" alt=""> ${foundFairy.Name}`;
     revealEl.style.display = 'block';
   }
 
@@ -1960,7 +1960,7 @@ function renderPassport() {
   if (caught.length === 0) {
     grid.innerHTML = `
       <div class="passport-empty">
-        <span class="passport-empty-icon">🧚</span>
+        <span class="passport-empty-icon"><img class="fairy-empty-img" src="fairy.png" alt="Fairy"></span>
         <p class="passport-empty-text">
           Empty as a dory in drydock, b'y.<br>
           Get out in the RDF and catch some fairies!
@@ -1983,8 +1983,8 @@ function renderPassport() {
 
     const imageHTML = imageURL
       ? `<img class="collected-card-img" src="${imageURL}" alt="${name}" onerror="this.style.display='none';this.nextElementSibling.style.display='flex';">
-         <div class="collected-card-placeholder" style="display:none;">🧚</div>`
-      : `<div class="collected-card-placeholder">🧚</div>`;
+         <div class="collected-card-placeholder" style="display:none;"><img class="fairy-placeholder-img" src="fairy.png" alt="Fairy"></div>`
+      : `<div class="collected-card-placeholder"><img class="fairy-placeholder-img" src="fairy.png" alt="Fairy"></div>`;
 
     return `
       <div class="collected-card">
@@ -1997,7 +1997,7 @@ function renderPassport() {
   grid.innerHTML = `
     ${cards}
     <div class="passport-count" style="grid-column: 1 / -1; justify-content: center; padding-top: var(--s-sm);">
-      🧚 ${caught.length} ${caught.length === 1 ? 'fairy' : 'fairies'} collected
+      <img class="btn-fairy-icon" src="fairy.png" alt=""> ${caught.length} ${caught.length === 1 ? 'fairy' : 'fairies'} collected
     </div>
   `;
 }
