@@ -174,13 +174,18 @@ body::after {
 .fairy-sprite {
   position: fixed;
   z-index: 9998;
-  font-size: 1.8rem;
   pointer-events: none;
   opacity: 0;
-  filter: drop-shadow(0 0 6px rgba(253, 94, 83, 0.7))
-          drop-shadow(0 0 18px rgba(245, 158, 11, 0.5));
   will-change: transform, opacity;
   animation: fairy-fly 2s cubic-bezier(0.22, 0.61, 0.36, 1) forwards;
+}
+
+.fairy-sprite img {
+  height: 48px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(253, 94, 83, 0.7))
+          drop-shadow(0 0 18px rgba(245, 158, 11, 0.5));
 }
 
 /* Sparkle trail — pseudo-element behind the fairy */
@@ -342,7 +347,9 @@ body::after {
 }
 
 .brand-fairy {
-  font-size: 1.5rem;
+  height: 36px;
+  width: auto;
+  object-fit: contain;
   animation: fairy-bob 3.5s ease-in-out infinite;
   filter: drop-shadow(0 0 8px rgba(217, 119, 6, 0.35));
 }
@@ -351,6 +358,44 @@ body::after {
   0%, 100% { transform: translateY(0) rotate(0deg); }
   30% { transform: translateY(-4px) rotate(3deg); }
   70% { transform: translateY(2px) rotate(-2deg); }
+}
+
+/* Fairy image — hunt card header */
+.hunt-header-fairy {
+  height: 28px;
+  width: auto;
+  object-fit: contain;
+  filter: drop-shadow(0 0 6px rgba(217, 119, 6, 0.35));
+  animation: fairy-bob 3.5s ease-in-out infinite;
+}
+
+/* Fairy image — inline button icon */
+.btn-fairy-icon {
+  height: 18px;
+  width: auto;
+  object-fit: contain;
+  vertical-align: middle;
+  margin-right: 4px;
+  filter: drop-shadow(0 0 4px rgba(217, 119, 6, 0.3));
+}
+
+/* Fairy image — passport/directory placeholders */
+.fairy-placeholder-img {
+  width: 48px;
+  height: 48px;
+  object-fit: contain;
+  opacity: 0.5;
+  filter: drop-shadow(0 0 6px rgba(217, 119, 6, 0.2));
+}
+
+/* Fairy image — large empty state icon */
+.fairy-empty-img {
+  width: 72px;
+  height: auto;
+  object-fit: contain;
+  opacity: 0.45;
+  filter: drop-shadow(0 0 8px rgba(217, 119, 6, 0.25));
+  margin-bottom: var(--s-md);
 }
 
 .brand-name {
