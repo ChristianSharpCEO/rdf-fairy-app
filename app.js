@@ -2340,6 +2340,65 @@ function resetOnboarding() {
 }
 
 
+/* ═══════════════════════════════════════════════
+   15. INFO / PRIVACY MODAL
+   ───────────────────────────────────────────────
+   Opens from footer link. Includes contact info,
+   privacy policy, terms, and the "Danger Zone"
+   passport data reset.
+   ═══════════════════════════════════════════════ */
+
+function initInfoModal() {
+  const overlay = document.getElementById('info-overlay');
+  const openLink = document.getElementById('link-open-info');
+  const closeBtn = document.getElementById('btn-close-info');
+  const resetBtn = document.getElementById('btn-reset-data');
+
+  if (!overlay || !openLink) return;
+
+  // Open modal
+  openLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    overlay.classList.remove('hidden');
+    window.scrollTo({ top: 0 });
+  });
+
+  // Close via button
+  if (closeBtn) {
+    closeBtn.addEventListener('click', () => {
+      overlay.classList.add('hidden');
+    });
+  }
+
+  // Close via overlay backdrop click
+  overlay.addEventListener('click', (e) => {
+    if (e.target === overlay) {
+      overlay.classList.add('hidden');
+    }
+  });
+
+  // Danger Zone: Reset all passport data
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      const confirmed = confirm(
+        "Are you sure, b'y? This will release all your fairies back into the fog!\n\n" +
+        "All caught fairies, dismissed popups, and preferences will be erased. This cannot be undone."
+      );
+      if (confirmed) {
+        try {
+          localStorage.clear();
+          console.log('[RDF] ⚠️ All data cleared. Reloading...');
+          window.location.reload();
+        } catch (e) {
+          console.warn('[RDF] Could not clear localStorage:', e);
+          alert("Something went wrong. Try clearing your browser data manually.");
+        }
+      }
+    });
+  }
+}
+
+
 document.addEventListener('DOMContentLoaded', () => {
   // Boot fairy mascot images (set base64 src on all data-fairy elements)
   document.querySelectorAll('[data-fairy]').forEach(img => {
@@ -2387,6 +2446,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot Gruffy's pastimes popup
   initGruffyPastimes();
+
+  // Boot info/privacy modal
+  initInfoModal();
 
   // Boot service worker
   registerServiceWorker();
