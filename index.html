@@ -6,9 +6,11 @@
   <meta name="theme-color" content="#080E1A">
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="RDF Fairies">
   <meta name="description" content="RDF: Fairy-Led St. John's Passport — Your hyper-local guide to indoor activities and deals when it's Rain, Drizzle, or Fog in St. John's, Newfoundland.">
+  <meta name="application-name" content="RDF Fairies">
 
-  <title>RDF · Fairy-Led St. John's Passport</title>
+  <title>RDF: Fairy-Led St. John's Passport</title>
 
   <link rel="manifest" href="./manifest.json">
   <!-- Emoji favicon — swap for a real .png icon in production -->
@@ -387,7 +389,101 @@
          HTML5 Geolocation tracks the user. Fairy hotspot
          proximity triggers the folk-glass "win" state. -->
 
+    <!-- ═══════════ APP FOOTER ═══════════ -->
+    <footer class="app-footer">
+      <a href="#" id="link-open-info">ℹ️ Info, Privacy &amp; Contact</a> | v1.0
+    </footer>
+
   </div><!-- /#app -->
+
+
+  <!-- ═══════════ INFO / PRIVACY MODAL ═══════════ -->
+  <div id="info-overlay" class="info-overlay hidden">
+    <div id="info-modal" class="info-modal">
+
+      <h3 class="info-modal-header">📜 The Logbook</h3>
+
+      <!-- About -->
+      <div class="info-section">
+        <h4 class="info-section-title">About</h4>
+        <p class="info-section-text">
+          <strong>RDF: Fairy-Led St. John's Passport</strong> is a free progressive web app
+          that helps locals and visitors find indoor activities, explore local folklore,
+          and hunt fairies across St. John's, NL — especially when it's Rain, Drizzle &amp; Fog outside.
+        </p>
+      </div>
+
+      <!-- Contact -->
+      <div class="info-section">
+        <h4 class="info-section-title">Contact</h4>
+        <p class="info-section-text">
+          <strong>RDF Fairies</strong><br>
+          303 – 495 Water St.<br>
+          St. John's, NL A1E 6B5<br><br>
+          📧 <a href="mailto:info@rdffairies.com">info@rdffairies.com</a><br>
+          📞 <a href="tel:+17097000951">709-700-0951</a><br>
+          🌐 <a href="https://www.rdffairies.com" target="_blank" rel="noopener">www.rdffairies.com</a>
+        </p>
+      </div>
+
+      <!-- Privacy & Terms -->
+      <div class="info-section">
+        <h4 class="info-section-title">Privacy Policy</h4>
+        <p class="info-section-text">
+          This app collects <strong>no personal data</strong>. We do not require registration,
+          accounts, or login. All app data (your caught fairies, dismissed popups, and preferences)
+          is stored <strong>locally on your device</strong> using your browser's localStorage.
+          This data never leaves your device and is not transmitted to any server.<br><br>
+          <strong>Location data:</strong> The Fairy Hunt feature uses your device's GPS
+          with your explicit permission. Your coordinates are processed locally to calculate
+          proximity to fairy hotspots and are <strong>never stored, logged, or transmitted</strong>
+          to any server.<br><br>
+          <strong>Weather data:</strong> We fetch weather conditions from the
+          <a href="https://open-meteo.com/" target="_blank" rel="noopener">Open-Meteo API</a>
+          using the public coordinates for St. John's, NL. No personal data is sent in this request.<br><br>
+          <strong>Google Sheets:</strong> Venue, lore, and game data is loaded from publicly
+          published Google Sheets CSV files. No cookies or tracking are involved in these requests.<br><br>
+          <strong>Third-party services:</strong> This app does not use analytics, advertising,
+          cookies, tracking pixels, or any third-party data collection services.<br><br>
+          <strong>Children's privacy:</strong> This app does not knowingly collect any personal
+          information from children under the age of 13.
+        </p>
+      </div>
+
+      <div class="info-section">
+        <h4 class="info-section-title">Terms of Use</h4>
+        <p class="info-section-text">
+          This app is provided <strong>"as is"</strong> without warranty of any kind.
+          RDF Fairies is not responsible for the accuracy of venue information, weather data,
+          or any deals or promotions referenced within the app. Deals and offers are provided
+          by participating venues and may change or expire without notice.<br><br>
+          <strong>Safety:</strong> Use caution when navigating outdoors, especially in fog.
+          Always be aware of your surroundings. RDF Fairies is not liable for any injury,
+          loss, or damage arising from the use of the Fairy Hunt GPS feature or any other
+          aspect of this application.<br><br>
+          <strong>Intellectual property:</strong> All fairy character artwork, app design,
+          and original content are &copy; 2025 RDF Fairies. Folklore content is drawn from
+          public domain oral histories and cited academic sources.<br><br>
+          By using this app, you agree to these terms. We reserve the right to update
+          this policy at any time. Changes will be reflected in the app.
+        </p>
+      </div>
+
+      <!-- Danger Zone -->
+      <div class="info-section info-danger-zone">
+        <h4 class="info-section-title">⚠️ Danger Zone</h4>
+        <p class="info-section-text">
+          This will erase your entire passport — all caught fairies, dismissed popups,
+          and preferences. This action cannot be undone.
+        </p>
+        <button id="btn-reset-data" class="danger-btn">⚠️ Reset All Passport Data</button>
+      </div>
+
+      <!-- Close -->
+      <button id="btn-close-info" class="info-close-btn">Close</button>
+
+    </div>
+  </div>
 
 
   <!-- ═══════════ BOTTOM NAVIGATION ═══════════ -->
