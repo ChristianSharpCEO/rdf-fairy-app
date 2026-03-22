@@ -1544,6 +1544,26 @@ function calculateDistance(lat1, lon1, lat2, lon2) {
  * Randomly selects a fairy location from the database,
  * hides the name, and displays the cryptic clue in the UI.
  */
+/**
+ * Fairy Flight Animation — creates a fairy sprite that flies
+ * across the screen on a whimsical path and self-destructs.
+ * Called when "Generate Mystery Hunt" is triggered.
+ */
+function animateFairyFlight() {
+  const sprite = document.createElement('div');
+  sprite.className = 'fairy-sprite';
+  sprite.textContent = '🧚';
+  sprite.setAttribute('aria-hidden', 'true');
+  document.body.appendChild(sprite);
+
+  // Self-destruct after the 2s animation completes
+  setTimeout(() => {
+    if (sprite.parentNode) {
+      sprite.parentNode.removeChild(sprite);
+    }
+  }, 2200);
+}
+
 function generateMysteryCrawl() {
   // Clean up any previous hunt
   stopTracking();
@@ -1607,6 +1627,9 @@ function generateMysteryCrawl() {
 
   // ── TASK 3: Standard Hunt — pick from uncaught fairies only ──
   activeHunt = availableFairies[Math.floor(Math.random() * availableFairies.length)];
+
+  // 🧚 Fly a fairy across the screen!
+  animateFairyFlight();
 
   // Reset UI to hunt state
   card.classList.remove('card-hearth');
