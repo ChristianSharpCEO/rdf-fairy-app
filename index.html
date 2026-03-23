@@ -205,6 +205,77 @@
         </div>
       </section>
 
+      <!-- ═══════════ DISPATCH STATION ═══════════ -->
+      <section id="dispatch-station" class="dispatch-section">
+        <div class="glass-panel dispatch-panel">
+
+          <div class="dispatch-header">
+            <h3 class="dispatch-title">📜 Send a Dispatch</h3>
+            <p class="dispatch-intro">Want to be part of the RDF network? Whether you run a shop, play a stage, or sketch fairies in the fog — we want to hear from you.</p>
+          </div>
+
+          <!-- Three Pillars -->
+          <div class="dispatch-pillars">
+
+            <div class="dispatch-pillar">
+              <span class="dispatch-pillar-icon">🧚‍♂️</span>
+              <h4 class="dispatch-pillar-title">Report a Sighting</h4>
+              <p class="dispatch-pillar-text">Think a fairy has taken up residence in your shop or watering hole? Send us a dispatch. If Gruffy remembers hearing about it, we'll map a fairy to your location for our next jaunt.</p>
+            </div>
+
+            <div class="dispatch-pillar">
+              <span class="dispatch-pillar-icon">📯</span>
+              <h4 class="dispatch-pillar-title">Sound the Foghorn</h4>
+              <p class="dispatch-pillar-text">When the RDF rolls in, folks on the Fairy Jaunt need a safe harbour. If you want your business listed as an official RDF Hideout for wanderers to dry off, let us know.</p>
+            </div>
+
+            <div class="dispatch-pillar">
+              <span class="dispatch-pillar-icon">🎨</span>
+              <h4 class="dispatch-pillar-title">Naturalists &amp; Artists</h4>
+              <p class="dispatch-pillar-text">If you have a talent for sketching the elusive Newfoundland fairy, we want your field notes. Submit your art to be featured in future updates.</p>
+            </div>
+
+          </div>
+
+          <!-- Dispatch Form -->
+          <div class="dispatch-form-wrap">
+            <h4 class="dispatch-form-heading">✉️ Your Dispatch</h4>
+            <div id="dispatch-form">
+
+              <div class="dispatch-field">
+                <label class="dispatch-label" for="dispatch-name">Full Name</label>
+                <input class="dispatch-input" type="text" id="dispatch-name" name="name" placeholder="e.g. Skipper Jim" required>
+              </div>
+
+              <div class="dispatch-field">
+                <label class="dispatch-label" for="dispatch-email">Email</label>
+                <input class="dispatch-input" type="email" id="dispatch-email" name="email" placeholder="skipper@example.com" required>
+              </div>
+
+              <div class="dispatch-field">
+                <label class="dispatch-label" for="dispatch-business">Business / Studio Name</label>
+                <input class="dispatch-input" type="text" id="dispatch-business" name="business" placeholder="e.g. The Foggy Lantern">
+              </div>
+
+              <div class="dispatch-field">
+                <label class="dispatch-label" for="dispatch-address">Business Address</label>
+                <input class="dispatch-input" type="text" id="dispatch-address" name="address" placeholder="e.g. 123 Duckworth St, St. John's">
+              </div>
+
+              <div class="dispatch-field">
+                <label class="dispatch-label" for="dispatch-message">Message / Sighting Details</label>
+                <textarea class="dispatch-textarea" id="dispatch-message" name="message" rows="4" placeholder="Tell us about the fairy sighting, your business, or your art..."></textarea>
+              </div>
+
+              <button type="button" id="btn-send-dispatch" class="dispatch-submit-btn">Send Dispatch ✉️</button>
+              <p id="dispatch-status" class="dispatch-status"></p>
+
+            </div>
+          </div>
+
+        </div>
+      </section>
+
     </div><!-- /view-radar -->
 
 
