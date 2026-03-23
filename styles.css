@@ -2041,6 +2041,205 @@ body::after {
   transform: scale(0.97);
 }
 
+/* ─── DISPATCH STATION (Partnerships) ────────── */
+.dispatch-section {
+  margin: var(--s-md);
+}
+
+.dispatch-panel {
+  background: rgba(12, 50, 91, 0.45);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow);
+  padding: var(--s-lg);
+}
+
+.dispatch-header {
+  text-align: center;
+  margin-bottom: var(--s-lg);
+}
+
+.dispatch-title {
+  font-family: var(--font-folk);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: var(--text-spindrift, #F8FAFC);
+  margin-bottom: var(--s-xs);
+}
+
+.dispatch-intro {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.82rem;
+  color: var(--text-spindrift, #F8FAFC);
+  opacity: 0.75;
+  line-height: 1.55;
+  max-width: 420px;
+  margin: 0 auto;
+}
+
+/* ── Three Pillars ── */
+.dispatch-pillars {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--s-md);
+  margin-bottom: var(--s-xl);
+}
+
+@media (min-width: 540px) {
+  .dispatch-pillars {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+.dispatch-pillar {
+  text-align: center;
+  padding: var(--s-md);
+  background: rgba(4, 18, 42, 0.4);
+  border: 1px solid rgba(248, 250, 252, 0.06);
+  border-radius: var(--r-md);
+  transition: border-color 0.25s ease;
+}
+
+.dispatch-pillar:hover {
+  border-color: rgba(248, 250, 252, 0.15);
+}
+
+.dispatch-pillar-icon {
+  display: block;
+  font-size: 2rem;
+  margin-bottom: var(--s-sm);
+}
+
+.dispatch-pillar-title {
+  font-family: var(--font-folk);
+  font-size: 0.88rem;
+  font-weight: 700;
+  color: var(--folk-accent-bright, #F59E0B);
+  margin-bottom: var(--s-xs);
+}
+
+.dispatch-pillar-text {
+  font-family: var(--font-ui);
+  font-size: 0.76rem;
+  color: var(--text-spindrift, #F8FAFC);
+  opacity: 0.8;
+  line-height: 1.6;
+}
+
+/* ── Dispatch Form ── */
+.dispatch-form-wrap {
+  padding-top: var(--s-md);
+  border-top: 1px solid rgba(248, 250, 252, 0.06);
+}
+
+.dispatch-form-heading {
+  font-family: var(--font-folk);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--text-spindrift, #F8FAFC);
+  margin-bottom: var(--s-md);
+  text-align: center;
+}
+
+.dispatch-field {
+  margin-bottom: var(--s-md);
+}
+
+.dispatch-label {
+  display: block;
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--folk-accent, #D97706);
+  margin-bottom: 5px;
+}
+
+.dispatch-input,
+.dispatch-textarea {
+  display: block;
+  width: 100%;
+  padding: 11px 14px;
+  border-radius: var(--r-md);
+  border: 1px solid rgba(248, 250, 252, 0.12);
+  background: rgba(4, 18, 42, 0.5);
+  color: var(--text-spindrift, #F8FAFC);
+  font-family: var(--font-ui);
+  font-size: 0.84rem;
+  line-height: 1.5;
+  outline: none;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  -webkit-appearance: none;
+  box-sizing: border-box;
+}
+
+.dispatch-input::placeholder,
+.dispatch-textarea::placeholder {
+  color: rgba(248, 250, 252, 0.3);
+  font-style: italic;
+}
+
+.dispatch-input:focus,
+.dispatch-textarea:focus {
+  border-color: var(--folk-accent, #D97706);
+  box-shadow: 0 0 0 2px rgba(217, 119, 6, 0.15);
+}
+
+.dispatch-textarea {
+  resize: vertical;
+  min-height: 80px;
+}
+
+.dispatch-submit-btn {
+  display: block;
+  width: 100%;
+  padding: 14px 24px;
+  margin-top: var(--s-sm);
+  border-radius: var(--r-full);
+  border: none;
+  background: var(--accent-sunset, #FD5E53);
+  color: #FFF;
+  font-family: var(--font-ui);
+  font-size: 0.85rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+  box-shadow: 0 4px 20px rgba(253, 94, 83, 0.3);
+}
+
+.dispatch-submit-btn:hover {
+  background: var(--accent-sunset-hover, #E04B41);
+  box-shadow: 0 6px 28px rgba(253, 94, 83, 0.4);
+  transform: translateY(-1px);
+}
+
+.dispatch-submit-btn:active {
+  transform: scale(0.97);
+}
+
+.dispatch-status {
+  text-align: center;
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  margin-top: var(--s-sm);
+  min-height: 1.2em;
+}
+
+.dispatch-status.success {
+  color: #4ADE80;
+}
+
+.dispatch-status.error {
+  color: var(--accent-sunset, #FD5E53);
+}
+
 /* ─── APP FOOTER ─────────────────────────────── */
 .app-footer {
   text-align: center;
