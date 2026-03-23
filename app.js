@@ -2348,6 +2348,54 @@ function resetOnboarding() {
    passport data reset.
    ═══════════════════════════════════════════════ */
 
+/* ═══════════════════════════════════════════════
+   16. DISPATCH STATION — Contact Form
+   ───────────────────────────────────────────────
+   Sends form data via mailto link since we have
+   no backend. Falls back gracefully.
+   ═══════════════════════════════════════════════ */
+
+function initDispatchForm() {
+  const btn = document.getElementById('btn-send-dispatch');
+  const status = document.getElementById('dispatch-status');
+  if (!btn) return;
+
+  btn.addEventListener('click', () => {
+    const name = (document.getElementById('dispatch-name')?.value || '').trim();
+    const email = (document.getElementById('dispatch-email')?.value || '').trim();
+    const business = (document.getElementById('dispatch-business')?.value || '').trim();
+    const address = (document.getElementById('dispatch-address')?.value || '').trim();
+    const message = (document.getElementById('dispatch-message')?.value || '').trim();
+
+    // Validation
+    if (!name || !email) {
+      if (status) {
+        status.textContent = "We'll need at least yer name and email, b'y.";
+        status.className = 'dispatch-status error';
+      }
+      return;
+    }
+
+    // Build mailto
+    const subject = encodeURIComponent(`RDF Dispatch from ${name}`);
+    const body = encodeURIComponent(
+      `Name: ${name}\n` +
+      `Email: ${email}\n` +
+      `Business: ${business || 'N/A'}\n` +
+      `Address: ${address || 'N/A'}\n\n` +
+      `Message:\n${message || 'No message provided.'}`
+    );
+
+    window.location.href = `mailto:info@rdffairies.com?subject=${subject}&body=${body}`;
+
+    if (status) {
+      status.textContent = "Opening yer mail app... If nothing happens, email info@rdffairies.com directly.";
+      status.className = 'dispatch-status success';
+    }
+  });
+}
+
+
 function initInfoModal() {
   const overlay = document.getElementById('info-overlay');
   const openLink = document.getElementById('link-open-info');
@@ -2449,6 +2497,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot info/privacy modal
   initInfoModal();
+
+  // Boot dispatch contact form
+  initDispatchForm();
 
   // Boot service worker
   registerServiceWorker();
