@@ -286,6 +286,22 @@
         </div>
       </section>
 
+      <!-- ═══════════ CAPTAIN'S LOG (SEO Content on Beacon) ═══════════ -->
+      <section class="captains-log-section" aria-label="Captain's Log — guides and advice for St. John's">
+        <details class="captains-log-details glass" open>
+          <summary class="captains-log-summary">
+            <h2 class="captains-log-heading">📜 Captain's Log</h2>
+            <p class="captains-log-sub">Dispatches, field notes &amp; advice from the Rock</p>
+            <span class="captains-log-chevron">▾</span>
+          </summary>
+          <div class="captains-log-body">
+            <div id="log-accordion-container" class="log-accordion">
+              <!-- Populated by app.js renderCaptainsLog() -->
+            </div>
+          </div>
+        </details>
+      </section>
+
     </div><!-- /view-radar -->
 
 
@@ -465,40 +481,6 @@
     </div><!-- /view-pastimes -->
 
 
-    <!-- ═══════════════════════════════════════════
-         TAB 6: CAPTAIN'S LOG (Blog / SEO Content)
-         ═══════════════════════════════════════════ -->
-    <div id="view-log" class="view">
-      <div class="log-view">
-
-        <div class="log-header">
-          <h2 class="log-title">📜 Captain's Log</h2>
-          <p class="log-subtitle">Dispatches, field notes &amp; advice from the Rock</p>
-        </div>
-
-        <div id="log-accordion-container" class="log-accordion">
-          <!-- Populated by app.js renderCaptainsLog() -->
-        </div>
-
-      </div>
-    </div><!-- /view-log -->
-
-
-    <!-- ═══════════ GRUFFY'S LOG WELCOME MODAL ═══════════ -->
-    <div id="gruffy-log-modal" class="gruffy-log-overlay hidden">
-      <div class="gruffy-log-modal">
-        <div class="gruffy-log-avatar">
-          <img class="gruffy-log-img" src="" data-gruffy alt="Gruffy the Bayman">
-        </div>
-        <h3 class="gruffy-log-title">A Word from Gruffy</h3>
-        <blockquote class="gruffy-log-quote">
-          "Well, luh! Who knit ya, sneaking into me logbook like that? Ah, well, you might as well read it. I'm right crooked having to write for these Google robots, but it's the only way to get the mainlanders to notice us. Have a gander anyway, there's some shockin' good advice in there if you're trying to dodge the wet."
-        </blockquote>
-        <button id="btn-close-log" class="gruffy-log-btn">Have a Gander 📖</button>
-      </div>
-    </div>
-
-
     <!-- [PHASE 2 PLACEHOLDER: view-fairy-hunt]
          Third tab: interactive fairy hunt map.
          HTML5 Geolocation tracks the user. Fairy hotspot
@@ -622,10 +604,6 @@
     <button class="nav-tab" data-tab="pastimes" id="nav-pastimes" aria-label="Yarns & Antics — games and pastimes">
       <span class="nav-icon">🃏</span>
       <span class="nav-label">Yarns</span>
-    </button>
-    <button class="nav-tab" data-tab="log" id="nav-log" aria-label="Captain's Log — blog and guides">
-      <span class="nav-icon">📜</span>
-      <span class="nav-label">Log</span>
     </button>
   </nav>
 
