@@ -398,6 +398,21 @@ body::after {
   margin-bottom: var(--s-md);
 }
 
+/* Inline icon images (foghorn, etc.) */
+.inline-icon {
+  height: 22px;
+  width: 22px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
+.inline-icon-lg {
+  height: 32px;
+  width: 32px;
+  object-fit: contain;
+  vertical-align: middle;
+}
+
 .brand-name {
   font-family: var(--font-folk);
   font-size: 1.6rem;
