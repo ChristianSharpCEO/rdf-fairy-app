@@ -214,33 +214,43 @@
             <p class="dispatch-intro">Want to be part of the RDF network? Whether you run a shop, play a stage, or sketch fairies in the fog — we want to hear from you.</p>
           </div>
 
-          <!-- Three Pillars -->
-          <div class="dispatch-pillars">
+          <!-- Stacked Pillars -->
+          <div class="dispatch-pillars-stacked">
 
-            <div class="dispatch-pillar">
-              <span class="dispatch-pillar-icon">🧚‍♂️</span>
-              <h4 class="dispatch-pillar-title">Report a Sighting</h4>
+            <div class="dispatch-pillar-row">
+              <div class="dispatch-pillar-head">
+                <span class="dispatch-pillar-icon">🧚‍♂️</span>
+                <h4 class="dispatch-pillar-title">Report a Sighting</h4>
+              </div>
               <p class="dispatch-pillar-text">Think a fairy has taken up residence in your shop or watering hole? Send us a dispatch. If Gruffy remembers hearing about it, we'll map a fairy to your location for our next jaunt.</p>
             </div>
 
-            <div class="dispatch-pillar">
-              <span class="dispatch-pillar-icon">📯</span>
-              <h4 class="dispatch-pillar-title">Sound the Foghorn</h4>
+            <div class="dispatch-pillar-row">
+              <div class="dispatch-pillar-head">
+                <span class="dispatch-pillar-icon">📯</span>
+                <h4 class="dispatch-pillar-title">Sound the Foghorn</h4>
+              </div>
               <p class="dispatch-pillar-text">When the RDF rolls in, folks on the Fairy Jaunt need a safe harbour. If you want your business listed as an official RDF Hideout for wanderers to dry off, let us know.</p>
             </div>
 
-            <div class="dispatch-pillar">
-              <span class="dispatch-pillar-icon">🎨</span>
-              <h4 class="dispatch-pillar-title">Naturalists &amp; Artists</h4>
+            <div class="dispatch-pillar-row">
+              <div class="dispatch-pillar-head">
+                <span class="dispatch-pillar-icon">🎨</span>
+                <h4 class="dispatch-pillar-title">Naturalists &amp; Artists</h4>
+              </div>
               <p class="dispatch-pillar-text">If you have a talent for sketching the elusive Newfoundland fairy, we want your field notes. Submit your art to be featured in future updates.</p>
             </div>
 
           </div>
 
-          <!-- Dispatch Form -->
-          <div class="dispatch-form-wrap">
-            <h4 class="dispatch-form-heading">✉️ Your Dispatch</h4>
-            <div id="dispatch-form">
+          <!-- Accordion Toggle -->
+          <button id="dispatch-accordion-toggle" class="dispatch-toggle-btn">Open Dispatch Form ✉️</button>
+
+          <!-- Hidden Accordion Form -->
+          <div id="dispatch-form-container" class="dispatch-accordion-body">
+            <div class="dispatch-form-inner">
+
+              <h4 class="dispatch-form-heading">✉️ Your Dispatch</h4>
 
               <div class="dispatch-field">
                 <label class="dispatch-label" for="dispatch-name">Full Name</label>
@@ -455,6 +465,40 @@
     </div><!-- /view-pastimes -->
 
 
+    <!-- ═══════════════════════════════════════════
+         TAB 6: CAPTAIN'S LOG (Blog / SEO Content)
+         ═══════════════════════════════════════════ -->
+    <div id="view-log" class="view">
+      <div class="log-view">
+
+        <div class="log-header">
+          <h2 class="log-title">📜 Captain's Log</h2>
+          <p class="log-subtitle">Dispatches, field notes &amp; advice from the Rock</p>
+        </div>
+
+        <div id="log-accordion-container" class="log-accordion">
+          <!-- Populated by app.js renderCaptainsLog() -->
+        </div>
+
+      </div>
+    </div><!-- /view-log -->
+
+
+    <!-- ═══════════ GRUFFY'S LOG WELCOME MODAL ═══════════ -->
+    <div id="gruffy-log-modal" class="gruffy-log-overlay hidden">
+      <div class="gruffy-log-modal">
+        <div class="gruffy-log-avatar">
+          <img class="gruffy-log-img" src="" data-gruffy alt="Gruffy the Bayman">
+        </div>
+        <h3 class="gruffy-log-title">A Word from Gruffy</h3>
+        <blockquote class="gruffy-log-quote">
+          "Well, luh! Who knit ya, sneaking into me logbook like that? Ah, well, you might as well read it. I'm right crooked having to write for these Google robots, but it's the only way to get the mainlanders to notice us. Have a gander anyway, there's some shockin' good advice in there if you're trying to dodge the wet."
+        </blockquote>
+        <button id="btn-close-log" class="gruffy-log-btn">Have a Gander 📖</button>
+      </div>
+    </div>
+
+
     <!-- [PHASE 2 PLACEHOLDER: view-fairy-hunt]
          Third tab: interactive fairy hunt map.
          HTML5 Geolocation tracks the user. Fairy hotspot
@@ -578,6 +622,10 @@
     <button class="nav-tab" data-tab="pastimes" id="nav-pastimes" aria-label="Yarns & Antics — games and pastimes">
       <span class="nav-icon">🃏</span>
       <span class="nav-label">Yarns</span>
+    </button>
+    <button class="nav-tab" data-tab="log" id="nav-log" aria-label="Captain's Log — blog and guides">
+      <span class="nav-icon">📜</span>
+      <span class="nav-label">Log</span>
     </button>
   </nav>
 
