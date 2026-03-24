@@ -2056,30 +2056,79 @@ body::after {
   transform: scale(0.97);
 }
 
-/* ─── CAPTAIN'S LOG TAB ──────────────────────── */
-.log-view {
-  padding: var(--s-md);
+/* ─── CAPTAIN'S LOG (On-Beacon SEO Section) ──── */
+.captains-log-section {
+  margin: var(--s-md);
 }
 
-.log-header {
-  margin-bottom: var(--s-lg);
+.captains-log-details {
+  background: var(--glass-bg);
+  backdrop-filter: var(--glass-blur);
+  -webkit-backdrop-filter: var(--glass-blur);
+  border: 1px solid var(--glass-border);
+  border-radius: var(--r-lg);
+  box-shadow: var(--glass-shadow);
+  overflow: hidden;
 }
 
-.log-title {
+.captains-log-summary {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--s-sm);
+  padding: var(--s-md) var(--s-lg);
+  cursor: pointer;
+  list-style: none;
+  -webkit-tap-highlight-color: transparent;
+  user-select: none;
+  transition: background 0.2s ease;
+}
+
+.captains-log-summary::-webkit-details-marker { display: none; }
+.captains-log-summary::marker { content: ''; }
+
+.captains-log-summary:hover {
+  background: var(--glass-bg-hover);
+}
+
+.captains-log-heading {
   font-family: var(--font-folk);
-  font-size: 1.5rem;
+  font-size: 1.15rem;
   font-weight: 700;
   color: var(--text-spindrift, #F8FAFC);
-  margin-bottom: 2px;
+  margin: 0;
 }
 
-.log-subtitle {
+.captains-log-sub {
+  flex-basis: 100%;
   font-family: var(--font-folk);
   font-style: italic;
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   color: var(--text-slate);
+  margin: 0;
 }
 
+.captains-log-chevron {
+  margin-left: auto;
+  font-size: 0.85rem;
+  color: var(--text-faint);
+  transition: transform 0.3s ease;
+}
+
+.captains-log-details[open] .captains-log-chevron {
+  transform: rotate(180deg);
+}
+
+.captains-log-details[open] .captains-log-heading {
+  color: var(--folk-accent-bright, #F59E0B);
+}
+
+.captains-log-body {
+  padding: 0 var(--s-lg) var(--s-lg);
+  animation: lore-expand 0.3s ease;
+}
+
+/* Log accordion items (reused from previous) */
 .log-accordion {
   display: flex;
   flex-direction: column;
@@ -2087,12 +2136,9 @@ body::after {
 }
 
 .log-item {
-  background: var(--glass-bg);
-  backdrop-filter: var(--glass-blur);
-  -webkit-backdrop-filter: var(--glass-blur);
-  border: 1px solid var(--glass-border);
-  border-radius: var(--r-lg);
-  box-shadow: var(--glass-shadow);
+  background: rgba(4, 18, 42, 0.4);
+  border: 1px solid rgba(248, 250, 252, 0.06);
+  border-radius: var(--r-md);
   overflow: hidden;
   transition: border-color 0.25s ease;
   opacity: 0;
@@ -2105,6 +2151,9 @@ body::after {
 .log-item:nth-child(4) { animation-delay: 0.16s; }
 .log-item:nth-child(5) { animation-delay: 0.20s; }
 .log-item:nth-child(6) { animation-delay: 0.24s; }
+.log-item:nth-child(7) { animation-delay: 0.28s; }
+.log-item:nth-child(8) { animation-delay: 0.32s; }
+.log-item:nth-child(n+9) { animation-delay: 0.36s; }
 
 .log-item[open] {
   border-color: var(--glass-border-bright);
@@ -2114,7 +2163,7 @@ body::after {
   display: flex;
   align-items: center;
   gap: var(--s-sm);
-  padding: 14px var(--s-md);
+  padding: 12px var(--s-md);
   cursor: pointer;
   list-style: none;
   -webkit-tap-highlight-color: transparent;
@@ -2126,7 +2175,7 @@ body::after {
 .log-summary::marker { content: ''; }
 
 .log-summary:hover {
-  background: var(--glass-bg-hover);
+  background: rgba(248, 250, 252, 0.04);
 }
 
 .log-summary-text {
@@ -2136,7 +2185,7 @@ body::after {
 
 .log-summary-title {
   font-family: var(--font-folk);
-  font-size: 0.95rem;
+  font-size: 0.9rem;
   font-weight: 600;
   color: var(--text-spindrift, #F8FAFC);
   line-height: 1.3;
@@ -2144,7 +2193,7 @@ body::after {
 
 .log-summary-category {
   font-family: var(--font-ui);
-  font-size: 0.65rem;
+  font-size: 0.62rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.08em;
@@ -2172,22 +2221,26 @@ body::after {
   animation: lore-expand 0.3s ease;
 }
 
-.log-full-text {
+.log-paragraph {
   font-family: var(--font-ui);
-  font-size: 0.84rem;
+  font-size: 0.82rem;
   color: var(--text-spindrift, var(--text-mist));
-  line-height: 1.65;
-  white-space: pre-line;
+  line-height: 1.7;
+  margin-bottom: var(--s-sm);
+}
+
+.log-paragraph:last-child {
+  margin-bottom: 0;
 }
 
 .log-empty {
   text-align: center;
-  padding: var(--s-2xl) var(--s-md);
+  padding: var(--s-xl) var(--s-md);
 }
 
 .log-empty-icon {
-  font-size: 2.5rem;
-  margin-bottom: var(--s-md);
+  font-size: 2rem;
+  margin-bottom: var(--s-sm);
   opacity: 0.4;
   display: block;
 }
@@ -2195,114 +2248,8 @@ body::after {
 .log-empty-text {
   font-family: var(--font-folk);
   font-style: italic;
-  font-size: 0.92rem;
-  color: var(--text-slate);
-}
-
-/* ── Gruffy's Log Welcome Modal ── */
-.gruffy-log-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: rgba(4, 12, 30, 0.88);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: var(--s-md);
-  animation: overlay-fade-in 0.4s ease;
-}
-
-.gruffy-log-overlay.hidden {
-  display: none;
-}
-
-.gruffy-log-modal {
-  width: 100%;
-  max-width: 380px;
-  background: rgba(12, 50, 91, 0.95);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
-  border: 1px solid rgba(248, 250, 252, 0.2);
-  border-radius: var(--r-xl);
-  box-shadow:
-    0 16px 64px rgba(0, 0, 0, 0.5),
-    0 0 40px rgba(217, 119, 6, 0.06);
-  padding: var(--s-xl) var(--s-lg);
-  text-align: center;
-  animation: modal-slide-up 0.5s ease;
-}
-
-.gruffy-log-avatar {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto var(--s-md);
-  border-radius: 50%;
-  background: rgba(12, 50, 91, 0.5);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  border: 2px solid rgba(248, 250, 252, 0.2);
-  box-shadow:
-    0 6px 24px rgba(0, 0, 0, 0.35),
-    inset 0 1px 0 rgba(248, 250, 252, 0.1);
-  overflow: hidden;
-}
-
-.gruffy-log-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  border-radius: 50%;
-  filter: drop-shadow(0 0 6px rgba(217, 119, 6, 0.3));
-}
-
-.gruffy-log-title {
-  font-family: var(--font-folk);
-  font-size: 1.1rem;
-  font-weight: 700;
-  color: var(--folk-accent-bright, #F59E0B);
-  margin-bottom: var(--s-md);
-}
-
-.gruffy-log-quote {
-  font-family: var(--font-folk);
-  font-style: italic;
   font-size: 0.88rem;
-  color: var(--text-spindrift, #F8FAFC);
-  line-height: 1.6;
-  margin: 0 0 var(--s-lg);
-  padding: var(--s-md);
-  background: rgba(4, 18, 42, 0.4);
-  border-left: 3px solid var(--folk-accent, #D97706);
-  border-radius: 0 var(--r-md) var(--r-md) 0;
-  text-align: left;
-}
-
-.gruffy-log-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 14px 32px;
-  border-radius: var(--r-full);
-  border: none;
-  background: var(--accent-sunset, #FD5E53);
-  color: #FFF;
-  font-family: var(--font-ui);
-  font-size: 0.85rem;
-  font-weight: 800;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  cursor: pointer;
-  transition: background 0.2s ease, transform 0.2s ease;
-  -webkit-tap-highlight-color: transparent;
-  box-shadow: 0 4px 20px rgba(253, 94, 83, 0.3);
-}
-
-.gruffy-log-btn:hover {
-  background: var(--accent-sunset-hover, #E04B41);
-}
-
-.gruffy-log-btn:active {
-  transform: scale(0.97);
+  color: var(--text-slate);
 }
 
 /* ─── DISPATCH STATION (Partnerships) ────────── */
