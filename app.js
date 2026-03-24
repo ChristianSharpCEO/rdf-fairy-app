@@ -1194,7 +1194,7 @@ function initSlang() {
  */
 const GUILT_MESSAGES = [
   {
-    title: "🧚 This weather, what a sin.",
+    title: "🍃 This weather, what a sin.",
     body: "You're really going to stay inside without catching a Fairy Charm? Get on the go, b'y!",
   },
   {
@@ -1202,7 +1202,7 @@ const GUILT_MESSAGES = [
     body: "The fairies are waiting in the fog and you're just sat there? They won't wait forever, ya know.",
   },
   {
-    title: "🧚 The fairies noticed you haven't moved.",
+    title: "🍃 The fairies noticed you haven't moved.",
     body: "They're not angry, just disappointed. Sure, get out of it and find a Charm before they vanish.",
   },
   {
@@ -1214,7 +1214,7 @@ const GUILT_MESSAGES = [
     body: "Perfect fairy weather and you're doing NOTHING? The b'ys are all out. Don't be the last one.",
   },
   {
-    title: "🧚 Your fairy is wondering about you.",
+    title: "🍃 Your fairy is wondering about you.",
     body: "She flew all the way from the Battery in the lashing rain, and you can't be bothered? Lovely.",
   },
   {
@@ -1222,7 +1222,7 @@ const GUILT_MESSAGES = [
     body: "Storm's here. Fairy Charms are popping up all over downtown. You're missing them all. Just saying.",
   },
   {
-    title: "🧚 Day 1 of you ignoring the fairies.",
+    title: "🍃 Day 1 of you ignoring the fairies.",
     body: "They're keeping track, by the way. Get on the go before they hold a grudge.",
   },
 ];
@@ -1445,7 +1445,7 @@ async function initDatabase() {
     const csvText = await res.text();
     fairyDatabase = parseCSV(csvText).filter(f => f.Name && f.Lat && f.Lng && f.Clue);
 
-    console.log(`[RDF] 🧚 Fairy database loaded: ${fairyDatabase.length} locations.`);
+    console.log(`[RDF] 🍃 Fairy database loaded: ${fairyDatabase.length} locations.`);
   } catch (err) {
     console.warn('[RDF] CSV fetch failed, using fallback data:', err.message);
 
@@ -1645,7 +1645,7 @@ function generateMysteryCrawl() {
   // ── TASK 3: Standard Hunt — pick from uncaught fairies only ──
   activeHunt = availableFairies[Math.floor(Math.random() * availableFairies.length)];
 
-  // 🧚 Fly a fairy across the screen!
+  // 🍃 Fly a fairy across the screen!
   animateFairyFlight();
 
   // Reset UI to hunt state
@@ -1865,7 +1865,7 @@ function revealFairy() {
 
   // Hide catch button, update generate button for next round
   if (catchBtn) catchBtn.style.display = 'none';
-  if (genBtn) genBtn.textContent = 'Hunt Another Fairy';
+  if (genBtn) genBtn.textContent = 'Jaunt for Another Fairy';
 
   // ── Save to Passport ──
   saveCaughtFairy(foundFairy.Name);
@@ -1879,7 +1879,7 @@ function revealFairy() {
       ? `You found her at ${foundFairy.Name}! Show your phone to claim: ${foundFairy.Reward}`
       : `You found her at ${foundFairy.Name}! No deal this time, but you're a legend.`;
 
-    new Notification('🧚 Fairy Caught!', {
+    new Notification('🍃 Fairy Caught!', {
       body: notifBody,
       tag: 'rdf-fairy-catch',
     });
@@ -1941,7 +1941,7 @@ function saveCaughtFairy(fairyName) {
 
   try {
     localStorage.setItem('caughtFairies', JSON.stringify(caught));
-    console.log(`[RDF] 🧚 Fairy saved to passport: "${fairyName}" (${caught.length} total)`);
+    console.log(`[RDF] 🍃 Fairy saved to passport: "${fairyName}" (${caught.length} total)`);
   } catch (e) {
     console.warn('[RDF] Failed to save to localStorage:', e);
   }
@@ -2095,7 +2095,7 @@ function renderLore() {
     return;
   }
 
-  const catIcons = { 'History':'⚔️', 'Humor':'😂', 'Lore':'👻', 'Fairytale':'🧚' };
+  const catIcons = { 'History':'⚔️', 'Humor':'😂', 'Lore':'👻', 'Fairytale':'📕' };
 
   container.innerHTML = loreDB.map(story => {
     const icon = catIcons[story.Category] || '🕯️';
@@ -2639,7 +2639,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // Auto-refresh weather
   setInterval(fetchWeather, CONFIG.WEATHER_REFRESH);
 
-  console.log('[RDF] 🧚 Fairy-Led Passport initialized. Stay dry, b\'y.');
+  console.log('[RDF] 🍃 Fairy-Led Passport initialized. Stay dry, b\'y.');
 });
 
 
