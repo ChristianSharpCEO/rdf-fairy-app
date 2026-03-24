@@ -42,6 +42,7 @@ const CONFIG = {
     DIRECTORY:   '?gid=828648384&single=true&output=csv',
     LORE:        '?gid=1883610755&single=true&output=csv',
     PASTIMES:    '?gid=1186700664&single=true&output=csv',
+    CAPTAINS_LOG:'?gid=479692008&single=true&output=csv',
   },
 };
 
@@ -1376,6 +1377,12 @@ function initNavigation() {
         checkGruffyPastimes();
         renderPastimes();
       }
+
+      // Render Captain's Log when switching to that tab
+      if (target === 'log') {
+        checkGruffyLog();
+        renderCaptainsLog();
+      }
     });
   });
 }
@@ -2349,13 +2356,132 @@ function resetOnboarding() {
    ═══════════════════════════════════════════════ */
 
 /* ═══════════════════════════════════════════════
-   16. DISPATCH STATION — Contact Form
+   16. CAPTAIN'S LOG — Blog / SEO Content
+   ───────────────────────────────────────────────
+   Fetched live from Google Sheet (gid=479692008).
+   Features Gruffy's one-time welcome modal.
+   ═══════════════════════════════════════════════ */
+
+let captainsLogDB = [];
+
+/**
+ * Fetches the Captain's Log sheet CSV.
+ */
+async function initCaptainsLogDB() {
+  try {
+    const url = CONFIG.SHEET_BASE + CONFIG.SHEETS.CAPTAINS_LOG;
+    console.log("[RDF] 📜 Fetching Captain's Log from:", url);
+    const res = await fetch(url);
+    if (!res.ok) throw new Error(`Captain's Log sheet returned ${res.status}`);
+    captainsLogDB = parseCSV(await res.text());
+    console.log(`[RDF] 📜 Captain's Log loaded: ${captainsLogDB.length} entries.`);
+    if (captainsLogDB.length > 0) {
+      console.log("[RDF] 📜 First entry keys:", Object.keys(captainsLogDB[0]));
+    }
+  } catch (err) {
+    console.warn("[RDF] Captain's Log CSV fetch failed, using fallback:", err.message);
+    captainsLogDB = [
+      { Title: "Welcome to the Rock", Category: "Guide", Content: "If you're reading this, you've found Gruffy's logbook. Consider yourself lucky — or cursed. Either way, welcome to St. John's." },
+    ];
+  }
+}
+
+/**
+ * Gruffy's one-time Captain's Log welcome modal.
+ */
+function checkGruffyLog() {
+  const modal = document.getElementById('gruffy-log-modal');
+  if (!modal) return;
+  try {
+    if (localStorage.getItem('seenGruffyLog') === 'true') return;
+  } catch (e) { /* show it */ }
+  modal.classList.remove('hidden');
+}
+
+function initGruffyLog() {
+  const btn = document.getElementById('btn-close-log');
+  if (!btn) return;
+  btn.addEventListener('click', () => {
+    const modal = document.getElementById('gruffy-log-modal');
+    if (modal) modal.classList.add('hidden');
+    try { localStorage.setItem('seenGruffyLog', 'true'); }
+    catch (e) { console.warn('[RDF] Could not save log modal state:', e); }
+  });
+}
+
+/**
+ * Renders the Captain's Log accordion.
+ * Expects keys: Title, Category, Content
+ */
+function renderCaptainsLog() {
+  const container = document.getElementById('log-accordion-container');
+  if (!container) return;
+
+  if (!captainsLogDB || captainsLogDB.length === 0) {
+    container.innerHTML = `
+      <div class="log-empty">
+        <span class="log-empty-icon">📜</span>
+        <p class="log-empty-text">The logbook is empty, b'y. Gruffy hasn't written anything yet.</p>
+      </div>
+    `;
+    return;
+  }
+
+  const catIcons = { 'Guide': '🧭', 'Weather': '🌧️', 'Culture': '🎻', 'Food': '🍲', 'Tips': '💡', 'History': '⚔️', 'News': '📰' };
+
+  container.innerHTML = captainsLogDB.map(entry => {
+    const title = entry['Title'] || entry['title'] || 'Untitled';
+    const category = entry['Category'] || entry['category'] || '';
+    const content = entry['Content'] || entry['content'] || entry['Body'] || entry['body'] || '';
+    const icon = catIcons[category] || '📜';
+
+    return `
+      <details class="log-item">
+        <summary class="log-summary">
+          <span class="log-summary-icon">${icon}</span>
+          <div class="log-summary-text">
+            <div class="log-summary-title">${title}</div>
+            ${category ? `<div class="log-summary-category">${category}</div>` : ''}
+          </div>
+          <span class="log-chevron">▾</span>
+        </summary>
+        <div class="log-body">
+          <p class="log-full-text">${content}</p>
+        </div>
+      </details>
+    `;
+  }).join('');
+}
+
+
+/* ═══════════════════════════════════════════════
+   17. DISPATCH STATION — Contact Form
    ───────────────────────────────────────────────
    Sends form data via mailto link since we have
    no backend. Falls back gracefully.
    ═══════════════════════════════════════════════ */
 
 function initDispatchForm() {
+  // ── Accordion toggle ──
+  const toggleBtn = document.getElementById('dispatch-accordion-toggle');
+  const formContainer = document.getElementById('dispatch-form-container');
+
+  if (toggleBtn && formContainer) {
+    toggleBtn.addEventListener('click', () => {
+      const isOpen = formContainer.classList.contains('expanded');
+      if (isOpen) {
+        formContainer.classList.remove('expanded');
+        toggleBtn.classList.remove('open');
+        toggleBtn.textContent = 'Open Dispatch Form ✉️';
+      } else {
+        formContainer.classList.add('expanded');
+        toggleBtn.classList.add('open');
+        toggleBtn.textContent = 'Close Form ✖️';
+      }
+    });
+  }
+
+  // ── Mailto submit ──
   const btn = document.getElementById('btn-send-dispatch');
   const status = document.getElementById('dispatch-status');
   if (!btn) return;
@@ -2488,6 +2614,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot Pastimes database from Google Sheet
   initPastimesDB();
+
+  // Boot Captain's Log database from Google Sheet
+  initCaptainsLogDB();
+
+  // Boot Gruffy's log welcome modal
+  initGruffyLog();
 
   // Boot Gruffy's one-time popup
   initGruffy();
