@@ -64,20 +64,6 @@
         </div>
       </section>
 
-      <!-- ── RDF Alerts (Push Notifications) ── -->
-      <section class="alert-section">
-        <div class="alert-card folk-glass">
-          <div class="alert-icon-wrap">🔔</div>
-          <div class="alert-info">
-            <div class="alert-heading">RDF Rain Alerts</div>
-            <div class="alert-sub">Get guilt-tripped by a fairy when it's miserable outside.</div>
-          </div>
-          <button class="alert-btn" id="btn-enable-alerts" aria-label="Enable push notifications">
-            Enable
-          </button>
-        </div>
-      </section>
-
       <!-- ── Live Feeds (Collapsible Tabs) ── -->
       <section class="webcam-section">
         <div class="section-head">
@@ -143,6 +129,33 @@
         </details>
       </section>
 
+      <!-- ── Fog Horn Deals ── -->
+      <section class="deals-section">
+        <div class="section-head">
+          <span class="section-icon"><img class="inline-icon" src="" data-foghorn alt="Foghorn"></span>
+          <h2 class="section-title">The Fog Horn Deals</h2>
+        </div>
+        <div class="deal-card glass">
+          <span class="deal-icon"><img class="inline-icon-lg" src="" data-foghorn alt="Foghorn"></span>
+          <div class="deal-heading">Fog Horn Flash Deals coming soon!</div>
+          <div class="deal-sub">Exclusive discounts from St. John's businesses — activated when it's RDF weather.</div>
+        </div>
+      </section>
+
+      <!-- ── RDF Alerts (Push Notifications) ── -->
+      <section class="alert-section">
+        <div class="alert-card folk-glass">
+          <div class="alert-icon-wrap">🔔</div>
+          <div class="alert-info">
+            <div class="alert-heading">RDF Rain Alerts</div>
+            <div class="alert-sub">Get guilt-tripped by a fairy when it's miserable outside.</div>
+          </div>
+          <button class="alert-btn" id="btn-enable-alerts" aria-label="Enable push notifications">
+            Enable
+          </button>
+        </div>
+      </section>
+
       <!-- ── Local Lingo: Talk Like a Newfoundlander ── -->
       <section class="slang-section">
         <div class="slang-card folk-glass">
@@ -158,48 +171,6 @@
           <div class="slang-footer">
             <button class="slang-btn" id="btn-next-slang" aria-label="Learn another Newfoundland slang word">
               Learn Another →
-            </button>
-          </div>
-        </div>
-      </section>
-
-      <!-- ── Fog Horn Deals ── -->
-      <section class="deals-section">
-        <div class="section-head">
-          <span class="section-icon"><img class="inline-icon" src="" data-foghorn alt="Foghorn"></span>
-          <h2 class="section-title">The Fog Horn Deals</h2>
-        </div>
-        <div class="deal-card glass">
-          <span class="deal-icon"><img class="inline-icon-lg" src="" data-foghorn alt="Foghorn"></span>
-          <div class="deal-heading">Fog Horn Flash Deals coming soon!</div>
-          <div class="deal-sub">Exclusive discounts from St. John's businesses — activated when it's RDF weather.</div>
-        </div>
-      </section>
-
-      <!-- ── The Fairy Hunt (Mystery Crawl) ── -->
-      <section class="hunt-section">
-        <div id="fairy-hunt-card" class="card-hunt glass">
-          <div class="hunt-header">
-            <img class="hunt-header-fairy" src="" data-fairy alt="Fairy">
-            <span class="hunt-header-title">The Fairy Jaunt</span>
-          </div>
-          <div class="hunt-body">
-            <p class="hunt-clue" id="hunt-clue">
-              Tap below to summon a fairy from the fog. Follow the clue to find her hiding spot and claim your reward.
-            </p>
-            <p class="hunt-distance" id="hunt-distance"></p>
-            <h2 class="hunt-location-reveal" id="hunt-location-reveal"></h2>
-            <img class="hunt-image" id="fairy-image" src="" alt="" style="display:none;">
-            <div class="hunt-reward-display" id="reward-display" style="display:none;"></div>
-            <p class="hunt-reward" id="hunt-reward"></p>
-            <p class="hunt-error" id="hunt-error"></p>
-          </div>
-          <div class="hunt-footer">
-            <button class="hunt-btn-generate" id="btn-generate-crawl">
-              Generate Mystery Itinerary
-            </button>
-            <button class="hunt-btn-catch" id="btn-catch-fairy">
-              <img class="btn-fairy-icon" src="" data-fairy alt=""> Catch Fairy &amp; Claim Deal
             </button>
           </div>
         </div>
@@ -331,17 +302,49 @@
 
 
     <!-- ═══════════════════════════════════════════
-         TAB 3: THE PASSPORT (Collected Fairies)
+         TAB 3: THE EXPEDITION (Fairy Hunt + Collected)
          ═══════════════════════════════════════════ -->
     <div id="view-passport" class="view">
       <div class="passport-view">
+
+        <!-- ── The Fairy Jaunt (Mystery Crawl) ── -->
+        <section class="hunt-section">
+          <div id="fairy-hunt-card" class="card-hunt glass">
+            <div class="hunt-header">
+              <img class="hunt-header-fairy" src="" data-fairy alt="Fairy">
+              <span class="hunt-header-title">The Fairy Jaunt</span>
+            </div>
+            <div class="hunt-body">
+              <p class="hunt-clue" id="hunt-clue">
+                Tap below to summon a fairy from the fog. Follow the clue to find her hiding spot and claim your reward.
+              </p>
+              <p class="hunt-distance" id="hunt-distance"></p>
+              <h2 class="hunt-location-reveal" id="hunt-location-reveal"></h2>
+              <img class="hunt-image" id="fairy-image" src="" alt="" style="display:none;">
+              <div class="hunt-reward-display" id="reward-display" style="display:none;"></div>
+              <p class="hunt-reward" id="hunt-reward"></p>
+              <p class="hunt-error" id="hunt-error"></p>
+            </div>
+            <div class="hunt-footer">
+              <button class="hunt-btn-generate" id="btn-generate-crawl">
+                Generate Mystery Itinerary
+              </button>
+              <button class="hunt-btn-catch" id="btn-catch-fairy">
+                <img class="btn-fairy-icon" src="" data-fairy alt=""> Catch Fairy &amp; Claim Deal
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- ── Collected Fairies Gallery ── -->
         <div class="passport-header">
-          <h2 class="passport-title">🗺️ My Fairy Passport</h2>
+          <h2 class="passport-title">🗺️ My Expedition Log</h2>
           <p class="passport-subtitle">Every fairy you've caught on the jaunt</p>
         </div>
         <div id="passport-grid" class="passport-grid">
           <!-- Populated by app.js renderPassport() -->
         </div>
+
       </div>
     </div><!-- /view-passport -->
 
@@ -570,10 +573,10 @@
       <div class="info-section info-danger-zone">
         <h4 class="info-section-title">⚠️ Danger Zone</h4>
         <p class="info-section-text">
-          This will erase your entire passport — all caught fairies, dismissed popups,
+          This will erase your entire expedition log — all caught fairies, dismissed popups,
           and preferences. This action cannot be undone.
         </p>
-        <button id="btn-reset-data" class="danger-btn">⚠️ Reset All Passport Data</button>
+        <button id="btn-reset-data" class="danger-btn">⚠️ Reset All Expedition Data</button>
       </div>
 
       <!-- Close -->
@@ -593,9 +596,9 @@
       <span class="nav-icon">🧭</span>
       <span class="nav-label">Hideouts</span>
     </button>
-    <button class="nav-tab" data-tab="passport" id="nav-passport" aria-label="Passport — collected fairies">
+    <button class="nav-tab" data-tab="passport" id="nav-passport" aria-label="Expedition — fairy hunt and collected fairies">
       <span class="nav-icon">🍃</span>
-      <span class="nav-label">Passport</span>
+      <span class="nav-label">Expedition</span>
     </button>
     <button class="nav-tab" data-tab="lore" id="nav-lore" aria-label="Lore — ghost stories and folklore">
       <span class="nav-icon">🕯️</span>
