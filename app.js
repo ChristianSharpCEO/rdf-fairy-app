@@ -1379,12 +1379,6 @@ function initNavigation() {
         checkGruffyPastimes();
         renderPastimes();
       }
-
-      // Render Captain's Log when switching to that tab
-      if (target === 'log') {
-        checkGruffyLog();
-        renderCaptainsLog();
-      }
     });
   });
 }
@@ -2380,35 +2374,15 @@ async function initCaptainsLogDB() {
     if (captainsLogDB.length > 0) {
       console.log("[RDF] 📜 First entry keys:", Object.keys(captainsLogDB[0]));
     }
+    // Render immediately since it's on the Beacon tab
+    renderCaptainsLog();
   } catch (err) {
     console.warn("[RDF] Captain's Log CSV fetch failed, using fallback:", err.message);
     captainsLogDB = [
       { Title: "Welcome to the Rock", Category: "Guide", Content: "If you're reading this, you've found Gruffy's logbook. Consider yourself lucky — or cursed. Either way, welcome to St. John's." },
     ];
+    renderCaptainsLog();
   }
-}
-
-/**
- * Gruffy's one-time Captain's Log welcome modal.
- */
-function checkGruffyLog() {
-  const modal = document.getElementById('gruffy-log-modal');
-  if (!modal) return;
-  try {
-    if (localStorage.getItem('seenGruffyLog') === 'true') return;
-  } catch (e) { /* show it */ }
-  modal.classList.remove('hidden');
-}
-
-function initGruffyLog() {
-  const btn = document.getElementById('btn-close-log');
-  if (!btn) return;
-  btn.addEventListener('click', () => {
-    const modal = document.getElementById('gruffy-log-modal');
-    if (modal) modal.classList.add('hidden');
-    try { localStorage.setItem('seenGruffyLog', 'true'); }
-    catch (e) { console.warn('[RDF] Could not save log modal state:', e); }
-  });
 }
 
 /**
@@ -2429,7 +2403,7 @@ function renderCaptainsLog() {
     return;
   }
 
-  const catIcons = { 'Guide': '🧭', 'Weather': '🌧️', 'Culture': '🎻', 'Food': '🍲', 'Tips': '💡', 'History': '⚔️', 'News': '📰' };
+  const catIcons = { 'Guide': '🧭', 'Weather': '🌧️', 'Culture': '🎻', 'Food': '🍲', 'Tips': '💡', 'History': '⚔️', 'News': '📰', 'SEO': '🔍' };
 
   container.innerHTML = captainsLogDB.map(entry => {
     const title = entry['Title'] || entry['title'] || 'Untitled';
@@ -2437,19 +2411,25 @@ function renderCaptainsLog() {
     const content = entry['Content'] || entry['content'] || entry['Body'] || entry['body'] || '';
     const icon = catIcons[category] || '📜';
 
+    // Convert line breaks to paragraphs for SEO-friendly prose
+    const paragraphs = content.split(/\n{2,}/).filter(p => p.trim()).map(p =>
+      `<p class="log-paragraph">${p.trim()}</p>`
+    ).join('');
+    const bodyHTML = paragraphs || `<p class="log-paragraph">${content}</p>`;
+
     return `
       <details class="log-item">
         <summary class="log-summary">
-          <span class="log-summary-icon">${icon}</span>
+          <span class="log-summary-icon" aria-hidden="true">${icon}</span>
           <div class="log-summary-text">
-            <div class="log-summary-title">${title}</div>
-            ${category ? `<div class="log-summary-category">${category}</div>` : ''}
+            <h3 class="log-summary-title">${title}</h3>
+            ${category ? `<span class="log-summary-category">${category}</span>` : ''}
           </div>
-          <span class="log-chevron">▾</span>
+          <span class="log-chevron" aria-hidden="true">▾</span>
         </summary>
-        <div class="log-body">
-          <p class="log-full-text">${content}</p>
-        </div>
+        <article class="log-body" role="article">
+          ${bodyHTML}
+        </article>
       </details>
     `;
   }).join('');
@@ -2621,11 +2601,8 @@ document.addEventListener('DOMContentLoaded', () => {
   // Boot Pastimes database from Google Sheet
   initPastimesDB();
 
-  // Boot Captain's Log database from Google Sheet
+  // Boot Captain's Log database from Google Sheet (renders on Beacon)
   initCaptainsLogDB();
-
-  // Boot Gruffy's log welcome modal
-  initGruffyLog();
 
   // Boot Gruffy's one-time popup
   initGruffy();
