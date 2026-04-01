@@ -796,52 +796,63 @@ function getWmoDescription(wmo) {
  * Falls back to simulated "mauzy" data on failure.
  */
 async function fetchWeather() {
-  const container = document.getElementById('weather-content');
-  if (!container) return;
-
-  // Show loading spinner
-  container.innerHTML = `
-    <div class="weather-loading">
-      <div class="loading-ring"></div>
-      Checking the weather on Signal Hill...
-    </div>
-  `;
-
   try {
-    // Open-Meteo: request current weather with the fields we need
     const params = new URLSearchParams({
       latitude: CONFIG.LAT,
       longitude: CONFIG.LON,
       current: 'temperature_2m,relative_humidity_2m,apparent_temperature,weather_code,wind_speed_10m',
+      daily: 'sunrise,sunset',
       wind_speed_unit: 'kmh',
       timezone: 'America/St_Johns',
     });
 
     const res = await fetch(`${CONFIG.WEATHER_URL}?${params}`);
-
-    if (!res.ok) {
-      throw new Error(`Open-Meteo returned status ${res.status}`);
-    }
+    if (!res.ok) throw new Error(`Open-Meteo returned status ${res.status}`);
 
     const data = await res.json();
-    renderWeatherLive(container, data);
+    renderAlmanac(data);
   } catch (err) {
     console.warn('[RDF] Weather fetch failed:', err.message);
-    renderWeatherFallback(container);
+    renderAlmanacFallback();
   }
 }
 
 /**
- * Renders live weather from Open-Meteo response.
- * Open-Meteo response shape:
- *   data.current.temperature_2m
- *   data.current.apparent_temperature
- *   data.current.relative_humidity_2m
- *   data.current.weather_code (WMO)
- *   data.current.wind_speed_10m
+ * Formats an ISO time string to 12-hour AM/PM.
+ * e.g. "2025-06-15T05:23" → "5:23 AM"
  */
-function renderWeatherLive(container, data) {
+function formatTime12h(isoStr) {
+  if (!isoStr) return '--:--';
+  try {
+    const d = new Date(isoStr);
+    let h = d.getHours();
+    const m = d.getMinutes().toString().padStart(2, '0');
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;
+    return `${h}:${m} ${ampm}`;
+  } catch (e) {
+    return '--:--';
+  }
+}
+
+/**
+ * Determines Gruffy's weather commentary based on WMO code.
+ * RDF codes (rain/drizzle/fog): 45, 48, 51-67, 71-77, 80-86, 95-99
+ */
+function getGruffyQuote(wmo) {
+  const rdfCodes = [45, 48, 51, 53, 55, 56, 57, 61, 63, 65, 66, 67, 71, 73, 75, 77, 80, 81, 82, 85, 86, 95, 96, 99];
+  if (rdfCodes.includes(wmo)) {
+    return "🌫️ The RDF is thick today. Seek shelter in a Hideout, b'y.";
+  }
+  return "☀️ A rare break in the weather. Perfect time for a jaunt.";
+}
+
+/**
+ * Renders the unified Almanac from live Open-Meteo data.
+ */
+function renderAlmanac(data) {
   const current   = data.current;
+  const daily     = data.daily || {};
   const temp      = Math.round(current.temperature_2m);
   const feelsLike = Math.round(current.apparent_temperature);
   const wmo       = current.weather_code;
@@ -851,48 +862,60 @@ function renderWeatherLive(container, data) {
   const emoji     = getWeatherEmoji(wmo);
   const slang     = getWeatherSlang(wmo, temp);
 
-  container.innerHTML = `
-    <div class="weather-row">
-      <div>
-        <div class="weather-location">📍 ${CONFIG.CITY}</div>
-        <div class="weather-temp">${temp}<sup>°C</sup></div>
-        <div class="weather-condition">${desc} · Feels like ${feelsLike}°C</div>
-      </div>
-      <div class="weather-emoji">${emoji}</div>
-    </div>
-    <div class="weather-slang">
-      <div class="slang-text">${slang}</div>
-    </div>
-    <div class="weather-stats">
-      <div class="weather-stat">💨 Wind <span>${wind} km/h</span></div>
-      <div class="weather-stat">💧 Humidity <span>${humidity}%</span></div>
-    </div>
-  `;
+  // Current conditions
+  const tempEl = document.getElementById('current-temp');
+  const descEl = document.getElementById('current-desc');
+  const emojiEl = document.getElementById('almanac-emoji');
+  if (tempEl) tempEl.textContent = `${temp}°C`;
+  if (descEl) descEl.textContent = `${desc} · Feels like ${feelsLike}°C`;
+  if (emojiEl) emojiEl.textContent = emoji;
+
+  // Stats
+  const windEl = document.getElementById('almanac-wind');
+  const humEl = document.getElementById('almanac-humidity');
+  const feelsEl = document.getElementById('almanac-feels');
+  if (windEl) windEl.textContent = `${wind} km/h`;
+  if (humEl) humEl.textContent = `${humidity}%`;
+  if (feelsEl) feelsEl.textContent = `${feelsLike}°C`;
+
+  // Sunrise / Sunset
+  const sunriseEl = document.getElementById('sunrise-time');
+  const sunsetEl = document.getElementById('sunset-time');
+  if (sunriseEl && daily.sunrise) sunriseEl.textContent = formatTime12h(daily.sunrise[0]);
+  if (sunsetEl && daily.sunset) sunsetEl.textContent = formatTime12h(daily.sunset[0]);
+
+  // NL Slang
+  const slangEl = document.getElementById('almanac-slang');
+  if (slangEl) slangEl.innerHTML = slang;
+
+  // Gruffy's forecast
+  const gruffyEl = document.getElementById('gruffy-weather-quote');
+  if (gruffyEl) gruffyEl.innerHTML = `<em>${getGruffyQuote(wmo)}</em>`;
 }
 
 /**
- * Renders simulated "mauzy" weather when API fails.
+ * Renders fallback Almanac when API fails.
  */
-function renderWeatherFallback(container) {
-  container.innerHTML = `
-    <div class="weather-row">
-      <div>
-        <div class="weather-location">📍 ${CONFIG.CITY}</div>
-        <div class="weather-temp">7<sup>°C</sup></div>
-        <div class="weather-condition">Drizzle &amp; Fog · Feels like 3°C</div>
-      </div>
-      <div class="weather-emoji">🌫️</div>
-    </div>
-    <div class="weather-slang">
-      <div class="slang-text">
-        'Tis <span class="slang-bold">mauzy</span> out — damp enough to rot ya. Proper RDF weather, b'y.
-      </div>
-    </div>
-    <div class="weather-stats">
-      <div class="weather-stat">💨 Wind <span>38 km/h</span></div>
-      <div class="weather-stat">💧 Humidity <span>94%</span></div>
-    </div>
-  `;
+function renderAlmanacFallback() {
+  const tempEl = document.getElementById('current-temp');
+  const descEl = document.getElementById('current-desc');
+  const emojiEl = document.getElementById('almanac-emoji');
+  if (tempEl) tempEl.textContent = '7°C';
+  if (descEl) descEl.textContent = 'Drizzle & Fog · Feels like 3°C';
+  if (emojiEl) emojiEl.textContent = '🌫️';
+
+  const windEl = document.getElementById('almanac-wind');
+  const humEl = document.getElementById('almanac-humidity');
+  const feelsEl = document.getElementById('almanac-feels');
+  if (windEl) windEl.textContent = '38 km/h';
+  if (humEl) humEl.textContent = '94%';
+  if (feelsEl) feelsEl.textContent = '3°C';
+
+  const slangEl = document.getElementById('almanac-slang');
+  if (slangEl) slangEl.innerHTML = "'Tis <span class=\"slang-bold\">mauzy</span> out — damp enough to rot ya. Proper RDF weather, b'y.";
+
+  const gruffyEl = document.getElementById('gruffy-weather-quote');
+  if (gruffyEl) gruffyEl.innerHTML = "<em>🌫️ The RDF is thick today. Seek shelter in a Hideout, b'y.</em>";
 }
 
 
@@ -2158,8 +2181,10 @@ async function initPastimesDB() {
  * Category → emoji map for pastimes.
  */
 const pastimeCatIcons = {
+  'Café': '🖋️',
+  'Solo': '🖋️',
   'Pub': '🍺',
-  'Café': '☕',
+  'Walking': '🚶',
   'Antique Store': '🏺',
   'Retail': '🛍️',
 };
@@ -2217,8 +2242,15 @@ function renderPastimes() {
     groups[cat].push(item);
   });
 
-  // ── Build HTML for each category group ──
-  const html = Object.keys(groups).map(cat => {
+  // ── Build HTML for each category group (ordered) ──
+  const categoryOrder = ['Café', 'Solo', 'Walking', 'Pub', 'Antique Store', 'Retail'];
+  const sortedCats = Object.keys(groups).sort((a, b) => {
+    const ia = categoryOrder.indexOf(a);
+    const ib = categoryOrder.indexOf(b);
+    return (ia === -1 ? 999 : ia) - (ib === -1 ? 999 : ib);
+  });
+
+  const html = sortedCats.map(cat => {
     const icon = pastimeCatIcons[cat] || '🎲';
     const items = groups[cat];
 
@@ -2465,7 +2497,149 @@ function renderCaptainsLog() {
 
 
 /* ═══════════════════════════════════════════════
-   17. DISPATCH STATION — Contact Form
+   17. TAVERN PASTIMES — API-Powered Cards
+   ───────────────────────────────────────────────
+   Three interactive cards at the bottom of Yarns:
+   1. Pub Trivia (Open Trivia DB)
+   2. Apothecary Remedies (TheCocktailDB)
+   3. Gruffy's Card Table (Deck of Cards API)
+   ═══════════════════════════════════════════════ */
+
+/**
+ * Decodes HTML entities from API responses.
+ * e.g. "&amp;quot;" → '"'
+ */
+function decodeHTML(html) {
+  const txt = document.createElement('textarea');
+  txt.innerHTML = html;
+  return txt.value;
+}
+
+function initTavernCards() {
+
+  // ── 1. Pub Trivia ──
+  const triviaBtn = document.getElementById('btn-trivia');
+  const revealBtn = document.getElementById('btn-trivia-reveal');
+  const questionEl = document.getElementById('trivia-question');
+  const answerEl = document.getElementById('trivia-answer');
+
+  if (triviaBtn && questionEl && answerEl) {
+    triviaBtn.addEventListener('click', async () => {
+      triviaBtn.disabled = true;
+      triviaBtn.textContent = 'Drawing...';
+      questionEl.textContent = '';
+      answerEl.textContent = '';
+      answerEl.classList.add('hidden-answer');
+      if (revealBtn) revealBtn.style.display = 'none';
+
+      try {
+        const res = await fetch('https://opentdb.com/api.php?amount=1');
+        const data = await res.json();
+        if (data.results && data.results.length > 0) {
+          const q = data.results[0];
+          questionEl.textContent = decodeHTML(q.question);
+          answerEl.textContent = decodeHTML(q.correct_answer);
+          if (revealBtn) revealBtn.style.display = 'inline-block';
+        } else {
+          questionEl.textContent = "The trivia master's gone to the pub. Try again later.";
+        }
+      } catch (err) {
+        questionEl.textContent = "Can't reach the trivia master — might be the fog.";
+        console.warn('[RDF] Trivia fetch failed:', err.message);
+      }
+
+      triviaBtn.disabled = false;
+      triviaBtn.textContent = 'Draw Another';
+    });
+
+    if (revealBtn) {
+      revealBtn.addEventListener('click', () => {
+        answerEl.classList.toggle('hidden-answer');
+        revealBtn.textContent = answerEl.classList.contains('hidden-answer') ? 'Reveal Answer' : 'Hide Answer';
+      });
+    }
+  }
+
+  // ── 2. Apothecary Remedies ──
+  const remedyBtn = document.getElementById('btn-remedy');
+  const remedyResult = document.getElementById('remedy-result');
+  const remedyImg = document.getElementById('remedy-img');
+  const remedyName = document.getElementById('remedy-name');
+  const remedyIngredients = document.getElementById('remedy-ingredients');
+
+  if (remedyBtn && remedyResult) {
+    remedyBtn.addEventListener('click', async () => {
+      remedyBtn.disabled = true;
+      remedyBtn.textContent = 'Brewing...';
+
+      try {
+        const res = await fetch('https://www.thecocktaildb.com/api/json/v1/1/random.php');
+        const data = await res.json();
+        if (data.drinks && data.drinks.length > 0) {
+          const drink = data.drinks[0];
+          if (remedyImg) {
+            remedyImg.src = drink.strDrinkThumb + '/preview';
+            remedyImg.alt = drink.strDrink;
+          }
+          if (remedyName) remedyName.textContent = drink.strDrink;
+          if (remedyIngredients) {
+            const ings = [];
+            for (let i = 1; i <= 3; i++) {
+              const ing = drink['strIngredient' + i];
+              const measure = drink['strMeasure' + i];
+              if (ing && ing.trim()) {
+                ings.push(`<li>${measure ? measure.trim() + ' ' : ''}${ing.trim()}</li>`);
+              }
+            }
+            remedyIngredients.innerHTML = ings.join('') || '<li>Secret recipe</li>';
+          }
+          remedyResult.style.display = 'flex';
+        }
+      } catch (err) {
+        if (remedyName) remedyName.textContent = "The apothecary's closed — fog's too thick.";
+        remedyResult.style.display = 'flex';
+        console.warn('[RDF] Cocktail fetch failed:', err.message);
+      }
+
+      remedyBtn.disabled = false;
+      remedyBtn.textContent = 'Try Another';
+    });
+  }
+
+  // ── 3. Gruffy's Card Table ──
+  const cardBtn = document.getElementById('btn-draw-card');
+  const cardImg = document.getElementById('drawn-card-img');
+  const cardName = document.getElementById('drawn-card-name');
+
+  if (cardBtn && cardImg) {
+    cardBtn.addEventListener('click', async () => {
+      cardBtn.disabled = true;
+      cardBtn.textContent = 'Shuffling...';
+
+      try {
+        const res = await fetch('https://deckofcardsapi.com/api/deck/new/draw/?count=1');
+        const data = await res.json();
+        if (data.cards && data.cards.length > 0) {
+          const card = data.cards[0];
+          cardImg.src = card.image;
+          cardImg.alt = `${card.value} of ${card.suit}`;
+          cardImg.style.display = 'block';
+          if (cardName) cardName.textContent = `${card.value} of ${card.suit}`;
+        }
+      } catch (err) {
+        if (cardName) cardName.textContent = "Gruffy spilled his screech on the deck. Try again.";
+        console.warn('[RDF] Card draw failed:', err.message);
+      }
+
+      cardBtn.disabled = false;
+      cardBtn.textContent = 'Draw Again';
+    });
+  }
+}
+
+
+/* ═══════════════════════════════════════════════
+   18. DISPATCH STATION — Contact Form
    ───────────────────────────────────────────────
    Sends form data via mailto link since we have
    no backend. Falls back gracefully.
@@ -2643,6 +2817,9 @@ document.addEventListener('DOMContentLoaded', () => {
 
   // Boot dispatch contact form
   initDispatchForm();
+
+  // Boot tavern API cards (trivia, cocktails, cards)
+  initTavernCards();
 
   // Boot service worker
   registerServiceWorker();
