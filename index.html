@@ -49,84 +49,54 @@
 
       <!-- ── App Header ── -->
       <header class="app-header">
-        <div class="app-brand">
-          <img class="brand-fairy" src="" data-fairy alt="RDF Fairy" aria-hidden="true">
-          <h1 class="brand-name"><span class="brand-accent">RDF</span> · Fairy-Led Passport</h1>
-        </div>
+        <h1 class="brand-name">RDF Fairy-Led Expedition</h1>
         <p class="brand-tagline">Rain, Drizzle &amp; Fog — St. John's, NL</p>
         <div class="header-divider" aria-hidden="true"></div>
       </header>
 
-      <!-- ── Live Weather ── -->
-      <section class="weather-card glass" aria-label="Current weather in St. John's">
-        <div id="weather-content">
-          <!-- Populated by app.js fetchWeather() -->
-        </div>
-      </section>
+      <!-- ── The Daily Almanac (Unified Weather + Sunrise/Sunset) ── -->
+      <section id="almanac-station" class="almanac-section">
+        <div class="almanac-panel glass">
 
-      <!-- ── Live Feeds (Collapsible Tabs) ── -->
-      <section class="webcam-section">
-        <div class="section-head">
-          <span class="section-icon">🏮</span>
-          <h2 class="section-title">Live Feeds — St. John's</h2>
-        </div>
+          <h3 class="almanac-title">⚓ The Daily Almanac</h3>
 
-        <!-- Tab 1: Harbour Cam (YouTube link, no iframe) -->
-        <details class="feed-panel glass">
-          <summary class="feed-tab">
-            <span class="feed-tab-icon">🌊</span>
-            <span class="feed-tab-title">Harbour Cam</span>
-            <span class="live-dot"></span>
-            <span class="feed-tab-chevron">▾</span>
-          </summary>
-          <div class="feed-content">
-            <div class="feed-placeholder">
-              <span class="feed-placeholder-icon">📹</span>
-              <p class="feed-placeholder-text">Live video of St. John's Harbour — icebergs, ships, and fog rolling through the Narrows.</p>
+          <!-- Current Conditions -->
+          <div class="almanac-current">
+            <div class="almanac-current-main">
+              <div class="almanac-temp" id="current-temp">--°C</div>
+              <div class="almanac-desc" id="current-desc">Checking the sky...</div>
             </div>
-            <div class="feed-footer">
-              <a
-                class="webcam-open-btn"
-                href="https://www.youtube.com/watch?v=RCeWw24Qj1c"
-                target="_blank"
-                rel="noopener"
-              >
-                Open Live Harbour Feed →
-              </a>
+            <div class="almanac-emoji" id="almanac-emoji">🌫️</div>
+          </div>
+
+          <!-- Weather Stats -->
+          <div class="almanac-stats" id="almanac-stats">
+            <div class="almanac-stat">💨 Wind <span id="almanac-wind">--</span></div>
+            <div class="almanac-stat">💧 Humidity <span id="almanac-humidity">--</span></div>
+            <div class="almanac-stat">🌡️ Feels <span id="almanac-feels">--</span></div>
+          </div>
+
+          <!-- The Fairy Hours: Sunrise & Sunset -->
+          <div class="almanac-sun">
+            <div class="almanac-sun-item">
+              <span class="almanac-sun-icon">🌅</span>
+              <span class="almanac-sun-label">Sunrise</span>
+              <span class="almanac-sun-time" id="sunrise-time">--:--</span>
+            </div>
+            <div class="almanac-sun-item">
+              <span class="almanac-sun-icon">🌇</span>
+              <span class="almanac-sun-label">Sunset</span>
+              <span class="almanac-sun-time" id="sunset-time">--:--</span>
             </div>
           </div>
-        </details>
 
-        <!-- Tab 2: Wind Map (Windy.com embed) -->
-        <details class="feed-panel glass">
-          <summary class="feed-tab">
-            <span class="feed-tab-icon">🌀</span>
-            <span class="feed-tab-title">Wind &amp; Storm Map</span>
-            <span class="live-dot"></span>
-            <span class="feed-tab-chevron">▾</span>
-          </summary>
-          <div class="feed-content">
-            <div class="iframe-wrapper">
-              <iframe
-                src="https://embed.windy.com/embed.html?type=map&location=coordinates&metricRain=default&metricTemp=%C2%B0C&metricWind=km%2Fh&zoom=8&overlay=wind&product=ecmwf&level=surface&lat=47.561&lon=-52.713"
-                title="Windy.com Live Wind Map — St. John's, NL"
-                loading="lazy"
-                allow="geolocation"
-                referrerpolicy="no-referrer"
-              ></iframe>
-            </div>
-            <div class="feed-footer">
-              <a
-                class="webcam-open-btn"
-                href="https://www.windy.com/47.561/-52.713?47.561,-52.713,8"
-                target="_blank"
-                rel="noopener"
-              >
-                Open Full Wind Map →
-              </a>
-            </div>
-          </div>
-        </details>
+          <!-- NL Slang -->
+          <div class="almanac-slang" id="almanac-slang"></div>
+
+          <!-- Gruffy's Forecast -->
+          <p class="almanac-gruffy" id="gruffy-weather-quote"><em>Gruffy's checking the horizon...</em></p>
+
+        </div>
       </section>
 
       <!-- ── Fog Horn Deals ── -->
@@ -479,6 +449,52 @@
         <div id="pastimes-accordion-container" class="pastimes-accordion">
           <!-- Populated by app.js renderPastimes() -->
         </div>
+
+        <!-- ═══════════ TAVERN PASTIMES (API Cards) ═══════════ -->
+        <section id="tavern-pastimes" class="tavern-section">
+
+          <!-- Pub Trivia -->
+          <div class="tavern-card glass">
+            <h4 class="tavern-card-title">📜 Pub Trivia</h4>
+            <p class="tavern-card-sub">Test yer wits while waiting out the RDF.</p>
+            <div id="trivia-display" class="tavern-content">
+              <p id="trivia-question" class="tavern-question"></p>
+              <p id="trivia-answer" class="tavern-answer hidden-answer"></p>
+            </div>
+            <div class="tavern-actions">
+              <button id="btn-trivia" class="tavern-btn">Draw a Question</button>
+              <button id="btn-trivia-reveal" class="tavern-btn-secondary" style="display:none;">Reveal Answer</button>
+            </div>
+          </div>
+
+          <!-- Apothecary Remedies -->
+          <div class="tavern-card glass">
+            <h4 class="tavern-card-title">🥃 Apothecary Remedies</h4>
+            <p class="tavern-card-sub">Chilled to the bone from the RDF? Let the apothecary prescribe something warm.</p>
+            <div id="remedy-display" class="tavern-content">
+              <div id="remedy-result" class="remedy-result" style="display:none;">
+                <img id="remedy-img" class="remedy-img" src="" alt="">
+                <div class="remedy-info">
+                  <h5 id="remedy-name" class="remedy-name"></h5>
+                  <ul id="remedy-ingredients" class="remedy-ingredients"></ul>
+                </div>
+              </div>
+            </div>
+            <button id="btn-remedy" class="tavern-btn">Find a Warm-Up</button>
+          </div>
+
+          <!-- Gruffy's Card Table -->
+          <div class="tavern-card glass">
+            <h4 class="tavern-card-title">🃏 Gruffy's Card Table</h4>
+            <p class="tavern-card-sub">Settle the tab or pass the time. Draw from the deck.</p>
+            <div id="card-display" class="tavern-content">
+              <img id="drawn-card-img" class="drawn-card-img" src="" alt="Drawn card" style="display:none;">
+              <p id="drawn-card-name" class="drawn-card-name"></p>
+            </div>
+            <button id="btn-draw-card" class="tavern-btn">Draw a Card</button>
+          </div>
+
+        </section>
 
       </div>
     </div><!-- /view-pastimes -->
