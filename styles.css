@@ -334,24 +334,19 @@ body::after {
 
 /* ─── APP HEADER ─────────────────────────────── */
 .app-header {
-  padding: var(--s-xl) var(--s-md) var(--s-md);
+  padding: max(3rem, env(safe-area-inset-top, 2rem)) var(--s-md) var(--s-md);
   text-align: center;
 }
 
-.app-brand {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: var(--s-sm);
-  margin-bottom: 6px;
-}
-
-.brand-fairy {
-  height: 36px;
-  width: auto;
-  object-fit: contain;
-  animation: fairy-bob 3.5s ease-in-out infinite;
-  filter: drop-shadow(0 0 8px rgba(217, 119, 6, 0.35));
+.brand-name {
+  font-family: var(--font-folk);
+  font-size: 1.5rem;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  color: var(--text-white);
+  text-align: center;
+  display: block;
+  width: 100%;
 }
 
 @keyframes fairy-bob {
@@ -413,18 +408,6 @@ body::after {
   vertical-align: middle;
 }
 
-.brand-name {
-  font-family: var(--font-folk);
-  font-size: 1.6rem;
-  font-weight: 700;
-  letter-spacing: -0.01em;
-  color: var(--text-white);
-}
-
-.brand-name .brand-accent {
-  color: var(--folk-accent-bright);
-}
-
 .brand-tagline {
   font-family: var(--font-folk);
   font-style: italic;
@@ -440,15 +423,18 @@ body::after {
   background: linear-gradient(90deg, transparent, var(--folk-accent-dim), transparent);
 }
 
-/* ─── WEATHER CARD ───────────────────────────── */
-.weather-card {
+/* ─── THE DAILY ALMANAC ──────────────────────── */
+.almanac-section {
   margin: var(--s-md);
+}
+
+.almanac-panel {
   padding: var(--s-lg);
   position: relative;
   overflow: hidden;
 }
 
-.weather-card::after {
+.almanac-panel::after {
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -456,24 +442,28 @@ body::after {
   background: linear-gradient(90deg, transparent, var(--folk-accent), transparent);
 }
 
-.weather-row {
+.almanac-title {
+  font-family: var(--font-folk);
+  font-size: 1.1rem;
+  font-weight: 700;
+  color: var(--text-spindrift, #F8FAFC);
+  margin-bottom: var(--s-md);
+}
+
+/* Current conditions row */
+.almanac-current {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
   gap: var(--s-md);
+  margin-bottom: var(--s-md);
 }
 
-.weather-location {
-  font-family: var(--font-ui);
-  font-size: 0.68rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.14em;
-  color: var(--folk-accent);
-  margin-bottom: var(--s-xs);
+.almanac-current-main {
+  flex: 1;
 }
 
-.weather-temp {
+.almanac-temp {
   font-family: var(--font-folk);
   font-size: 3rem;
   font-weight: 700;
@@ -481,62 +471,104 @@ body::after {
   color: var(--text-white);
 }
 
-.weather-temp sup {
-  font-size: 1rem;
-  font-weight: 400;
-  vertical-align: super;
-  color: var(--text-mist);
-}
-
-.weather-condition {
+.almanac-desc {
+  font-family: var(--font-ui);
   font-size: 0.82rem;
   color: var(--text-mist);
   margin-top: var(--s-xs);
 }
 
-.weather-emoji {
+.almanac-emoji {
   flex-shrink: 0;
   font-size: 3rem;
   line-height: 1;
 }
 
-.weather-slang {
-  margin-top: var(--s-md);
-  padding-top: var(--s-md);
-  border-top: 1px solid rgba(255, 255, 255, 0.06);
+/* Stats row */
+.almanac-stats {
+  display: flex;
+  gap: var(--s-lg);
+  margin-bottom: var(--s-md);
+  padding-bottom: var(--s-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-.slang-text {
+.almanac-stat {
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  color: var(--text-faint);
+}
+
+.almanac-stat span {
+  color: var(--text-slate);
+  font-weight: 500;
+}
+
+/* Sunrise / Sunset grid */
+.almanac-sun {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--s-sm);
+  margin-bottom: var(--s-md);
+  padding-bottom: var(--s-md);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.almanac-sun-item {
+  display: flex;
+  align-items: center;
+  gap: var(--s-xs);
+}
+
+.almanac-sun-icon {
+  font-size: 1.1rem;
+}
+
+.almanac-sun-label {
+  font-family: var(--font-ui);
+  font-size: 0.7rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--folk-accent);
+}
+
+.almanac-sun-time {
+  font-family: var(--font-ui);
+  font-size: 0.82rem;
+  font-weight: 600;
+  color: var(--text-spindrift, #F8FAFC);
+  margin-left: auto;
+}
+
+/* NL slang line */
+.almanac-slang {
   font-family: var(--font-folk);
   font-style: italic;
-  font-size: 0.95rem;
+  font-size: 0.92rem;
   line-height: 1.5;
   color: var(--text-candlelight);
+  margin-bottom: var(--s-sm);
 }
 
-.slang-text .slang-bold {
+.almanac-slang .slang-bold {
   color: var(--folk-accent-bright);
   font-weight: 600;
   font-style: normal;
 }
 
-.weather-stats {
-  display: flex;
-  gap: var(--s-lg);
-  margin-top: var(--s-sm);
+/* Gruffy's forecast */
+.almanac-gruffy {
+  font-family: var(--font-folk);
+  font-size: 0.8rem;
+  color: var(--text-mist);
+  line-height: 1.5;
+  padding-top: var(--s-sm);
+  border-top: 1px solid rgba(255, 255, 255, 0.04);
 }
 
-.weather-stat {
-  font-size: 0.72rem;
-  color: var(--text-faint);
-}
-
-.weather-stat span {
-  color: var(--text-slate);
-  font-weight: 500;
-}
-
-.weather-loading {
+/* Loading state */
+.almanac-loading {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -556,8 +588,6 @@ body::after {
 }
 
 @keyframes spin { to { transform: rotate(360deg); } }
-
-/* ─── SECTION HEADERS ────────────────────────── */
 .section-head {
   display: flex;
   align-items: center;
@@ -572,183 +602,6 @@ body::after {
   font-size: 1.05rem;
   font-weight: 600;
   color: var(--text-frost);
-}
-
-/* ─── LIVE FEEDS (Collapsible Tab Panels) ─────── */
-.webcam-section {
-  margin: var(--s-lg) var(--s-md);
-  display: flex;
-  flex-direction: column;
-  gap: var(--s-sm);
-}
-
-.live-dot {
-  width: 6px; height: 6px;
-  border-radius: 50%;
-  background: #EF4444;
-  box-shadow: 0 0 6px rgba(239, 68, 68, 0.5);
-  animation: pulse-dot 2s ease-in-out infinite;
-}
-
-@keyframes pulse-dot {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.3; }
-}
-
-/* Each collapsible feed panel */
-.feed-panel {
-  overflow: hidden;
-}
-
-/* The clickable tab header — <summary> element */
-.feed-tab {
-  display: flex;
-  align-items: center;
-  gap: var(--s-sm);
-  padding: 14px var(--s-md);
-  cursor: pointer;
-  list-style: none; /* remove default disclosure triangle */
-  -webkit-tap-highlight-color: transparent;
-  transition: background 0.2s ease;
-  user-select: none;
-}
-
-/* Hide the default marker in all browsers */
-.feed-tab::-webkit-details-marker { display: none; }
-.feed-tab::marker { content: ''; }
-
-.feed-tab:hover {
-  background: var(--glass-bg-hover);
-}
-
-.feed-tab-icon {
-  font-size: 1.1rem;
-  flex-shrink: 0;
-}
-
-.feed-tab-title {
-  flex: 1;
-  font-family: var(--font-ui);
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: var(--text-frost);
-}
-
-.feed-tab-chevron {
-  font-size: 0.85rem;
-  color: var(--text-faint);
-  transition: transform 0.3s ease;
-  flex-shrink: 0;
-}
-
-/* Rotate chevron when open */
-.feed-panel[open] .feed-tab-chevron {
-  transform: rotate(180deg);
-}
-
-/* Highlight the active/open tab header */
-.feed-panel[open] .feed-tab {
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-}
-
-.feed-panel[open] .feed-tab-title {
-  color: var(--folk-accent-bright);
-}
-
-/* The expandable content area */
-.feed-content {
-  animation: feed-slide 0.3s ease;
-}
-
-@keyframes feed-slide {
-  from { opacity: 0; max-height: 0; }
-  to { opacity: 1; max-height: 600px; }
-}
-
-/* Placeholder card (for link-only panels like Harbour Cam) */
-.feed-placeholder {
-  padding: var(--s-lg) var(--s-md);
-  text-align: center;
-}
-
-.feed-placeholder-icon {
-  font-size: 2.2rem;
-  display: block;
-  margin-bottom: var(--s-sm);
-  opacity: 0.6;
-}
-
-.feed-placeholder-text {
-  font-family: var(--font-folk);
-  font-style: italic;
-  font-size: 0.85rem;
-  color: var(--text-mist);
-  line-height: 1.5;
-  max-width: 300px;
-  margin: 0 auto;
-}
-
-/* Responsive iframe wrapper — 3:2 for map readability on mobile */
-.iframe-wrapper {
-  position: relative;
-  width: 100%;
-  padding-bottom: 66.67%; /* 3:2 aspect ratio */
-  background: rgba(0, 0, 0, 0.4);
-  overflow: hidden;
-}
-
-.iframe-wrapper iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: none;
-  border-radius: 0;
-}
-
-/* Footer with glowing CTA — shared by both panels */
-.feed-footer {
-  padding: var(--s-md);
-  display: flex;
-  justify-content: center;
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  background: rgba(0, 0, 0, 0.1);
-}
-
-.webcam-open-btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  padding: 12px 28px;
-  border-radius: var(--r-full);
-  border: 1px solid var(--folk-accent);
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.2), rgba(180, 83, 9, 0.35));
-  color: var(--folk-accent-bright);
-  font-family: var(--font-ui);
-  font-size: 0.78rem;
-  font-weight: 700;
-  text-decoration: none;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  transition: all 0.25s ease;
-  box-shadow:
-    0 0 16px rgba(217, 119, 6, 0.15),
-    0 0 40px rgba(217, 119, 6, 0.06);
-}
-
-.webcam-open-btn:hover {
-  background: linear-gradient(135deg, rgba(217, 119, 6, 0.35), rgba(180, 83, 9, 0.5));
-  box-shadow:
-    0 0 24px rgba(217, 119, 6, 0.25),
-    0 0 60px rgba(217, 119, 6, 0.1);
-  transform: translateY(-1px);
-}
-
-.webcam-open-btn:active {
-  transform: scale(0.97);
 }
 
 /* ─── DEALS SECTION ──────────────────────────── */
@@ -2250,6 +2103,196 @@ body::after {
   font-style: italic;
   font-size: 0.88rem;
   color: var(--text-slate);
+}
+
+/* ─── TAVERN PASTIMES (API Cards) ────────────── */
+.tavern-section {
+  margin-top: var(--s-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--s-md);
+}
+
+.tavern-card {
+  padding: var(--s-lg);
+}
+
+.tavern-card-title {
+  font-family: var(--font-folk);
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--text-spindrift, #F8FAFC);
+  margin-bottom: var(--s-xs);
+}
+
+.tavern-card-sub {
+  font-family: var(--font-folk);
+  font-style: italic;
+  font-size: 0.8rem;
+  color: var(--text-mist);
+  line-height: 1.5;
+  margin-bottom: var(--s-md);
+}
+
+.tavern-content {
+  min-height: 40px;
+  margin-bottom: var(--s-md);
+}
+
+.tavern-question {
+  font-family: var(--font-ui);
+  font-size: 0.88rem;
+  color: var(--text-candlelight, #FEF3C7);
+  line-height: 1.6;
+  text-align: left;
+}
+
+.tavern-answer {
+  font-family: var(--font-folk);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--folk-accent-bright, #F59E0B);
+  margin-top: var(--s-sm);
+  padding: var(--s-sm) var(--s-md);
+  background: rgba(4, 18, 42, 0.4);
+  border-left: 3px solid var(--folk-accent, #D97706);
+  border-radius: 0 var(--r-md) var(--r-md) 0;
+  transition: opacity 0.3s ease, max-height 0.3s ease;
+}
+
+.tavern-answer.hidden-answer {
+  opacity: 0;
+  max-height: 0;
+  overflow: hidden;
+  padding: 0;
+  margin: 0;
+}
+
+.tavern-actions {
+  display: flex;
+  gap: var(--s-sm);
+  flex-wrap: wrap;
+}
+
+.tavern-btn {
+  flex: 1;
+  min-width: 140px;
+  padding: 12px 20px;
+  border-radius: var(--r-full);
+  border: none;
+  background: var(--accent-sunset, #FD5E53);
+  color: #FFF;
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tavern-btn:hover {
+  background: var(--accent-sunset-hover, #E04B41);
+}
+
+.tavern-btn:active {
+  transform: scale(0.97);
+}
+
+.tavern-btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.tavern-btn-secondary {
+  flex: 1;
+  min-width: 120px;
+  padding: 12px 20px;
+  border-radius: var(--r-full);
+  border: 1px solid rgba(248, 250, 252, 0.15);
+  background: rgba(12, 50, 91, 0.6);
+  color: var(--text-spindrift, #F8FAFC);
+  font-family: var(--font-ui);
+  font-size: 0.8rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  cursor: pointer;
+  transition: background 0.2s ease;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.tavern-btn-secondary:hover {
+  background: rgba(12, 50, 91, 0.8);
+}
+
+/* Apothecary remedy result */
+.remedy-result {
+  display: flex;
+  gap: var(--s-md);
+  align-items: flex-start;
+}
+
+.remedy-img {
+  width: 80px;
+  height: 80px;
+  border-radius: var(--r-md);
+  object-fit: cover;
+  border: 1px solid rgba(248, 250, 252, 0.1);
+  flex-shrink: 0;
+}
+
+.remedy-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.remedy-name {
+  font-family: var(--font-folk);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: var(--folk-accent-bright, #F59E0B);
+  margin-bottom: var(--s-xs);
+}
+
+.remedy-ingredients {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.remedy-ingredients li {
+  font-family: var(--font-ui);
+  font-size: 0.78rem;
+  color: var(--text-spindrift, #F8FAFC);
+  opacity: 0.8;
+  line-height: 1.5;
+  padding-left: 12px;
+  position: relative;
+}
+
+.remedy-ingredients li::before {
+  content: '•';
+  position: absolute;
+  left: 0;
+  color: var(--folk-accent);
+}
+
+/* Drawn card display */
+.drawn-card-img {
+  max-width: 120px;
+  height: auto;
+  border-radius: var(--r-md);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.4);
+  margin-bottom: var(--s-sm);
+}
+
+.drawn-card-name {
+  font-family: var(--font-folk);
+  font-size: 0.88rem;
+  font-weight: 600;
+  color: var(--text-candlelight, #FEF3C7);
 }
 
 /* ─── DISPATCH STATION (Partnerships) ────────── */
