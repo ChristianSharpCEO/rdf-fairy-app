@@ -2943,13 +2943,22 @@ body::after {
   box-shadow: 0 -4px 30px rgba(0, 0, 0, 0.5);
   display: flex;
   align-items: center;
-  justify-content: center;
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scroll-snap-type: x proximity;
   padding-bottom: var(--safe-bottom);
+  scrollbar-width: none;
+}
+
+.bottom-nav::-webkit-scrollbar {
+  display: none;
 }
 
 .nav-tab {
-  flex: 1;
-  max-width: 150px;
+  flex: 0 0 auto;
+  min-width: 64px;
+  max-width: 110px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -2960,6 +2969,7 @@ body::after {
   cursor: pointer;
   -webkit-tap-highlight-color: transparent;
   position: relative;
+  scroll-snap-align: center;
 }
 
 .nav-icon {
@@ -3045,5 +3055,7 @@ body::after {
     left: 50%;
     transform: translateX(-50%);
     border-radius: var(--r-lg) var(--r-lg) 0 0;
+    justify-content: center;
+    overflow-x: visible;
   }
 }
