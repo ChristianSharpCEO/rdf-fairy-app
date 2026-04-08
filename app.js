@@ -1388,6 +1388,9 @@ function initNavigation() {
       // Scroll to top on tab change
       window.scrollTo({ top: 0, behavior: 'smooth' });
 
+      // Scroll the active tab into view in the bottom nav
+      tab.scrollIntoView({ behavior: 'smooth', inline: 'center', block: 'nearest' });
+
       // Render passport gallery when switching to that tab
       if (target === 'passport') renderPassport();
 
